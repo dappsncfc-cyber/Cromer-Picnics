@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="h-full bg-coastal-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cromer Picnics | The White Horse, Cromer</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Theme Extensions -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crab: {
+                            50: '#fff1f0',
+                            100: '#ffdfdc',
+                            200: '#ffc5c0',
+                            500: '#e63946',
+                            600: '#d0202f',
+                            700: '#b01523',
+                        },
+                        coastal: {
+                            50: '#f0f7f7',
+                            100: '#d9ebd',
+                            200: '#b4d7d7',
+                            600: '#2a6f78',
+                            800: '#1d3557',
+                            900: '#0f2038',
+                        },
+                        sand: {
+                            100: '#fdfbf7',
+                            200: '#f7f1e5',
+                            300: '#eddcd0',
+                            700: '#c29b68',
+                            800: '#9e7943',
+                        },
+                        sage: {
+                            100: '#f1f5f2',
+                            600: '#52796f',
+                            800: '#2f3e46',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .touch-target { min-height: 44px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f0f7f7; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    </style>
+</head>
+<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-20 md:pb-0">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-coastal-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
+                
+                <!-- Brand & Pub Address Details -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('customer-explore')">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 bg-coastal-800 rounded-2xl flex items-center justify-center text-sand-200 font-serif font-bold text-lg shadow-md border border-sand-300 shrink-0">
+                            WH
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-1.5">
+                                <h1 class="font-serif text-base sm:text-lg font-extrabold text-coastal-900 tracking-tight leading-tight">Cromer Picnics</h1>
+                                <span class="bg-crab-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Norfolk</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-coastal-600 font-medium flex items-center space-x-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
+                                <span>The White Horse • 24 West Street, Cromer, NR27 9DS</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Account Button -->
+                    <button onclick="openAuthModal()" class="md:hidden touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
+                        <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
+                        <span id="header-user-status-mobile" class="truncate max-w-[80px]">Guest</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Tabs & Account Switcher -->
+                <div class="flex items-center justify-between md:justify-end space-x-1.5 sm:space-x-2 w-full md:w-auto overflow-x-auto pb-0.5 md:pb-0">
+                    <nav class="flex space-x-1 bg-coastal-50 p-1 rounded-2xl border border-coastal-100 w-full md:w-auto justify-between md:justify-start">
+                        <button id="nav-customer" onclick="switchView('customer-explore')" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 shrink-0"></i>
+                            <span>Menu</span>
+                        </button>
+
+                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 animate-pulse shrink-0"></i>
+                            <span>Live Tracker</span>
+                        </button>
+
+                        <button id="nav-orders" onclick="handleCustomerOrdersTabClick()" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="receipt" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-coastal-600 shrink-0"></i>
+                            <span>My Orders</span>
+                        </button>
+
+                        <button id="nav-pub" onclick="handleKitchenNavClick()" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="chef-hat" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-coastal-600 shrink-0"></i>
+                            <span>Staff Kitchen</span>
+                            <span id="kitchen-lock-icon" class="text-[10px] bg-coastal-200 text-coastal-700 px-1 py-0.2 rounded ml-0.5">🔒</span>
+                        </button>
+                    </nav>
+
+                    <!-- Desktop User Account Badge -->
+                    <button onclick="openAuthModal()" class="hidden md:flex items-center space-x-2 bg-coastal-50 hover:bg-coastal-100 px-3 py-2 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800 transition-all">
+                        <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
+                        <span id="header-user-status">Customer Login</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
+
+        <!-- ==================== VIEW 1: CUSTOMER MENU & EXPLORE ==================== -->
+        <section id="customer-explore" class="space-y-6">
+            
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-coastal-900 text-white shadow-xl border border-coastal-800">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80');"></div>
+                <div class="relative z-10 p-6 sm:p-10 max-w-3xl space-y-3">
+                    <div class="inline-flex items-center space-x-2 bg-sand-200/20 backdrop-blur-md px-3 py-1 rounded-full text-sand-200 text-xs font-bold border border-sand-300/30">
+                        <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+                        <span>The White Horse Pub • Cromer</span>
+                    </div>
+                    <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-sand-100 tracking-tight leading-tight">
+                        Artisan Coastal Hampers for Cromer Beach Days
+                    </h2>
+                    <p class="text-xs sm:text-base text-coastal-100 max-w-2xl font-light leading-relaxed">
+                        Order gourmet Norfolk picnics online and collect freshly packed from <strong class="font-semibold text-white">24 West Street</strong>. Every picnic includes an insulated cool box with a <strong>£20.00 refundable deposit</strong> returned instantly when you hand the box back to our bar staff.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-sand-200">
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Fresh Local Cromer Crab</span>
+                        </span>
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Norfolk Artisan Cheeses</span>
+                        </span>
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Instant £20 Deposit Refund</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Grid & Basket Sidebar Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Package Cards Column -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b border-coastal-200">
+                        <h3 class="font-serif text-xl font-bold text-coastal-900 flex items-center space-x-2">
+                            <span>Select Picnic Packages</span>
+                        </h3>
+                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">5 Hampers Available</span>
+                    </div>
+
+                    <div id="picnic-packages-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <!-- Populated dynamically via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Basket Sidebar (Desktop) -->
+                <div class="hidden lg:block lg:col-span-1 sticky top-24 space-y-4">
+                    <div class="bg-white rounded-3xl p-6 border border-coastal-200 shadow-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5 text-crab-500"></i>
+                                <h3 class="font-serif text-lg font-bold text-coastal-900">Your Basket</h3>
+                            </div>
+                            <button onclick="clearBasket()" class="text-xs font-semibold text-coastal-400 hover:text-crab-600 transition-colors">Clear</button>
+                        </div>
+
+                        <div id="basket-items-list" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <div id="basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs">
+                            <!-- Financial summary loaded here -->
+                        </div>
+
+                        <button id="checkout-btn" onclick="openCheckoutModal()" disabled class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 disabled:bg-coastal-200 disabled:text-coastal-400 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2">
+                            <span>Proceed to Pickup Details</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+
+                        <div class="bg-coastal-50 p-3 rounded-xl border border-coastal-100 text-[11px] text-coastal-600 flex items-start space-x-2">
+                            <i data-lucide="info" class="w-4 h-4 text-coastal-600 shrink-0 mt-0.5"></i>
+                            <span>A <strong>£20.00 deposit</strong> per hamper is added for the insulated cool box. Returned in full at 24 West Street upon box hand-back.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: LIVE ORDER TRACKER ==================== -->
+        <section id="order-tracker" class="hidden max-w-3xl mx-auto space-y-6">
+            <div id="tracker-active-content" class="bg-white rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-xl space-y-6">
+                <!-- Tracker populated dynamically -->
+            </div>
+            
+            <div id="tracker-empty-content" class="bg-white rounded-3xl p-12 text-center border border-coastal-200 space-y-4">
+                <div class="w-16 h-16 bg-coastal-50 rounded-2xl flex items-center justify-center mx-auto text-coastal-400">
+                    <i data-lucide="radio" class="w-8 h-8"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-coastal-900">No Active Order Selected</h3>
+                <p class="text-xs sm:text-sm text-coastal-600 max-w-md mx-auto">Place an order from the menu or select a past order from your history tab to view real-time tracking.</p>
+                <button onclick="switchView('customer-explore')" class="touch-target bg-coastal-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs hover:bg-coastal-900 transition-all">
+                    Browse Picnic Menu
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 3: CUSTOMER ORDER HISTORY ==================== -->
+        <section id="customer-history" class="hidden max-w-4xl mx-auto space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-md space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-4 border-b border-coastal-100">
+                    <div>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900">My Order History</h2>
+                        <p class="text-xs text-coastal-500">Track current and past Cromer picnic hamper bookings.</p>
+                    </div>
+                    <button onclick="openAuthModal()" class="touch-target text-xs bg-coastal-50 text-coastal-800 px-3 py-2 rounded-xl font-bold border border-coastal-200 self-start sm:self-auto flex items-center space-x-1.5">
+                        <i data-lucide="user-check" class="w-4 h-4 text-crab-500"></i>
+                        <span id="history-logged-email">Guest Session</span>
+                    </button>
+                </div>
+
+                <div id="customer-orders-history-list" class="space-y-4">
+                    <!-- Populated dynamically via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 4: PUB STAFF KITCHEN PORTAL ==================== -->
+        <section id="pub-portal" class="hidden space-y-6">
+            
+            <!-- Staff PIN Unlock Overlay -->
+            <div id="kitchen-pin-overlay" class="bg-white p-8 rounded-3xl border-2 border-coastal-800 shadow-xl max-w-md mx-auto space-y-4 text-center">
+                <div class="bg-coastal-800 text-sand-100 w-12 h-12 rounded-2xl flex items-center justify-center mx-auto shadow-md">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-coastal-900">The White Horse Kitchen Portal</h3>
+                <p class="text-xs text-coastal-600">Enter kitchen staff PIN to access live ticket prep queue and cool box deposit ledger.</p>
+                
+                <div class="space-y-2">
+                    <input type="password" id="staff-pin-input" placeholder="PIN (Default: 1884)" maxlength="6" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-4 py-3 text-center text-lg font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                    <button onclick="unlockKitchenPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3 rounded-xl text-xs transition-all">
+                        Unlock Kitchen Dashboard
+                    </button>
+                    <button onclick="demoUnlockKitchen()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-2.5 rounded-xl text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
+                        <i data-lucide="key-round" class="w-4 h-4"></i>
+                        <span>Access Kitchen Dashboard (Demo PIN 1884)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kitchen Staff Dashboard Content (Unlocked) -->
+            <div id="kitchen-dashboard-content" class="hidden space-y-6">
+                <!-- Staff Metrics Bar -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Pending Orders</p>
+                        <h4 class="font-serif text-2xl font-black text-crab-600" id="stat-pending-count">0</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Boxes On Loan</p>
+                        <h4 class="font-serif text-2xl font-black text-coastal-800" id="stat-boxes-count">0</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Active Deposits Held</p>
+                        <h4 class="font-serif text-2xl font-black text-emerald-700" id="stat-deposits-held">£0.00</h4>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Total Sales Revenue</p>
+                        <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-gross-revenue">£0.00</h4>
+                    </div>
+                </div>
+
+                <!-- Kitchen Header Actions -->
+                <div class="bg-white p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-coastal-800 text-white p-2.5 rounded-2xl">
+                            <i data-lucide="chef-hat" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-lg font-bold text-coastal-900">Live Kitchen Prep Queue</h3>
+                            <p class="text-xs text-coastal-500">Pick-up Location: 24 West Street, Cromer</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <button onclick="playNotificationSound()" class="touch-target bg-coastal-50 hover:bg-coastal-100 text-coastal-800 border border-coastal-200 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1">
+                            <i data-lucide="bell" class="w-4 h-4 text-crab-500"></i>
+                            <span>Test Chime</span>
+                        </button>
+                        <button onclick="lockKitchenPortal()" class="touch-target bg-coastal-200 hover:bg-coastal-300 text-coastal-900 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                            <span>Lock Dashboard</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kitchen Ticket Columns -->
+                <div id="kitchen-tickets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Kitchen order cards populated here -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Mobile Bottom Floating Basket Bar -->
+    <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="openMobileBasketModal()">
+            <div class="bg-crab-500 text-white font-bold text-xs w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" id="mobile-basket-qty">
+                0
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-coastal-400 uppercase tracking-wider block">Basket Total <span class="text-crab-600 font-bold">(Tap to View)</span></span>
+                <span class="font-serif font-bold text-coastal-900 text-sm" id="mobile-basket-total">£0.00</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="openMobileBasketModal()" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-200">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-crab-500"></i>
+                <span>View Basket</span>
+            </button>
+            <button id="mobile-checkout-btn" onclick="openCheckoutModal()" disabled class="touch-target bg-coastal-800 disabled:bg-coastal-200 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all flex items-center space-x-1.5">
+                <span>Checkout</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 0: Mobile Basket Slide-Up Modal -->
+    <div id="mobile-basket-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg border border-coastal-100 shadow-2xl overflow-hidden relative p-5 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-crab-500"></i>
+                    <h3 class="font-serif text-lg font-bold text-coastal-900">Your Picnic Basket</h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="clearBasket()" class="text-xs font-semibold text-coastal-400 hover:text-crab-600 transition-colors mr-2">Clear All</button>
+                    <button onclick="closeMobileBasketModal()" class="touch-target text-coastal-400 hover:text-coastal-800 p-1.5 rounded-full">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Items List -->
+            <div id="mobile-basket-items-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-[100px]">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- Mobile Summary Box -->
+            <div id="mobile-basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs">
+                <!-- Summary populated dynamically -->
+            </div>
+
+            <button id="mobile-modal-checkout-btn" onclick="closeMobileBasketModal(); openCheckoutModal();" disabled class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 disabled:bg-coastal-200 disabled:text-coastal-400 text-white font-bold py-3 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2">
+                <span>Proceed to Pickup Details</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 1: Customise Hamper Modal -->
+    <div id="customize-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-lg border border-coastal-100 shadow-2xl overflow-hidden relative p-6 space-y-4">
+            <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="space-y-1 border-b border-coastal-100 pb-3">
+                <span class="text-[10px] font-bold text-crab-600 uppercase tracking-widest" id="custom-pkg-tag">Signature</span>
+                <h3 class="font-serif text-xl font-bold text-coastal-900" id="custom-pkg-title">Hamper Customiser</h3>
+                <p class="text-xs text-coastal-500" id="custom-pkg-desc">Adjust options for your beach picnic.</p>
+            </div>
+
+            <div class="space-y-3 text-xs">
+                <label class="block font-bold text-coastal-800">Dietary Requirement Options</label>
+                <select id="custom-diet-select" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
+                    <option value="Gluten-Free Swap">Gluten-Free Bread & Crackers Swap</option>
+                    <option value="Dairy-Free Swap">Dairy-Free Alternative Cheese/Spread</option>
+                    <option value="Vegetarian Swap">Vegetarian Alternative</option>
+                </select>
+
+                <label class="block font-bold text-coastal-800">Norfolk Drinks Upgrade</label>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2.5 bg-coastal-50 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-coastal-100/50">
+                        <input type="checkbox" id="custom-drink-1" value="Norfolk Apple Juice" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800">Add Chilled Norfolk Apple Juice (+£3.50)</span>
+                    </label>
+                    <label class="flex items-center space-x-2.5 bg-coastal-50 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-coastal-100/50">
+                        <input type="checkbox" id="custom-drink-2" value="Local Ginger Beer" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800">Add Artisan Ginger Beer (+£3.50)</span>
+                    </label>
+                </div>
+
+                <button onclick="saveHamperCustomization()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-xl mt-2 transition-all">
+                    Add Customised Hamper to Basket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Checkout & Payment Modal -->
+    <div id="checkout-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-xl border border-coastal-100 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
+            <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="border-b border-coastal-100 pb-3">
+                <h3 class="font-serif text-xl font-bold text-coastal-900">Complete Your Order</h3>
+                <p class="text-xs text-coastal-500">Collect from The White Horse Pub • 24 West Street, Cromer</p>
+            </div>
+
+            <!-- Checkout Form Content -->
+            <div id="modal-form-content" class="space-y-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
+                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" value="Sarah Jenkins" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
+                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" value="07700 900123" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
+                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="sarah@example.co.uk" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Collection Time Today *</label>
+                        <select id="pickup-time" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                            <option value="12:00 PM">12:00 PM (Lunch)</option>
+                            <option value="1:00 PM">1:00 PM (Lunch)</option>
+                            <option value="2:30 PM">2:30 PM (Afternoon)</option>
+                            <option value="4:00 PM">4:00 PM (High Tea)</option>
+                            <option value="6:00 PM">6:00 PM (Sunset Picnic)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Special Dietary Notes</label>
+                    <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, no mustard..." class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
+                </div>
+
+                <!-- Financial Summary Box -->
+                <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-200 space-y-1.5">
+                    <div class="flex justify-between text-coastal-600">
+                        <span>Hampers Subtotal:</span>
+                        <span font-bold id="modal-subtotal">£0.00</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-700 font-medium">
+                        <span>Refundable Cool Box Deposit (£20/box):</span>
+                        <span id="modal-deposit">£20.00</span>
+                    </div>
+                    <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-1.5 mt-1.5">
+                        <span>Total Payable Now:</span>
+                        <span font-serif class="text-base text-crab-600" id="modal-grandtotal">£0.00</span>
+                    </div>
+                </div>
+
+                <!-- Pre-populated Card Details -->
+                <div class="space-y-2 border-t border-coastal-100 pt-3">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-bold text-coastal-800">Card Payment Details (Pre-filled Sandbox)</label>
+                        <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Auto-Approve Enabled</span>
+                    </div>
+                    <div class="space-y-2">
+                        <input type="text" id="card-num" value="4000 1234 5678 9010" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 font-mono text-center">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="card-exp" value="12/28" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 font-mono text-center">
+                            <input type="text" id="card-cvc" value="888" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 font-mono text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="processSimulatedPayment()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm mt-3">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <span>Confirm & Auto-Approve Payment</span>
+                </button>
+            </div>
+
+            <!-- Processing Animation Content -->
+            <div id="modal-processing-content" class="hidden text-center py-10 space-y-4">
+                <div class="w-12 h-12 border-4 border-crab-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <h4 class="font-serif text-lg font-bold text-coastal-900" id="processing-step-title">Authorising Payment...</h4>
+                <p class="text-xs text-coastal-500" id="processing-step-sub">Securing cool box deposit & sending ticket to kitchen...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Auth Email Login Modal -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-coastal-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-sm border border-coastal-100 shadow-2xl p-6 relative space-y-4">
+            <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-10 h-10 bg-coastal-800 text-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </div>
+                <h3 class="font-serif text-lg font-bold text-coastal-900">Customer Login</h3>
+                <p class="text-xs text-coastal-500">Enter your email to view order history and active tickets.</p>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Your Email</label>
+                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" value="sarah@example.co.uk" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <button onclick="saveCustomerLogin()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all">
+                    Sign In / Set Active Session
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Global State Variables
+        const appId = 'cromer-picnics-app';
+        let isKitchenUnlocked = false;
+        let loggedInCustomer = { name: 'Sarah Jenkins', email: 'sarah@example.co.uk' };
+        let activeCustomizingPkg = null;
+        let activeOrder = null;
+        let basket = {};
+        let allOrdersList = [];
+
+        // Picnic Packages Catalog
+        const picnicPackages = [
+            {
+                id: 'crab-feast',
+                title: 'The Cromer Crab Feast',
+                tagline: 'Freshly caught local crab & sea samphire.',
+                price: 48.00,
+                desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.',
+                badge: 'Signature',
+                badgeColor: 'bg-crab-500 text-white',
+                image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80',
+                available: true
+            },
+            {
+                id: 'ploughmans-classic',
+                title: 'Norfolk Artisan Ploughman’s',
+                tagline: 'Hearty pub deli selections.',
+                price: 38.00,
+                desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.',
+                badge: 'Popular',
+                badgeColor: 'bg-sand-700 text-white',
+                image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80',
+                available: true
+            },
+            {
+                id: 'saltmarsh-vegan',
+                title: 'Saltmarsh Wild Grazing (V)',
+                tagline: 'Vegetarian harvest selection.',
+                price: 36.00,
+                desc: 'Caramelized onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.',
+                badge: 'Vegetarian',
+                badgeColor: 'bg-sage-600 text-white',
+                image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
+                available: true
+            },
+            {
+                id: 'sunset-prosecco',
+                title: 'Pier Sunset Romance (For Two)',
+                tagline: 'Luxury seaside celebration.',
+                price: 68.00,
+                desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.',
+                badge: 'Luxury',
+                badgeColor: 'bg-coastal-800 text-white',
+                image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+                available: true
+            },
+            {
+                id: 'shipmates-family',
+                title: 'Little Shipmates Family Feast',
+                tagline: 'Family friendly beach treats.',
+                price: 28.00,
+                desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.',
+                badge: 'Family',
+                badgeColor: 'bg-coastal-600 text-white',
+                image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80',
+                available: true
+            }
+        ];
+
+        // Toast Notification Trigger
+        function triggerToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            const bgClass = type === 'success' ? 'bg-emerald-800 text-white' : type === 'error' ? 'bg-crab-600 text-white' : 'bg-coastal-800 text-white';
+            toast.className = `pointer-events-auto p-3.5 rounded-2xl shadow-xl text-xs font-bold flex items-center justify-between space-x-2 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4 shrink-0"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Web Audio Synthesised Kitchen Alert Chime
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.5);
+            } catch(e) {}
+        }
+
+        // Navigation View Switcher
+        function switchView(viewId) {
+            document.getElementById('customer-explore').classList.add('hidden');
+            document.getElementById('order-tracker').classList.add('hidden');
+            document.getElementById('customer-history').classList.add('hidden');
+            document.getElementById('pub-portal').classList.add('hidden');
+
+            const navCustomer = document.getElementById('nav-customer');
+            const navTracker = document.getElementById('nav-tracker');
+            const navOrders = document.getElementById('nav-orders');
+            const navPub = document.getElementById('nav-pub');
+            
+            const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none";
+            const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none";
+
+            navCustomer.className = baseBtn;
+            if (navTracker) navTracker.className = activeOrder ? baseBtn : "hidden";
+            navOrders.className = baseBtn;
+            navPub.className = baseBtn;
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.remove('hidden');
+
+            if (viewId === 'customer-explore') {
+                navCustomer.className = activeBtn;
+            } else if (viewId === 'order-tracker') {
+                if (navTracker) navTracker.className = activeBtn;
+                renderLiveTrackerContent();
+            } else if (viewId === 'customer-history') {
+                navOrders.className = activeBtn;
+                renderCustomerOrderHistory();
+            } else if (viewId === 'pub-portal') {
+                navPub.className = activeBtn;
+                if (isKitchenUnlocked) renderKitchenDashboard();
+            }
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Hamper Cards
+        function renderPicnicPackages() {
+            const container = document.getElementById('picnic-packages-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            picnicPackages.forEach(pkg => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl border border-coastal-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-44 sm:h-48 overflow-hidden bg-coastal-100">
+                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor}">
+                                ${pkg.badge}
+                            </span>
+                        </div>
+                        <div class="p-5 space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
+                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${pkg.price.toFixed(2)}</span>
+                            </div>
+                            <p class="text-xs text-coastal-600 font-medium leading-relaxed">${pkg.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 grid grid-cols-2 gap-2">
+                        <button onclick="openCustomizeModal('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 text-coastal-800 font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                            <span>Customise</span>
+                        </button>
+                        <button onclick="addToBasket('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Add Item to Basket
+        function addToBasket(packageId, customOpts = null) {
+            const pkg = picnicPackages.find(p => p.id === packageId);
+            if (!pkg) return;
+
+            const basketKey = customOpts ? `${packageId}-${JSON.stringify(customOpts)}` : packageId;
+
+            if (basket[basketKey]) {
+                basket[basketKey].qty += 1;
+            } else {
+                basket[basketKey] = {
+                    id: packageId,
+                    title: pkg.title,
+                    basePrice: pkg.price,
+                    price: pkg.price + (customOpts ? customOpts.extraPrice : 0),
+                    qty: 1,
+                    custom: customOpts
+                };
+            }
+
+            updateBasketSummary();
+            triggerToast(`Added ${pkg.title} to basket`, 'success');
+        }
+
+        function updateQuantity(basketKey, delta) {
+            if (!basket[basketKey]) return;
+            basket[basketKey].qty += delta;
+            if (basket[basketKey].qty <= 0) {
+                delete basket[basketKey];
+            }
+            updateBasketSummary();
+        }
+
+        function removeFromBasket(basketKey) {
+            if (basket[basketKey]) {
+                const title = basket[basketKey].title;
+                delete basket[basketKey];
+                updateBasketSummary();
+                triggerToast(`Removed ${title} from basket`, 'info');
+            }
+        }
+
+        function clearBasket() {
+            basket = {};
+            updateBasketSummary();
+        }
+
+        // Update Basket Totals
+        function updateBasketSummary() {
+            const listContainer = document.getElementById('basket-items-list');
+            const mobileListContainer = document.getElementById('mobile-basket-items-list');
+            const summaryBox = document.getElementById('basket-summary-box');
+            const mobileSummaryBox = document.getElementById('mobile-basket-summary-box');
+            
+            let totalQty = 0;
+            let subtotal = 0;
+            let hamperCount = 0;
+
+            if (listContainer) listContainer.innerHTML = '';
+            if (mobileListContainer) mobileListContainer.innerHTML = '';
+
+            Object.keys(basket).forEach(key => {
+                const item = basket[key];
+                totalQty += item.qty;
+                hamperCount += item.qty;
+                subtotal += item.price * item.qty;
+
+                const itemHtml = `
+                    <div class="flex items-center justify-between bg-coastal-50 p-2.5 rounded-xl border border-coastal-100 text-xs">
+                        <div class="space-y-0.5 max-w-[150px] sm:max-w-[130px]">
+                            <p class="font-bold text-coastal-900 truncate">${item.title}</p>
+                            ${item.custom ? `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${item.custom.drinks.length ? '+ Drinks' : ''}</p>` : ''}
+                            <p class="text-coastal-600 font-semibold">£${(item.price * item.qty).toFixed(2)}</p>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="flex items-center space-x-1 bg-white rounded-lg border border-coastal-200 p-0.5">
+                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold" title="Decrease">-</button>
+                                <span class="w-5 text-center font-bold text-coastal-900 text-xs">${item.qty}</span>
+                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold" title="Increase">+</button>
+                            </div>
+                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item from basket">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if (listContainer) {
+                    const itemEl = document.createElement('div');
+                    itemEl.innerHTML = itemHtml;
+                    listContainer.appendChild(itemEl.firstElementChild);
+                }
+
+                if (mobileListContainer) {
+                    const mobileItemEl = document.createElement('div');
+                    mobileItemEl.innerHTML = itemHtml;
+                    mobileListContainer.appendChild(mobileItemEl.firstElementChild);
+                }
+            });
+
+            const depositTotal = hamperCount * 20.00;
+            const grandTotal = subtotal + depositTotal;
+
+            const summaryHtml = totalQty === 0 ? `
+                <div class="flex justify-between text-coastal-500">
+                    <span>Subtotal:</span>
+                    <span>£0.00</span>
+                </div>
+            ` : `
+                <div class="flex justify-between text-coastal-600">
+                    <span>Hampers Subtotal:</span>
+                    <span class="font-bold">£${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-emerald-700 font-medium">
+                    <span>Refundable Cool Box Deposit (£20/box):</span>
+                    <span class="font-bold">£${depositTotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-2 mt-1">
+                    <span>Total Payable:</span>
+                    <span class="font-serif text-crab-600 text-base">£${grandTotal.toFixed(2)}</span>
+                </div>
+            `;
+
+            if (summaryBox) {
+                if (totalQty === 0 && listContainer) {
+                    listContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
+                }
+                summaryBox.innerHTML = summaryHtml;
+            }
+
+            if (mobileSummaryBox) {
+                if (totalQty === 0 && mobileListContainer) {
+                    mobileListContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
+                }
+                mobileSummaryBox.innerHTML = summaryHtml;
+            }
+
+            // Desktop & Mobile Checkout Buttons
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const mobileCheckoutBtn = document.getElementById('mobile-checkout-btn');
+            const mobileModalCheckoutBtn = document.getElementById('mobile-modal-checkout-btn');
+            const mobileQtyBadge = document.getElementById('mobile-basket-qty');
+            const mobileTotalSpan = document.getElementById('mobile-basket-total');
+
+            if (checkoutBtn) checkoutBtn.disabled = totalQty === 0;
+            if (mobileCheckoutBtn) mobileCheckoutBtn.disabled = totalQty === 0;
+            if (mobileModalCheckoutBtn) mobileModalCheckoutBtn.disabled = totalQty === 0;
+            if (mobileQtyBadge) mobileQtyBadge.innerText = totalQty;
+            if (mobileTotalSpan) mobileTotalSpan.innerText = `£${grandTotal.toFixed(2)}`;
+
+            lucide.createIcons();
+        }
+
+        function openMobileBasketModal() {
+            document.getElementById('mobile-basket-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeMobileBasketModal() {
+            document.getElementById('mobile-basket-modal').classList.add('hidden');
+        }
+
+        function openCustomizeModal(pkgId) {
+            const pkg = picnicPackages.find(p => p.id === pkgId);
+            if (!pkg) return;
+            activeCustomizingPkg = pkg;
+
+            document.getElementById('custom-pkg-tag').innerText = pkg.badge;
+            document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
+            document.getElementById('custom-pkg-desc').innerText = pkg.desc;
+            document.getElementById('custom-diet-select').value = "Standard Recipe";
+            document.getElementById('custom-drink-1').checked = false;
+            document.getElementById('custom-drink-2').checked = false;
+
+            document.getElementById('customize-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeCustomizeModal() {
+            document.getElementById('customize-modal').classList.add('hidden');
+        }
+
+        function saveHamperCustomization() {
+            if (!activeCustomizingPkg) return;
+
+            const diet = document.getElementById('custom-diet-select').value;
+            const drink1 = document.getElementById('custom-drink-1').checked;
+            const drink2 = document.getElementById('custom-drink-2').checked;
+
+            let extraPrice = 0;
+            const drinksList = [];
+            if (drink1) { extraPrice += 3.50; drinksList.push('Norfolk Apple Juice'); }
+            if (drink2) { extraPrice += 3.50; drinksList.push('Artisan Ginger Beer'); }
+
+            const customOpts = {
+                diet: diet,
+                drinks: drinksList,
+                extraPrice: extraPrice
+            };
+
+            addToBasket(activeCustomizingPkg.id, customOpts);
+            closeCustomizeModal();
+        }
+
+        function openCheckoutModal() {
+            const keys = Object.keys(basket);
+            if (keys.length === 0) return;
+
+            let subtotal = 0;
+            let hamperCount = 0;
+            const itemsList = [];
+
+            keys.forEach(k => {
+                const item = basket[k];
+                subtotal += item.price * item.qty;
+                hamperCount += item.qty;
+                itemsList.push(item);
+            });
+
+            const depositTotal = hamperCount * 20.00;
+            const grandTotal = subtotal + depositTotal;
+
+            document.getElementById('modal-subtotal').innerText = `£${subtotal.toFixed(2)}`;
+            document.getElementById('modal-deposit').innerText = `£${depositTotal.toFixed(2)}`;
+            document.getElementById('modal-grandtotal').innerText = `£${grandTotal.toFixed(2)}`;
+
+            document.getElementById('modal-form-content').classList.remove('hidden');
+            document.getElementById('modal-processing-content').classList.add('hidden');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            
+            lucide.createIcons();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function processSimulatedPayment() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const pickupTime = document.getElementById('pickup-time').value;
+            const notes = document.getElementById('dietary-notes').value.trim();
+
+            if (!name || !email) {
+                triggerToast('Please provide your name and email address', 'error');
+                return;
+            }
+
+            document.getElementById('modal-form-content').classList.add('hidden');
+            document.getElementById('modal-processing-content').classList.remove('hidden');
+
+            setTimeout(() => {
+                let subtotal = 0;
+                let coolboxCount = 0;
+                const itemsPayload = [];
+
+                Object.keys(basket).forEach(k => {
+                    const item = basket[k];
+                    subtotal += item.price * item.qty;
+                    coolboxCount += item.qty;
+                    itemsPayload.push({
+                        title: item.title,
+                        qty: item.qty,
+                        price: item.price,
+                        custom: item.custom || null
+                    });
+                });
+
+                const deposit = coolboxCount * 20.00;
+                const grandTotal = subtotal + deposit;
+                const orderRef = 'CMP-' + Math.floor(100000 + Math.random() * 900000);
+
+                const newOrder = {
+                    id: 'ord-' + Date.now(),
+                    orderRef: orderRef,
+                    customerName: name,
+                    customerPhone: phone,
+                    customerEmail: email,
+                    pickupTime: pickupTime,
+                    pickupDate: new Date().toLocaleDateString('en-GB'),
+                    notes: notes,
+                    items: itemsPayload,
+                    subtotal: subtotal,
+                    deposit: deposit,
+                    grandTotal: grandTotal,
+                    coolboxCount: coolboxCount,
+                    status: 'pending', // pending -> preparing -> ready -> returned
+                    createdAt: Date.now()
+                };
+
+                // Update Session & Local Storage
+                activeOrder = newOrder;
+                allOrdersList.unshift(newOrder);
+                saveLocalOrders();
+
+                // Set Customer Info
+                loggedInCustomer = { name: name, email: email };
+                updateHeaderUserBadge();
+
+                // Unhide Live Tracker in Nav
+                const navTracker = document.getElementById('nav-tracker');
+                if (navTracker) navTracker.classList.remove('hidden');
+
+                // Trigger Kitchen Sound Effect
+                playNotificationSound();
+
+                closeCheckoutModal();
+                clearBasket();
+
+                triggerToast('Payment Approved! Order dispatched to kitchen.', 'success');
+                switchView('order-tracker');
+            }, 1200);
+        }
+
+        // Render Live Order Tracker UI
+        function renderLiveTrackerContent() {
+            const activeContainer = document.getElementById('tracker-active-content');
+            const emptyContainer = document.getElementById('tracker-empty-content');
+
+            if (!activeOrder) {
+                if (activeContainer) activeContainer.classList.add('hidden');
+                if (emptyContainer) emptyContainer.classList.remove('hidden');
+                return;
+            }
+
+            if (activeContainer) activeContainer.classList.remove('hidden');
+            if (emptyContainer) emptyContainer.classList.add('hidden');
+
+            const statusSteps = [
+                { key: 'pending', label: 'Order Received', icon: 'receipt' },
+                { key: 'preparing', label: 'Kitchen Prep', icon: 'chef-hat' },
+                { key: 'ready', label: 'Ready at West St', icon: 'package-check' },
+                { key: 'returned', label: 'Deposit Refunded', icon: 'check-circle' }
+            ];
+
+            const currentIdx = statusSteps.findIndex(s => s.key === activeOrder.status);
+
+            activeContainer.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 border-b border-coastal-100">
+                    <div>
+                        <span class="bg-crab-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Live Tracker</span>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900 mt-1">Ref: ${activeOrder.orderRef}</h2>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-xs text-coastal-500">Pick-up Location</p>
+                        <p class="text-xs font-bold text-coastal-800">24 West Street, Cromer (${activeOrder.pickupTime})</p>
+                    </div>
+                </div>
+
+                <!-- Tracker Progress Bar -->
+                <div class="grid grid-cols-4 gap-2 pt-2">
+                    ${statusSteps.map((step, idx) => {
+                        const isDone = idx <= currentIdx;
+                        const isCurrent = idx === currentIdx;
+                        return `
+                            <div class="text-center space-y-1.5">
+                                <div class="w-10 h-10 rounded-2xl flex items-center justify-center mx-auto text-xs transition-all ${isCurrent ? 'bg-crab-500 text-white ring-4 ring-crab-100 font-bold' : isDone ? 'bg-coastal-800 text-white' : 'bg-coastal-100 text-coastal-400'}">
+                                    <i data-lucide="${step.icon}" class="w-5 h-5"></i>
+                                </div>
+                                <span class="block text-[10px] font-bold ${isDone ? 'text-coastal-900' : 'text-coastal-400'}">${step.label}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <!-- Order Content Breakdown -->
+                <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
+                    <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
+                    <ul class="space-y-1 text-coastal-700">
+                        ${activeOrder.items.map(i => `
+                            <li class="flex justify-between">
+                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet})` : ''}</span>
+                                <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="pt-2 border-t border-coastal-200 flex justify-between font-bold text-coastal-900">
+                        <span>Refundable Cool Box Deposit Held:</span>
+                        <span class="text-emerald-700">£${activeOrder.deposit.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="bg-sand-100 p-4 rounded-2xl border border-sand-300 text-xs text-coastal-800 flex items-start space-x-3">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-crab-500 shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="block font-bold">Pick-up Instructions:</strong>
+                        <p class="mt-0.5">Present this screen or reference <strong>${activeOrder.orderRef}</strong> at the pub counter at 24 West Street, Cromer. Return cool box before pub closing to receive your <strong>£20 deposit refund</strong>.</p>
+                    </div>
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+
+        function renderCustomerOrderHistory() {
+            const container = document.getElementById('customer-orders-history-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const loggedEmailSpan = document.getElementById('history-logged-email');
+            if (loggedEmailSpan) loggedEmailSpan.innerText = loggedInCustomer ? loggedInCustomer.email : 'Guest Session';
+
+            let filteredOrders = allOrdersList;
+            if (loggedInCustomer && loggedInCustomer.email) {
+                filteredOrders = allOrdersList.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === loggedInCustomer.email.toLowerCase());
+            }
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-xs text-coastal-400 space-y-2">
+                        <i data-lucide="receipt" class="w-8 h-8 mx-auto opacity-30"></i>
+                        <p>No past picnic hamper bookings found for ${loggedInCustomer ? loggedInCustomer.email : 'this session'}.</p>
+                        <button onclick="switchView('customer-explore')" class="text-crab-600 font-bold hover:underline">Browse menu to place a booking</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filteredOrders.forEach(order => {
+                const isReturned = order.status === 'returned';
+                const el = document.createElement('div');
+                el.className = "bg-coastal-50 p-4 sm:p-5 rounded-2xl border border-coastal-200 flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs";
+                el.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-extrabold font-mono text-coastal-900 text-sm">${order.orderRef}</span>
+                            <span class="bg-coastal-200 text-coastal-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${order.status.replace('_', ' ')}</span>
+                            ${isReturned ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">£20 Deposit Refunded</span>' : ''}
+                        </div>
+                        <p class="text-coastal-600 font-medium">${order.items.map(i => `${i.qty}x ${i.title}`).join(', ')}</p>
+                        <p class="text-[11px] text-coastal-400">Pick-up: ${order.pickupDate} at ${order.pickupTime}</p>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end space-x-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-coastal-200">
+                        <span class="font-serif font-black text-coastal-900 text-base">£${order.grandTotal.toFixed(2)}</span>
+                        <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Track Order</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+
+            lucide.createIcons();
+        }
+
+        function setupActiveOrderTracker(orderId) {
+            const found = allOrdersList.find(o => o.id === orderId);
+            if (found) {
+                activeOrder = found;
+                switchView('order-tracker');
+            }
+        }
+
+        // Kitchen Staff Portal Actions
+        function handleKitchenNavClick() {
+            switchView('pub-portal');
+        }
+
+        function unlockKitchenPortal() {
+            const pinInput = document.getElementById('staff-pin-input');
+            const pin = pinInput ? pinInput.value.trim() : '';
+            if (pin === '1884') {
+                demoUnlockKitchen();
+            } else {
+                triggerToast('Incorrect Staff PIN (Default Demo PIN is 1884)', 'error');
+            }
+        }
+
+        function demoUnlockKitchen() {
+            isKitchenUnlocked = true;
+            document.getElementById('kitchen-pin-overlay').classList.add('hidden');
+            document.getElementById('kitchen-dashboard-content').classList.remove('hidden');
+            
+            const lockIcon = document.getElementById('kitchen-lock-icon');
+            if (lockIcon) lockIcon.innerText = '🔓';
+
+            renderKitchenDashboard();
+            triggerToast('Kitchen Dashboard Unlocked', 'success');
+        }
+
+        function lockKitchenPortal() {
+            isKitchenUnlocked = false;
+            document.getElementById('kitchen-pin-overlay').classList.remove('hidden');
+            document.getElementById('kitchen-dashboard-content').classList.add('hidden');
+            const lockIcon = document.getElementById('kitchen-lock-icon');
+            if (lockIcon) lockIcon.innerText = '🔒';
+        }
+
+        function updateKitchenOrderStatus(orderId, newStatus) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                saveLocalOrders();
+                renderKitchenDashboard();
+                if (activeOrder && activeOrder.id === orderId) {
+                    activeOrder.status = newStatus;
+                }
+                triggerToast(`Ticket ${order.orderRef} updated to ${newStatus.toUpperCase()}`, 'success');
+            }
+        }
+
+        function renderKitchenDashboard() {
+            const container = document.getElementById('kitchen-tickets-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let pendingCount = 0;
+            let boxesCount = 0;
+            let depositsHeld = 0;
+            let totalRev = 0;
+
+            allOrdersList.forEach(o => {
+                totalRev += o.grandTotal;
+                if (o.status !== 'returned') {
+                    boxesCount += o.coolboxCount;
+                    depositsHeld += o.deposit;
+                }
+                if (o.status === 'pending' || o.status === 'preparing') {
+                    pendingCount++;
+                }
+            });
+
+            document.getElementById('stat-pending-count').innerText = pendingCount;
+            document.getElementById('stat-boxes-count').innerText = boxesCount;
+            document.getElementById('stat-deposits-held').innerText = `£${depositsHeld.toFixed(2)}`;
+            document.getElementById('stat-gross-revenue').innerText = `£${totalRev.toFixed(2)}`;
+
+            if (allOrdersList.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-xs text-coastal-400 space-y-2 bg-white rounded-3xl border border-coastal-200">
+                        <i data-lucide="check-circle-2" class="w-8 h-8 mx-auto text-emerald-500"></i>
+                        <p>No active kitchen tickets in queue right now.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            allOrdersList.forEach(order => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-3xl border border-coastal-200 shadow-sm space-y-4 flex flex-col justify-between";
+                
+                let statusBadge = 'bg-amber-100 text-amber-800';
+                if (order.status === 'preparing') statusBadge = 'bg-blue-100 text-blue-800';
+                if (order.status === 'ready') statusBadge = 'bg-emerald-100 text-emerald-800';
+                if (order.status === 'returned') statusBadge = 'bg-coastal-100 text-coastal-600';
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start border-b border-coastal-100 pb-2">
+                            <div>
+                                <span class="font-extrabold font-mono text-coastal-900 text-base">${order.orderRef}</span>
+                                <p class="text-xs font-bold text-coastal-700">${order.customerName}</p>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase ${statusBadge}">${order.status.replace('_', ' ')}</span>
+                        </div>
+
+                        <div class="text-xs space-y-1">
+                            <p class="text-coastal-500 font-medium">Collect Time: <strong class="text-coastal-900">${order.pickupTime}</strong></p>
+                            <p class="text-coastal-500 font-medium">Contact: ${order.customerPhone}</p>
+                            ${order.notes ? `<p class="bg-amber-50 p-2 rounded-lg text-amber-900 text-[11px] border border-amber-200"><strong>Note:</strong> ${order.notes}</p>` : ''}
+                        </div>
+
+                        <div class="bg-coastal-50 p-3 rounded-2xl border border-coastal-100 text-xs space-y-1">
+                            <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items:</p>
+                            ${order.items.map(i => `
+                                <div class="flex justify-between text-coastal-700">
+                                    <span>${i.qty}x ${i.title}</span>
+                                    <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-coastal-100">
+                        ${order.status === 'pending' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'preparing')" class="touch-target w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
+                                <i data-lucide="chef-hat" class="w-4 h-4"></i>
+                                <span>Start Preparation</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.status === 'preparing' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'ready')" class="touch-target w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
+                                <i data-lucide="package-check" class="w-4 h-4"></i>
+                                <span>Mark Ready for Pickup</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.status === 'ready' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'returned')" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4 text-emerald-400"></i>
+                                <span>Refund £${order.deposit.toFixed(2)} Deposit & Complete</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.status === 'returned' ? `
+                            <p class="text-center text-xs text-emerald-700 font-bold py-1">✓ Box Returned & £${order.deposit.toFixed(2)} Refunded</p>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function saveCustomerLogin() {
+            const emailInput = document.getElementById('auth-email-input');
+            const email = emailInput ? emailInput.value.trim() : '';
+            if (!email) {
+                triggerToast('Please enter a valid email address', 'error');
+                return;
+            }
+
+            loggedInCustomer = { name: email.split('@')[0], email: email };
+            updateHeaderUserBadge();
+            closeAuthModal();
+            triggerToast(`Logged in as ${email}`, 'success');
+
+            const activeTab = document.getElementById('customer-history');
+            if (activeTab && !activeTab.classList.contains('hidden')) {
+                renderCustomerOrderHistory();
+            }
+        }
+
+        function updateHeaderUserBadge() {
+            const label = loggedInCustomer ? loggedInCustomer.name : 'Guest';
+            const desktopLabel = document.getElementById('header-user-status');
+            const mobileLabel = document.getElementById('header-user-status-mobile');
+            if (desktopLabel) desktopLabel.innerText = label;
+            if (mobileLabel) mobileLabel.innerText = label;
+        }
+
+        function handleCustomerOrdersTabClick() {
+            switchView('customer-history');
+        }
+
+        function saveLocalOrders() {
+            try {
+                localStorage.setItem('cromer_picnics_orders', JSON.stringify(allOrdersList));
+            } catch(e) {}
+        }
+
+        function loadLocalOrders() {
+            try {
+                const saved = localStorage.getItem('cromer_picnics_orders');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        allOrdersList = parsed;
+                    }
+                }
+            } catch(e) {}
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalOrders();
+            renderPicnicPackages();
+            updateBasketSummary();
+            updateHeaderUserBadge();
+
+            // Set up initial icon rendering
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
