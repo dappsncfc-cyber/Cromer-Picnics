@@ -1394,6 +1394,33 @@
             if (lockIcon) lockIcon.innerText = '🔒';
         }
 
+        function sendCustomerReadyEmail(orderId) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if (!order || !order.customerEmail) {
+                triggerToast('No customer email address on file for this order.', 'error');
+                return;
+            }
+
+            const subject = encodeURIComponent(`Your Cromer Picnic Order is Ready for Collection! (Ref: ${order.orderRef})`);
+            const body = encodeURIComponent(
+                `Hi ${order.customerName},\n\n` +
+                `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
+                `Collection Point:\n` +
+                `The White Horse\n` +
+                `24 West Street, Cromer, NR27 9DS\n\n` +
+                `Items in your hamper:\n` +
+                order.items.map(i => `• ${i.qty}x ${i.title}${i.custom ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
+                `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
+                `When you finish your beach day, return the insulated cool box to bar staff to receive your £${order.deposit.toFixed(2)} deposit refund!\n\n` +
+                `Warm regards,\n` +
+                `The White Horse Kitchen Team\n` +
+                `24 West Street, Cromer`
+            );
+
+            window.location.href = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
+            triggerToast(`Opening email client to notify ${order.customerName}...`, 'info');
+        }
+
         function updateKitchenOrderStatus(orderId, newStatus) {
             const order = allOrdersList.find(o => o.id === orderId);
             if (order) {
@@ -1592,6 +1619,13 @@
                             <button onclick="updateKitchenOrderStatus('${order.id}', 'ready')" class="touch-target w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
                                 <i data-lucide="package-check" class="w-4 h-4"></i>
                                 <span>Mark Ready for Pickup</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && (order.status === 'ready' || order.status === 'preparing') ? `
+                            <button onclick="sendCustomerReadyEmail('${order.id}')" class="touch-target w-full bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-sand-300">
+                                <i data-lucide="mail" class="w-4 h-4 text-crab-600"></i>
+                                <span>Email Customer Order Ready</span>
                             </button>
                         ` : ''}
 
