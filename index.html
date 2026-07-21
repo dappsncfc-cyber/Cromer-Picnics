@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cromer Picnics | The White Horse, Cromer</title>
+    <title>Cromer Picnics | Gourmet Coastal Hampers by The White Horse</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -98,11 +98,11 @@
                         <div>
                             <div class="flex items-center space-x-1.5">
                                 <h1 class="font-serif text-base sm:text-lg font-extrabold text-coastal-900 tracking-tight leading-tight">Cromer Picnics</h1>
-                                <span class="bg-crab-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">Norfolk</span>
+                                <span class="bg-crab-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">The White Horse</span>
                             </div>
                             <p class="text-[11px] sm:text-xs text-coastal-600 font-medium flex items-center space-x-1">
                                 <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
-                                <span>The White Horse • 24 West Street, Cromer, NR27 9DS</span>
+                                <span>The White Horse • 24 West Street, Cromer, NR27 9DX</span>
                             </p>
                         </div>
                     </div>
@@ -829,8 +829,10 @@
             const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none";
             const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none";
 
+            const hasActiveLiveOrder = activeOrder && activeOrder.status !== 'returned';
+
             if (navCustomer) navCustomer.className = baseBtn;
-            if (navTracker) navTracker.className = activeOrder ? baseBtn : "hidden";
+            if (navTracker) navTracker.className = hasActiveLiveOrder ? baseBtn : "hidden";
             if (navOrders) navOrders.className = baseBtn;
             if (navPub) navPub.className = baseBtn;
 
@@ -1381,7 +1383,7 @@
                 closeCheckoutModal();
                 clearBasket();
 
-                triggerToast('Payment Approved! Order dispatched to kitchen.', 'success');
+                triggerToast('Payment Authorised! Order ticket dispatched to kitchen.', 'success');
                 switchView('order-tracker');
             }, 1200);
         }
@@ -1391,7 +1393,7 @@
             const activeContainer = document.getElementById('tracker-active-content');
             const emptyContainer = document.getElementById('tracker-empty-content');
 
-            if (!activeOrder) {
+            if (!activeOrder || activeOrder.status === 'returned') {
                 if (activeContainer) activeContainer.classList.add('hidden');
                 if (emptyContainer) emptyContainer.classList.remove('hidden');
                 return;
@@ -1507,10 +1509,12 @@
                     </div>
                     <div class="flex items-center justify-between sm:justify-end space-x-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-coastal-200">
                         <span class="font-serif font-black text-coastal-900 text-base">£${order.grandTotal.toFixed(2)}</span>
-                        <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
-                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                            <span>Track Order</span>
-                        </button>
+                        ${!isReturned ? `
+                            <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                <span>Track Order</span>
+                            </button>
+                        ` : '<span class="text-xs text-coastal-400 font-bold">Order Completed</span>'}
                     </div>
                 `;
                 container.appendChild(el);
@@ -1522,6 +1526,10 @@
         function setupActiveOrderTracker(orderId) {
             const found = allOrdersList.find(o => o.id === orderId);
             if (found) {
+                if (found.status === 'returned') {
+                    triggerToast('Order completed & cool box deposit refunded.', 'info');
+                    return;
+                }
                 activeOrder = found;
                 switchView('order-tracker');
             }
@@ -1574,7 +1582,7 @@
                 `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
                 `Collection Point:\n` +
                 `The White Horse\n` +
-                `24 West Street, Cromer, NR27 9DS\n\n` +
+                `24 West Street, Cromer, NR27 9DX\n\n` +
                 `Items in your hamper:\n` +
                 order.items.map(i => `• ${i.qty}x ${i.title}${i.custom ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
                 `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
@@ -1592,11 +1600,16 @@
             const order = allOrdersList.find(o => o.id === orderId);
             if (order) {
                 order.status = newStatus;
+
+                // Automatically drop off live tracker when returned
+                if (newStatus === 'returned' && activeOrder && activeOrder.id === orderId) {
+                    activeOrder = null;
+                    const navTracker = document.getElementById('nav-tracker');
+                    if (navTracker) navTracker.classList.add('hidden');
+                }
+
                 saveLocalOrders();
                 renderKitchenDashboard();
-                if (activeOrder && activeOrder.id === orderId) {
-                    activeOrder.status = newStatus;
-                }
                 triggerToast(`Ticket ${order.orderRef} updated to ${newStatus.toUpperCase()}`, 'success');
             }
         }
@@ -1683,7 +1696,7 @@
             const endOfToday = startOfToday + (24 * 60 * 60 * 1000) - 1;
 
             allOrdersList.forEach(o => {
-                // Accumulate revenue only for orders placed within today's date range
+                // Accumulate revenue only for orders placed within today's date range (resets at 11:59 PM)
                 if (o.createdAt >= startOfToday && o.createdAt <= endOfToday) {
                     todayRev += o.grandTotal;
                 }
