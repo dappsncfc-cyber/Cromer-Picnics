@@ -16,7 +16,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Custom Tailwind Theme Extensions -->
     <script>
         tailwind.config = {
             theme: {
@@ -32,7 +31,7 @@
                         },
                         coastal: {
                             50: '#f0f7f7',
-                            100: '#d9ebd',
+                            100: '#d9ebed',
                             200: '#b4d7d7',
                             600: '#2a6f78',
                             800: '#1d3557',
@@ -96,7 +95,7 @@
                     <!-- Mobile Account Button -->
                     <button onclick="openAuthModal()" class="md:hidden touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
                         <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
-                        <span id="header-user-status-mobile" class="truncate max-w-[80px]">Guest</span>
+                        <span id="header-user-status-mobile" class="truncate max-w-[90px]">Guest</span>
                     </button>
                 </div>
 
@@ -128,7 +127,7 @@
                     <!-- Desktop User Account Badge -->
                     <button onclick="openAuthModal()" class="hidden md:flex items-center space-x-2 bg-coastal-50 hover:bg-coastal-100 px-3 py-2 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800 transition-all">
                         <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
-                        <span id="header-user-status">Customer Login</span>
+                        <span id="header-user-status">Customer Sign In</span>
                     </button>
                 </div>
 
@@ -527,13 +526,53 @@
                 <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-200 space-y-1.5">
                     <div class="flex justify-between text-coastal-600">
                         <span>Hampers Subtotal:</span>
-                        <span font-bold id="modal-subtotal">£0.00</span>
+                        <span class="font-bold" id="modal-subtotal">£0.00</span>
                     </div>
                     <div class="flex justify-between text-emerald-700 font-medium">
                         <span>Refundable Cool Box Deposit (£20/box):</span>
-                        <span id="modal-deposit">£20.00</span>
+                        <span class="font-bold" id="modal-deposit">£20.00</span>
                     </div>
                     <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-1.5 mt-1.5">
+                        <span>Total Payable:</span>
+                        <span class="font-serif text-crab-600 text-base" id="modal-grandtotal">£0.00</span>
+                    </div>
+                </div>
+
+                <!-- Card Authorization Sandbox Box -->
+                <div class="bg-coastal-900 text-white p-4 rounded-2xl space-y-2">
+                    <div class="flex items-center justify-between border-b border-coastal-800 pb-2">
+                        <span class="text-[10px] font-bold uppercase text-sand-200 tracking-wider">Instant Payment Sandbox</span>
+                        <span class="text-[10px] text-emerald-400 font-mono font-bold">● Auto-Prepopulated</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                        <div>
+                            <span class="text-coastal-400 block text-[9px]">Card Number</span>
+                            <span>4000 1234 5678 9010</span>
+                        </div>
+                        <div>
+                            <span class="text-coastal-400 block text-[9px]">Expires / CVC</span>
+                            <span>12/28 • 888</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="processSimulatedPayment()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Confirm & Authorise Payment</span>
+                </button>
+            </div>
+
+            <!-- Processing Loading View -->
+            <div id="modal-processing-content" class="hidden py-12 text-center space-y-4">
+                <div class="w-12 h-12 border-4 border-coastal-200 border-t-crab-500 rounded-full animate-spin mx-auto"></div>
+                <div>
+                    <h4 class="font-serif font-bold text-lg text-coastal-900">Authorising Payment...</h4>
+                    <p class="text-xs text-coastal-500">Securing your cool box deposit and sending order ticket to kitchen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL 3: Auth Email Login & Sign Up Modal -->
     <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-coastal-900/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl w-full max-w-sm border border-coastal-100 shadow-2xl p-6 relative space-y-4">
@@ -606,6 +645,7 @@
         let allOrdersList = [];
         let kitchenViewMode = 'active'; // 'active' or 'archived'
         let kitchenArchiveDateFilter = ''; // YYYY-MM-DD or empty
+        
         const picnicPackages = [
             {
                 id: 'crab-feast',
@@ -724,24 +764,24 @@
             const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none";
             const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none";
 
-            navCustomer.className = baseBtn;
+            if (navCustomer) navCustomer.className = baseBtn;
             if (navTracker) navTracker.className = activeOrder ? baseBtn : "hidden";
-            navOrders.className = baseBtn;
-            navPub.className = baseBtn;
+            if (navOrders) navOrders.className = baseBtn;
+            if (navPub) navPub.className = baseBtn;
 
             const targetView = document.getElementById(viewId);
             if (targetView) targetView.classList.remove('hidden');
 
             if (viewId === 'customer-explore') {
-                navCustomer.className = activeBtn;
+                if (navCustomer) navCustomer.className = activeBtn;
             } else if (viewId === 'order-tracker') {
                 if (navTracker) navTracker.className = activeBtn;
                 renderLiveTrackerContent();
             } else if (viewId === 'customer-history') {
-                navOrders.className = activeBtn;
+                if (navOrders) navOrders.className = activeBtn;
                 renderCustomerOrderHistory();
             } else if (viewId === 'pub-portal') {
-                navPub.className = activeBtn;
+                if (navPub) navPub.className = activeBtn;
                 if (isKitchenUnlocked) renderKitchenDashboard();
             }
 
@@ -1160,7 +1200,8 @@
                 saveLocalOrders();
 
                 // Set Customer Info
-                loggedInCustomer = { name: name, email: email };
+                loggedInCustomer = { name: name, email: email, phone: phone };
+                saveLocalCustomers();
                 updateHeaderUserBadge();
 
                 // Unhide Live Tracker in Nav
@@ -1319,7 +1360,6 @@
             }
         }
 
-        // Kitchen Staff Portal Actions
         function handleKitchenNavClick() {
             switchView('pub-portal');
         }
@@ -1603,24 +1643,28 @@
             const modalSub = document.getElementById('auth-modal-sub');
 
             if (mode === 'signup') {
-                btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
-                btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
-                formSignUp.classList.remove('hidden');
-                formLogIn.classList.add('hidden');
+                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
+                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
+                if (formSignUp) formSignUp.classList.remove('hidden');
+                if (formLogIn) formLogIn.classList.add('hidden');
                 if (modalSub) modalSub.innerText = "Register your details for fast coastal hamper pickup.";
             } else {
-                btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
-                btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
-                formSignUp.classList.add('hidden');
-                formLogIn.classList.remove('hidden');
+                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
+                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
+                if (formSignUp) formSignUp.classList.add('hidden');
+                if (formLogIn) formLogIn.classList.remove('hidden');
                 if (modalSub) modalSub.innerText = "Enter your registered email to view order history.";
             }
         }
 
         function registerNewCustomer() {
-            const name = document.getElementById('signup-name-input').value.trim();
-            const email = document.getElementById('signup-email-input').value.trim();
-            const phone = document.getElementById('signup-phone-input').value.trim();
+            const nameInput = document.getElementById('signup-name-input');
+            const emailInput = document.getElementById('signup-email-input');
+            const phoneInput = document.getElementById('signup-phone-input');
+
+            const name = nameInput ? nameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
 
             if (!name || !email || !phone) {
                 triggerToast('Please complete all fields (Name, Email, and Phone)', 'error');
@@ -1665,6 +1709,7 @@
                 loggedInCustomer = { name: email.split('@')[0], email: email, phone: '' };
             }
 
+            saveLocalCustomers();
             updateHeaderUserBadge();
             closeAuthModal();
             triggerToast(`Logged in as ${loggedInCustomer.email}`, 'success');
