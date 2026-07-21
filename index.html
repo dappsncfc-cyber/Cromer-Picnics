@@ -303,8 +303,9 @@
                         <h4 class="font-serif text-2xl font-black text-emerald-700" id="stat-deposits-held">£0.00</h4>
                     </div>
                     <div class="bg-white p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Total Sales Revenue</p>
+                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Today's Revenue</p>
                         <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-gross-revenue">£0.00</h4>
+                        <p class="text-[9px] text-coastal-400 font-medium mt-0.5">Resets daily at 11:59 PM</p>
                     </div>
                 </div>
 
@@ -1444,6 +1445,17 @@
             }
         }
 
+        function deleteArchivedKitchenOrder(orderId) {
+            const orderIndex = allOrdersList.findIndex(o => o.id === orderId);
+            if (orderIndex >= 0) {
+                const ref = allOrdersList[orderIndex].orderRef;
+                allOrdersList.splice(orderIndex, 1);
+                saveLocalOrders();
+                renderKitchenDashboard();
+                triggerToast(`Archived ticket ${ref} permanently deleted`, 'info');
+            }
+        }
+
         function restoreKitchenOrder(orderId) {
             const order = allOrdersList.find(o => o.id === orderId);
             if (order) {
@@ -1496,12 +1508,19 @@
             let pendingCount = 0;
             let boxesCount = 0;
             let depositsHeld = 0;
-            let totalRev = 0;
+            let todayRev = 0;
             let activeQueueCount = 0;
             let archivedQueueCount = 0;
 
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const endOfToday = startOfToday + (24 * 60 * 60 * 1000) - 1;
+
             allOrdersList.forEach(o => {
-                totalRev += o.grandTotal;
+                // Accumulate revenue only for orders placed within today's date range
+                if (o.createdAt >= startOfToday && o.createdAt <= endOfToday) {
+                    todayRev += o.grandTotal;
+                }
                 if (o.status !== 'returned' && !o.archived) {
                     boxesCount += o.coolboxCount;
                     depositsHeld += o.deposit;
@@ -1516,7 +1535,7 @@
             document.getElementById('stat-pending-count').innerText = pendingCount;
             document.getElementById('stat-boxes-count').innerText = boxesCount;
             document.getElementById('stat-deposits-held').innerText = `£${depositsHeld.toFixed(2)}`;
-            document.getElementById('stat-gross-revenue').innerText = `£${totalRev.toFixed(2)}`;
+            document.getElementById('stat-gross-revenue').innerText = `£${todayRev.toFixed(2)}`;
 
             const badgeActive = document.getElementById('badge-kitchen-active-count');
             const badgeArchived = document.getElementById('badge-kitchen-archived-count');
@@ -1646,10 +1665,16 @@
 
                         ${order.archived ? `
                             <p class="text-center text-[11px] text-coastal-500 font-bold py-0.5">Archived Ticket Record</p>
-                            <button onclick="restoreKitchenOrder('${order.id}')" class="touch-target w-full bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200">
-                                <i data-lucide="undo" class="w-4 h-4 text-coastal-600"></i>
-                                <span>Restore to Active Queue</span>
-                            </button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="restoreKitchenOrder('${order.id}')" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200">
+                                    <i data-lucide="undo" class="w-4 h-4 text-coastal-600"></i>
+                                    <span>Restore</span>
+                                </button>
+                                <button onclick="deleteArchivedKitchenOrder('${order.id}')" class="touch-target bg-crab-50 hover:bg-crab-100 text-crab-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-crab-200">
+                                    <i data-lucide="trash-2" class="w-4 h-4 text-crab-600"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
                         ` : ''}
                     </div>
                 `;
