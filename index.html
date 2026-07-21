@@ -469,7 +469,14 @@
                         <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="sarah@example.co.uk" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                     <div>
-                        <label class="block font-bold text-coastal-800 mb-1">Collection Time Today *</label>
+                        <label class="block font-bold text-coastal-800 mb-1">Collection Date *</label>
+                        <input type="date" id="pickup-date" onchange="validatePickupCutoff()" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Collection Time *</label>
                         <select id="pickup-time" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                             <option value="12:00 PM">12:00 PM (Lunch)</option>
                             <option value="1:00 PM">1:00 PM (Lunch)</option>
@@ -477,6 +484,12 @@
                             <option value="4:00 PM">4:00 PM (High Tea)</option>
                             <option value="6:00 PM">6:00 PM (Sunset Picnic)</option>
                         </select>
+                    </div>
+                    <div class="flex items-end">
+                        <div id="cutoff-notice" class="w-full text-[11px] p-2.5 rounded-xl bg-coastal-50 border border-coastal-200 text-coastal-600 font-medium leading-tight">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 inline text-crab-500 mr-1"></i>
+                            <span id="cutoff-notice-text">Same-day pickup orders close daily at <strong>3:00 PM</strong>.</span>
+                        </div>
                     </div>
                 </div>
 
@@ -963,13 +976,11 @@
 
             let subtotal = 0;
             let hamperCount = 0;
-            const itemsList = [];
 
             keys.forEach(k => {
                 const item = basket[k];
                 subtotal += item.price * item.qty;
                 hamperCount += item.qty;
-                itemsList.push(item);
             });
 
             const depositTotal = hamperCount * 20.00;
@@ -979,11 +990,62 @@
             document.getElementById('modal-deposit').innerText = `£${depositTotal.toFixed(2)}`;
             document.getElementById('modal-grandtotal').innerText = `£${grandTotal.toFixed(2)}`;
 
+            // Date Picker & Cutoff Setup
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomYear = tomorrow.getFullYear();
+            const tomMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tomDay = String(tomorrow.getDate()).padStart(2, '0');
+            const tomorrowStr = `${tomYear}-${tomMonth}-${tomDay}`;
+
+            const dateInput = document.getElementById('pickup-date');
+            
+            // If current time is after 3:00 PM (15:00), default date to tomorrow
+            if (today.getHours() >= 15) {
+                dateInput.value = tomorrowStr;
+                dateInput.min = tomorrowStr;
+            } else {
+                dateInput.value = todayStr;
+                dateInput.min = todayStr;
+            }
+
+            validatePickupCutoff();
+
             document.getElementById('modal-form-content').classList.remove('hidden');
             document.getElementById('modal-processing-content').classList.add('hidden');
             document.getElementById('checkout-modal').classList.remove('hidden');
             
             lucide.createIcons();
+        }
+
+        function validatePickupCutoff() {
+            const dateInput = document.getElementById('pickup-date');
+            const noticeText = document.getElementById('cutoff-notice-text');
+            const noticeBox = document.getElementById('cutoff-notice');
+            if (!dateInput || !noticeText) return true;
+
+            const selectedDateStr = dateInput.value;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            if (selectedDateStr === todayStr && now.getHours() >= 15) {
+                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                noticeText.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a future date.";
+                return false;
+            } else {
+                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50 border border-coastal-200 text-coastal-600 font-medium leading-tight";
+                noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>.";
+                return true;
+            }
         }
 
         function closeCheckoutModal() {
@@ -994,11 +1056,22 @@
             const name = document.getElementById('customer-name').value.trim();
             const phone = document.getElementById('customer-phone').value.trim();
             const email = document.getElementById('customer-email').value.trim();
+            const pickupDate = document.getElementById('pickup-date').value;
             const pickupTime = document.getElementById('pickup-time').value;
             const notes = document.getElementById('dietary-notes').value.trim();
 
             if (!name || !email) {
                 triggerToast('Please provide your name and email address', 'error');
+                return;
+            }
+
+            if (!pickupDate) {
+                triggerToast('Please select a collection date', 'error');
+                return;
+            }
+
+            if (!validatePickupCutoff()) {
+                triggerToast('Same-day orders close at 3:00 PM. Please select tomorrow or a later date.', 'error');
                 return;
             }
 
@@ -1026,6 +1099,10 @@
                 const grandTotal = subtotal + deposit;
                 const orderRef = 'CMP-' + Math.floor(100000 + Math.random() * 900000);
 
+                // Format friendly pickup date string (e.g. 21/07/2026)
+                const dateParts = pickupDate.split('-');
+                const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : pickupDate;
+
                 const newOrder = {
                     id: 'ord-' + Date.now(),
                     orderRef: orderRef,
@@ -1033,7 +1110,7 @@
                     customerPhone: phone,
                     customerEmail: email,
                     pickupTime: pickupTime,
-                    pickupDate: new Date().toLocaleDateString('en-GB'),
+                    pickupDate: formattedDate,
                     notes: notes,
                     items: itemsPayload,
                     subtotal: subtotal,
@@ -1098,8 +1175,8 @@
                         <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900 mt-1">Ref: ${activeOrder.orderRef}</h2>
                     </div>
                     <div class="text-left sm:text-right">
-                        <p class="text-xs text-coastal-500">Pick-up Location</p>
-                        <p class="text-xs font-bold text-coastal-800">24 West Street, Cromer (${activeOrder.pickupTime})</p>
+                        <p class="text-xs text-coastal-500">Pick-up Date & Location</p>
+                        <p class="text-xs font-bold text-coastal-800">24 West Street • ${activeOrder.pickupDate} (${activeOrder.pickupTime})</p>
                     </div>
                 </div>
 
@@ -1314,7 +1391,7 @@
                         </div>
 
                         <div class="text-xs space-y-1">
-                            <p class="text-coastal-500 font-medium">Collect Time: <strong class="text-coastal-900">${order.pickupTime}</strong></p>
+                            <p class="text-coastal-500 font-medium">Collection: <strong class="text-coastal-900">${order.pickupDate} at ${order.pickupTime}</strong></p>
                             <p class="text-coastal-500 font-medium">Contact: ${order.customerPhone}</p>
                             ${order.notes ? `<p class="bg-amber-50 p-2 rounded-lg text-amber-900 text-[11px] border border-amber-200"><strong>Note:</strong> ${order.notes}</p>` : ''}
                         </div>
