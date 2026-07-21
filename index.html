@@ -896,17 +896,25 @@
             lucide.createIcons();
         }
 
-        // Add Item to Basket
+        // Add Item to Basket with safe unique key management
         function addToBasket(packageId, customOpts = null) {
             const pkg = picnicPackages.find(p => p.id === packageId);
             if (!pkg) return;
 
-            const basketKey = customOpts ? `${packageId}-${JSON.stringify(customOpts)}` : packageId;
+            // Search for existing matching basket item
+            const customOptsStr = customOpts ? JSON.stringify(customOpts) : '';
+            const existingKey = Object.keys(basket).find(k => {
+                const item = basket[k];
+                const itemCustomStr = item.custom ? JSON.stringify(item.custom) : '';
+                return item.id === packageId && itemCustomStr === customOptsStr;
+            });
 
-            if (basket[basketKey]) {
-                basket[basketKey].qty += 1;
+            if (existingKey) {
+                basket[existingKey].qty += 1;
             } else {
-                basket[basketKey] = {
+                // Generate a clean alphanumeric basket key to prevent inline JS quote escaping syntax errors
+                const newKey = 'item_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+                basket[newKey] = {
                     id: packageId,
                     title: pkg.title,
                     basePrice: pkg.price,
@@ -972,6 +980,7 @@
                     }
                 }
 
+                // Render item markup with clean alphanumeric key
                 const itemHtml = `
                     <div class="flex items-center justify-between bg-coastal-50/90 p-2.5 rounded-xl border border-coastal-100 text-xs">
                         <div class="space-y-0.5 max-w-[150px] sm:max-w-[130px]">
@@ -981,9 +990,9 @@
                         </div>
                         <div class="flex items-center space-x-1">
                             <div class="flex items-center space-x-1 bg-white rounded-lg border border-coastal-200 p-0.5">
-                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold" title="Decrease">-</button>
+                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Decrease quantity">-</button>
                                 <span class="w-5 text-center font-bold text-coastal-900 text-xs">${item.qty}</span>
-                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold" title="Increase">+</button>
+                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Increase quantity">+</button>
                             </div>
                             <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item from basket">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
