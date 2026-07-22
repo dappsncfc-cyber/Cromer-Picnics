@@ -1881,14 +1881,20 @@
                         </div>
 
                         <div class="bg-coastal-50/80 p-3 rounded-2xl border border-coastal-100 text-xs space-y-1">
-                            <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items:</p>
+                            <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items & Extras:</p>
                             ${order.items.map(i => `
-                                <div class="text-coastal-700 space-y-0.5 border-b border-coastal-100/50 pb-1 last:border-b-0">
+                                <div class="text-coastal-700 space-y-0.5 border-b border-coastal-100/50 pb-1.5 last:border-b-0">
                                     <div class="flex justify-between font-medium">
                                         <span>${i.qty}x ${i.title}</span>
                                         <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
                                     </div>
-                                    ${i.custom && i.custom.byoItems ? `<p class="text-[10px] text-crab-600 font-medium pl-2"><strong>Box Contents:</strong> ${i.custom.byoItems.join(', ')}</p>` : ''}
+                                    ${i.custom ? `
+                                        <div class="text-[10px] space-y-0.5 pl-2 mt-0.5">
+                                            ${i.custom.diet && i.custom.diet !== 'Standard Recipe' ? `<p class="text-amber-800 font-bold"><strong>Dietary Option:</strong> ${i.custom.diet}</p>` : ''}
+                                            ${i.custom.drinks && i.custom.drinks.length > 0 ? `<p class="text-coastal-800 font-bold"><strong>Extras / Drinks:</strong> ${i.custom.drinks.join(', ')}</p>` : ''}
+                                            ${i.custom.byoItems && i.custom.byoItems.length > 0 ? `<p class="text-crab-600 font-medium"><strong>Box Contents:</strong> ${i.custom.byoItems.join(', ')}</p>` : ''}
+                                        </div>
+                                    ` : ''}
                                 </div>
                             `).join('')}
                             <div class="pt-1.5 border-t border-coastal-200 flex justify-between font-extrabold text-coastal-900 mt-1">
