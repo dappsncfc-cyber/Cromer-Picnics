@@ -1359,7 +1359,7 @@
                     deposit: deposit,
                     grandTotal: grandTotal,
                     coolboxCount: coolboxCount,
-                    status: 'pending', // pending -> preparing -> ready -> returned
+                    status: 'pending', // pending -> preparing -> ready -> collected -> returned
                     createdAt: Date.now()
                 };
 
@@ -1406,6 +1406,7 @@
                 { key: 'pending', label: 'Order Received', icon: 'receipt' },
                 { key: 'preparing', label: 'Kitchen Prep', icon: 'chef-hat' },
                 { key: 'ready', label: 'Ready at West St', icon: 'package-check' },
+                { key: 'collected', label: 'Collected', icon: 'shopping-bag' },
                 { key: 'returned', label: 'Deposit Refunded', icon: 'check-circle' }
             ];
 
@@ -1424,7 +1425,7 @@
                 </div>
 
                 <!-- Tracker Progress Bar -->
-                <div class="grid grid-cols-4 gap-2 pt-2">
+                <div class="grid grid-cols-5 gap-1 sm:gap-2 pt-2">
                     ${statusSteps.map((step, idx) => {
                         const isDone = idx <= currentIdx;
                         const isCurrent = idx === currentIdx;
@@ -1769,6 +1770,7 @@
                 let statusBadge = 'bg-amber-100 text-amber-800';
                 if (order.status === 'preparing') statusBadge = 'bg-blue-100 text-blue-800';
                 if (order.status === 'ready') statusBadge = 'bg-emerald-100 text-emerald-800';
+                if (order.status === 'collected') statusBadge = 'bg-purple-100 text-purple-800';
                 if (order.status === 'returned') statusBadge = 'bg-coastal-100 text-coastal-600';
 
                 card.innerHTML = `
@@ -1831,6 +1833,13 @@
                         ` : ''}
 
                         ${!order.archived && order.status === 'ready' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'collected')" class="touch-target w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                <span>Mark Order as Collected</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && order.status === 'collected' ? `
                             <button onclick="updateKitchenOrderStatus('${order.id}', 'returned')" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1">
                                 <i data-lucide="rotate-ccw" class="w-4 h-4 text-emerald-400"></i>
                                 <span>Refund £${order.deposit.toFixed(2)} Deposit & Complete</span>
