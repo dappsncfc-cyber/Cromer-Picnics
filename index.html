@@ -122,9 +122,14 @@
                             <span>Menu</span>
                         </button>
 
-                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative">
                             <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 animate-pulse shrink-0"></i>
                             <span>Live Tracker</span>
+                            <!-- Animated Notification Dot -->
+                            <span id="tracker-badge" class="hidden flex h-2.5 w-2.5 relative ml-0.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crab-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-crab-500"></span>
+                            </span>
                         </button>
 
                         <button id="nav-orders" onclick="handleCustomerOrdersTabClick()" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
@@ -678,6 +683,7 @@
         let loggedInCustomer = { name: 'Sarah Jenkins', email: 'sarah@example.co.uk', phone: '07700 900123' };
         let activeCustomizingPkg = null;
         let activeOrder = null;
+        let hasUnreadTrackerUpdate = false;
         let basket = {};
         let allOrdersList = [];
         let kitchenViewMode = 'active'; // 'active' or 'archived'
@@ -826,8 +832,8 @@
             const navOrders = document.getElementById('nav-orders');
             const navPub = document.getElementById('nav-pub');
             
-            const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none";
-            const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none";
+            const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative";
+            const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none relative";
 
             const hasActiveLiveOrder = activeOrder && activeOrder.status !== 'returned';
 
@@ -843,6 +849,10 @@
                 if (navCustomer) navCustomer.className = activeBtn;
             } else if (viewId === 'order-tracker') {
                 if (navTracker) navTracker.className = activeBtn;
+                // Clear unread badge when user opens Live Tracker
+                hasUnreadTrackerUpdate = false;
+                const badge = document.getElementById('tracker-badge');
+                if (badge) badge.classList.add('hidden');
                 renderLiveTrackerContent();
             } else if (viewId === 'customer-history') {
                 if (navOrders) navOrders.className = activeBtn;
@@ -1377,6 +1387,11 @@
                 const navTracker = document.getElementById('nav-tracker');
                 if (navTracker) navTracker.classList.remove('hidden');
 
+                // Activate notification dot indicator on Live Tracker menu item
+                hasUnreadTrackerUpdate = true;
+                const trackerBadge = document.getElementById('tracker-badge');
+                if (trackerBadge) trackerBadge.classList.remove('hidden');
+
                 // Trigger Kitchen Sound Effect
                 playNotificationSound();
 
@@ -1602,16 +1617,42 @@
             if (order) {
                 order.status = newStatus;
 
+                let customerNotification = '';
+                if (newStatus === 'preparing') customerNotification = '👨‍🍳 Customer Update: Your picnic is now being prepared!';
+                if (newStatus === 'ready') customerNotification = '✅ Customer Update: Your picnic is ready for collection!';
+                if (newStatus === 'collected') customerNotification = '🧺 Customer Update: Order collected. Enjoy your beach day!';
+                if (newStatus === 'returned') customerNotification = '💰 Customer Update: Cool box returned! £20 deposit refunded.';
+
                 // Automatically drop off live tracker when returned
                 if (newStatus === 'returned' && activeOrder && activeOrder.id === orderId) {
                     activeOrder = null;
                     const navTracker = document.getElementById('nav-tracker');
                     if (navTracker) navTracker.classList.add('hidden');
+                    const badge = document.getElementById('tracker-badge');
+                    if (badge) badge.classList.add('hidden');
+                    hasUnreadTrackerUpdate = false;
+                    renderLiveTrackerContent(); // Live refresh to clear tracker
+                } else if (activeOrder && activeOrder.id === orderId) {
+                    activeOrder.status = newStatus;
+                    
+                    // Show pulsating notification dot badge on Live Tracker menu tab
+                    hasUnreadTrackerUpdate = true;
+                    const badge = document.getElementById('tracker-badge');
+                    if (badge) badge.classList.remove('hidden');
+
+                    renderLiveTrackerContent(); // Live refresh the customer tracker UI progress bar
                 }
 
                 saveLocalOrders();
                 renderKitchenDashboard();
-                triggerToast(`Ticket ${order.orderRef} updated to ${newStatus.toUpperCase()}`, 'success');
+                
+                // Show standard staff success toast
+                triggerToast(`Ticket ${order.orderRef} updated to ${newStatus.toUpperCase()}`, 'info');
+                
+                // Simulate customer receiving a push notification to their device
+                if (customerNotification) {
+                    setTimeout(() => triggerToast(customerNotification, 'success'), 300);
+                }
             }
         }
 
