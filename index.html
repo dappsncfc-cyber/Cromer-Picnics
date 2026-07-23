@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cromer Picnics | Gourmet Coastal Hampers by The White Horse</title>
 
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Google Fonts -->
@@ -296,7 +299,7 @@
         </div>
     </div>
 
-    <!-- MODAL 0: Mobile Basket Glassmorphic Slide-Up Modal -->
+    <!-- MODAL 0: Mobile Basket Slide-Up Modal -->
     <div id="mobile-basket-modal" onclick="if(event.target === this) closeMobileBasketModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-200">
         <div class="glass-card rounded-t-3xl sm:rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-5 space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
@@ -327,7 +330,7 @@
         </div>
     </div>
 
-    <!-- MODAL 1: Glassmorphic Customise & Build Your Own Hamper Modal -->
+    <!-- MODAL 1: Customise & Build Your Own Hamper Modal -->
     <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4">
             <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal">
@@ -344,21 +347,11 @@
                 <label class="block font-bold text-coastal-800">Dietary Requirement Options</label>
                 <select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
-                    <option value="Gluten-Free Swap">Gluten-Free Bread & Crackers Swap</option>
-                    <option value="Dairy-Free Swap">Dairy-Free Alternative Cheese/Spread</option>
-                    <option value="Vegetarian Swap">Vegetarian Alternative</option>
                 </select>
 
-                <label class="block font-bold text-coastal-800">Norfolk Drinks Upgrade</label>
-                <div class="space-y-2">
-                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
-                        <input type="checkbox" id="custom-drink-1" value="Norfolk Apple Juice" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">Add Chilled Norfolk Apple Juice (+£3.50)</span>
-                    </label>
-                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
-                        <input type="checkbox" id="custom-drink-2" value="Local Ginger Beer" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">Add Artisan Ginger Beer (+£3.50)</span>
-                    </label>
+                <label class="block font-bold text-coastal-800">Norfolk Drinks & Add-on Upgrades</label>
+                <div class="space-y-2" id="custom-drinks-container">
+                    <!-- Populated dynamically via JavaScript from customFieldsList -->
                 </div>
             </div>
 
@@ -388,7 +381,7 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Glassmorphic Checkout & Payment Modal -->
+    <!-- MODAL 2: Checkout & Payment Modal -->
     <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-xl border border-white/60 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
             <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -420,15 +413,15 @@
                     </div>
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Date *</label>
-                        <input type="date" id="pickup-date" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="date" id="pickup-date" onchange="populateTimeSlots()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 font-bold text-coastal-900">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Time *</label>
-                        <select id="pickup-time" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                            <!-- Options populated dynamically based on selected date & current time -->
+                        <select id="pickup-time" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 font-bold text-coastal-900">
+                            <!-- Populated dynamically via populateTimeSlots -->
                         </select>
                     </div>
                     <div class="flex items-end">
@@ -495,7 +488,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Glassmorphic Auth Email Login & Sign Up Modal -->
+    <!-- MODAL 3: Auth Email Login & Sign Up Modal -->
     <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -572,7 +565,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyDkrSDAVFeTPJC13a1GKdx8SZ1t4ik36zU",
             authDomain: "cromer-picnics.firebaseapp.com",
@@ -598,14 +590,15 @@
             window.appId = getEffectiveAppId();
             window.currentUser = null;
 
-            // STRICT PATH COMPLIANCE: /artifacts/{appId}/public/data/
+            /* STRICT PATH COMPLIANCE: /artifacts/{appId}/public/data/ */
             window.getOrdersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders');
             window.getCustomersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers');
+            window.getOrderDocRef = (id) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', id);
+            window.getCustomerDocRef = (email) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
+
             window.getHampersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'hampers');
             window.getExtrasColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'extras');
-
-            window.getOrderDocRef = (orderId) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', orderId);
-            window.getCustomerDocRef = (email) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
+            window.getCustomFieldsColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'custom_fields');
 
             async function initAuth() {
                 try {
@@ -615,7 +608,7 @@
                         await signInAnonymously(auth);
                     }
                 } catch (error) {
-                    console.warn("Firebase auth warning (local mode active):", error);
+                    console.warn("Auth offline warning:", error);
                     window.dispatchEvent(new Event('firebase-ready'));
                 }
             }
@@ -627,15 +620,13 @@
 
             initAuth();
         } catch (err) {
-            console.warn("Firebase initialization skipped (offline fallback active):", err);
+            console.warn("Firebase initialization skipped:", err);
             window.dispatchEvent(new Event('firebase-ready'));
         }
     </script>
 
     <!-- Application Logic Script -->
     <script>
-        // Global State Variables
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
         let authMode = 'signup';
         let loggedInCustomer = null;
         let activeCustomizingPkg = null;
@@ -644,16 +635,7 @@
         let basket = {};
         let allOrdersList = [];
 
-        // Daily Available Pickup Time Slots
-        const timeSlots = [
-            { value: '12:00 PM', label: '12:00 PM (Lunch)', hour: 12, minute: 0 },
-            { value: '1:00 PM', label: '1:00 PM (Lunch)', hour: 13, minute: 0 },
-            { value: '2:30 PM', label: '2:30 PM (Afternoon)', hour: 14, minute: 30 },
-            { value: '4:00 PM', label: '4:00 PM (High Tea)', hour: 16, minute: 0 },
-            { value: '6:00 PM', label: '6:00 PM (Sunset Picnic)', hour: 18, minute: 0 }
-        ];
-
-        // Default Delicacies
+        // Dynamic State loaded from Admin / LocalStorage / Firestore
         let byoAvailableItems = [
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
@@ -671,12 +653,19 @@
         ];
         
         let picnicPackages = [
-            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', available: true },
-            { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', available: true },
-            { id: 'ploughmans-classic', title: 'Norfolk Artisan Ploughman’s', price: 38.00, desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.', badge: 'Popular', badgeColor: 'bg-sand-700 text-white', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80', available: true },
-            { id: 'saltmarsh-vegan', title: 'Saltmarsh Wild Grazing (V)', price: 36.00, desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.', badge: 'Vegetarian', badgeColor: 'bg-sage-600 text-white', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', available: true },
-            { id: 'sunset-prosecco', title: 'Pier Sunset Romance (For Two)', price: 68.00, desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.', badge: 'Luxury', badgeColor: 'bg-coastal-800 text-white', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80', available: true },
-            { id: 'shipmates-family', title: 'Little Shipmates Family Feast', price: 28.00, desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.', badge: 'Family', badgeColor: 'bg-coastal-600 text-white', image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80', available: true }
+            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', available: true },
+            { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', available: true },
+            { id: 'ploughmans-classic', title: 'Norfolk Artisan Ploughman’s', price: 38.00, badge: 'Popular', badgeColor: 'bg-sand-700 text-white', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80', desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.', available: true },
+            { id: 'saltmarsh-vegan', title: 'Saltmarsh Wild Grazing (V)', price: 36.00, badge: 'Vegetarian', badgeColor: 'bg-sage-600 text-white', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.', available: true },
+            { id: 'sunset-prosecco', title: 'Pier Sunset Romance (For Two)', price: 68.00, badge: 'Luxury', badgeColor: 'bg-coastal-800 text-white', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80', desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.', available: true },
+            { id: 'shipmates-family', title: 'Little Shipmates Family Feast', price: 28.00, badge: 'Family', badgeColor: 'bg-coastal-600 text-white', image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80', desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.', available: true }
+        ];
+
+        let customFieldsList = [
+            { id: 'fld-1', title: 'Add Chilled Norfolk Apple Juice', price: 3.50, type: 'drink' },
+            { id: 'fld-2', title: 'Add Artisan Ginger Beer', price: 3.50, type: 'drink' },
+            { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
+            { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' }
         ];
 
         function safeCreateIcons() {
@@ -691,7 +680,6 @@
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
-            
             const bgClass = type === 'success' ? 'bg-emerald-800/95 text-white backdrop-blur-md' : type === 'error' ? 'bg-crab-600/95 text-white backdrop-blur-md' : 'bg-coastal-800/95 text-white backdrop-blur-md';
             toast.className = `pointer-events-auto p-3.5 rounded-2xl shadow-xl text-xs font-bold flex items-center justify-between space-x-2 transition-all duration-300 transform translate-y-2 opacity-0 border border-white/20 ${bgClass}`;
             toast.innerHTML = `
@@ -742,6 +730,26 @@
             } catch(e) {}
         }
 
+        function saveLocalCatalog() {
+            try {
+                localStorage.setItem('wh_admin_hampers', JSON.stringify(picnicPackages));
+                localStorage.setItem('wh_admin_extras', JSON.stringify(byoAvailableItems));
+                localStorage.setItem('wh_admin_fields', JSON.stringify(customFieldsList));
+            } catch(e) {}
+        }
+
+        function loadLocalCatalog() {
+            try {
+                const h = localStorage.getItem('wh_admin_hampers');
+                const e = localStorage.getItem('wh_admin_extras');
+                const f = localStorage.getItem('wh_admin_fields');
+
+                if (h) picnicPackages = JSON.parse(h);
+                if (e) byoAvailableItems = JSON.parse(e);
+                if (f) customFieldsList = JSON.parse(f);
+            } catch(err) {}
+        }
+
         function switchView(viewId) {
             document.getElementById('customer-explore').classList.add('hidden');
             document.getElementById('order-tracker').classList.add('hidden');
@@ -782,12 +790,14 @@
 
         function renderPicnicPackages() {
             const container = document.getElementById('picnic-packages-container');
+            const badgeEl = document.getElementById('package-count-badge');
             if (!container) return;
             container.innerHTML = '';
 
-            const availablePackages = picnicPackages.filter(p => p.available !== false);
+            const activePackages = picnicPackages.filter(p => p.available !== false);
+            if (badgeEl) badgeEl.innerText = `${activePackages.length} Hampers Available`;
 
-            availablePackages.forEach(pkg => {
+            activePackages.forEach(pkg => {
                 const card = document.createElement('div');
                 card.className = "bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
                 card.innerHTML = `
@@ -819,9 +829,6 @@
                 `;
                 container.appendChild(card);
             });
-
-            const countBadge = document.getElementById('package-count-badge');
-            if (countBadge) countBadge.innerText = `${availablePackages.length} Hampers Available`;
 
             safeCreateIcons();
         }
@@ -902,7 +909,7 @@
                     if (item.custom.byoItems && item.custom.byoItems.length > 0) {
                         customText = `<p class="text-[10px] text-crab-600 font-semibold truncate">${item.custom.byoItems.length} Items: ${item.custom.byoItems.join(', ')}</p>`;
                     } else if (item.custom.diet || (item.custom.drinks && item.custom.drinks.length)) {
-                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Drinks' : ''}</p>`;
+                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Upgrades' : ''}</p>`;
                     }
                 }
 
@@ -919,7 +926,7 @@
                                 <span class="w-5 text-center font-bold text-coastal-900 text-xs">${item.qty}</span>
                                 <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Increase quantity">+</button>
                             </div>
-                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item from basket">
+                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -1028,9 +1035,38 @@
                 if (byoOptions) byoOptions.classList.add('hidden');
                 if (stdOptions) {
                     stdOptions.classList.remove('hidden');
-                    document.getElementById('custom-diet-select').value = "Standard Recipe";
-                    document.getElementById('custom-drink-1').checked = false;
-                    document.getElementById('custom-drink-2').checked = false;
+                    
+                    // Render Dynamic Custom Upgrades from customFieldsList
+                    const drinksContainer = document.getElementById('custom-drinks-container');
+                    const dietSelect = document.getElementById('custom-diet-select');
+                    
+                    if (dietSelect) {
+                        dietSelect.innerHTML = `<option value="Standard Recipe">Standard Recipe (Chef Special)</option>`;
+                        customFieldsList.filter(f => f.type === 'dietary').forEach(fld => {
+                            const opt = document.createElement('option');
+                            opt.value = fld.title;
+                            opt.innerText = fld.title;
+                            dietSelect.appendChild(opt);
+                        });
+                    }
+
+                    if (drinksContainer) {
+                        drinksContainer.innerHTML = '';
+                        const drinkUpgrades = customFieldsList.filter(f => f.type === 'drink' || f.type === 'extra');
+                        if (drinkUpgrades.length === 0) {
+                            drinksContainer.innerHTML = `<p class="text-coastal-400 text-[11px]">No extra drink upgrades currently available.</p>`;
+                        } else {
+                            drinkUpgrades.forEach(fld => {
+                                const lbl = document.createElement('label');
+                                lbl.className = "flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors";
+                                lbl.innerHTML = `
+                                    <input type="checkbox" value="${fld.id}" data-title="${fld.title}" data-price="${fld.price}" class="custom-upgrade-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                                    <span class="text-coastal-800 font-medium">${fld.title} (+£${Number(fld.price).toFixed(2)})</span>
+                                `;
+                                drinksContainer.appendChild(lbl);
+                            });
+                        }
+                    }
                 }
             }
 
@@ -1049,7 +1085,7 @@
                 label.innerHTML = `
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">${item.icon} ${item.title}</span>
+                        <span class="text-coastal-800 font-medium">${item.icon || '🥪'} ${item.title}</span>
                     </div>
                     <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
                 `;
@@ -1065,7 +1101,7 @@
             checkboxes.forEach(cb => {
                 if (cb.checked) {
                     const found = byoAvailableItems.find(i => i.id === cb.value);
-                    if (found) total += Number(found.price);
+                    if (found) total += found.price;
                 }
             });
 
@@ -1086,7 +1122,7 @@
                         const item = byoAvailableItems.find(i => i.id === cb.value);
                         if (item) {
                             selectedItems.push(item.title);
-                            extraItemsTotal += Number(item.price);
+                            extraItemsTotal += item.price;
                         }
                     }
                 });
@@ -1106,13 +1142,19 @@
                 addToBasket(activeCustomizingPkg.id, customOpts);
             } else {
                 const diet = document.getElementById('custom-diet-select').value;
-                const drink1 = document.getElementById('custom-drink-1').checked;
-                const drink2 = document.getElementById('custom-drink-2').checked;
+                const checkboxes = document.querySelectorAll('.custom-upgrade-checkbox');
 
                 let extraPrice = 0;
                 const drinksList = [];
-                if (drink1) { extraPrice += 3.50; drinksList.push('Norfolk Apple Juice'); }
-                if (drink2) { extraPrice += 3.50; drinksList.push('Artisan Ginger Beer'); }
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const p = parseFloat(cb.getAttribute('data-price')) || 0;
+                        const title = cb.getAttribute('data-title');
+                        extraPrice += p;
+                        drinksList.push(title);
+                    }
+                });
 
                 const customOpts = {
                     diet: diet,
@@ -1124,6 +1166,113 @@
             }
 
             closeCustomizeModal();
+        }
+
+        function populateTimeSlots() {
+            const timeSelect = document.getElementById('pickup-time');
+            const dateInput = document.getElementById('pickup-date');
+            if (!timeSelect || !dateInput) return;
+
+            const slots = [
+                { value: "12:00 PM", label: "12:00 PM (Lunch)", time: 12.0 },
+                { value: "1:00 PM", label: "1:00 PM (Lunch)", time: 13.0 },
+                { value: "2:30 PM", label: "2:30 PM (Afternoon)", time: 14.5 },
+                { value: "4:00 PM", label: "4:00 PM (High Tea)", time: 16.0 },
+                { value: "6:00 PM", label: "6:00 PM (Sunset Picnic)", time: 18.0 }
+            ];
+
+            const now = new Date();
+            const selectedDateStr = dateInput.value;
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const isToday = (selectedDateStr === todayStr);
+            const currentHourDecimal = now.getHours() + (now.getMinutes() / 60);
+
+            timeSelect.innerHTML = '';
+            let validSlotsCount = 0;
+            let firstValidValue = null;
+
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.value;
+                
+                // Slot is past if selected date is today and slot time <= current time
+                const isPast = isToday && (slot.time <= currentHourDecimal);
+
+                if (isPast) {
+                    option.disabled = true;
+                    option.innerText = `${slot.label} — Passed`;
+                    option.className = "text-gray-400 bg-gray-100";
+                } else {
+                    option.innerText = slot.label;
+                    validSlotsCount++;
+                    if (!firstValidValue) firstValidValue = slot.value;
+                }
+                timeSelect.appendChild(option);
+            });
+
+            // If selected date is today and ALL slots have passed, auto-jump date to tomorrow
+            if (isToday && validSlotsCount === 0) {
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomYear = tomorrow.getFullYear();
+                const tomMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                const tomDay = String(tomorrow.getDate()).padStart(2, '0');
+                const tomorrowStr = `${tomYear}-${tomMonth}-${tomDay}`;
+
+                dateInput.value = tomorrowStr;
+                dateInput.min = tomorrowStr;
+                populateTimeSlots(); // Recalculate for tomorrow
+
+                const noticeText = document.getElementById('cutoff-notice-text');
+                const noticeBox = document.getElementById('cutoff-notice');
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-bold leading-tight";
+                if (noticeText) noticeText.innerHTML = "All collection times for today have passed. Pickup date auto-set to tomorrow.";
+                return;
+            }
+
+            if (firstValidValue && (!timeSelect.value || timeSelect.selectedOptions[0]?.disabled)) {
+                timeSelect.value = firstValidValue;
+            }
+
+            validatePickupCutoff();
+        }
+
+        function validatePickupCutoff() {
+            const dateInput = document.getElementById('pickup-date');
+            const timeSelect = document.getElementById('pickup-time');
+            const noticeText = document.getElementById('cutoff-notice-text');
+            const noticeBox = document.getElementById('cutoff-notice');
+            if (!dateInput || !noticeText) return true;
+
+            const selectedDateStr = dateInput.value;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const isToday = (selectedDateStr === todayStr);
+            const selectedOption = timeSelect ? timeSelect.selectedOptions[0] : null;
+
+            if (isToday && selectedOption && selectedOption.disabled) {
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                noticeText.innerHTML = "⚠️ Selected pickup time has already passed today. Please pick a future time.";
+                return false;
+            }
+
+            if (isToday && now.getHours() >= 15) {
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-bold leading-tight";
+                noticeText.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a later date.";
+                return false;
+            }
+
+            if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
+            noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>.";
+            return true;
         }
 
         function openCheckoutModal() {
@@ -1150,10 +1299,6 @@
                 document.getElementById('customer-name').value = loggedInCustomer.name || '';
                 document.getElementById('customer-email').value = loggedInCustomer.email || '';
                 document.getElementById('customer-phone').value = loggedInCustomer.phone || '';
-            } else {
-                document.getElementById('customer-name').value = '';
-                document.getElementById('customer-email').value = '';
-                document.getElementById('customer-phone').value = '';
             }
 
             const today = new Date();
@@ -1171,10 +1316,7 @@
 
             const dateInput = document.getElementById('pickup-date');
             
-            const currentDecimalTime = today.getHours() + (today.getMinutes() / 60);
-            const hasRemainingTimeToday = today.getHours() < 15 && timeSlots.some(slot => (slot.hour + slot.minute / 60) > currentDecimalTime);
-
-            if (!hasRemainingTimeToday) {
+            if (today.getHours() >= 15) {
                 dateInput.value = tomorrowStr;
                 dateInput.min = tomorrowStr;
             } else {
@@ -1182,91 +1324,13 @@
                 dateInput.min = todayStr;
             }
 
-            validatePickupCutoff();
+            populateTimeSlots();
 
             document.getElementById('modal-form-content').classList.remove('hidden');
             document.getElementById('modal-processing-content').classList.add('hidden');
             document.getElementById('checkout-modal').classList.remove('hidden');
             
             safeCreateIcons();
-        }
-
-        function populateTimeSlots(selectedDateStr) {
-            const timeSelect = document.getElementById('pickup-time');
-            if (!timeSelect) return { isToday: false, validSlotCount: timeSlots.length };
-
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
-
-            const isToday = selectedDateStr === todayStr;
-            const currentDecimalTime = now.getHours() + (now.getMinutes() / 60);
-
-            const previousValue = timeSelect.value;
-            timeSelect.innerHTML = '';
-            let validSlotCount = 0;
-
-            timeSlots.forEach(slot => {
-                const slotDecimalTime = slot.hour + (slot.minute / 60);
-                const option = document.createElement('option');
-                option.value = slot.value;
-
-                if (isToday && slotDecimalTime <= currentDecimalTime) {
-                    option.disabled = true;
-                    option.innerText = `${slot.label} — Passed`;
-                    option.className = "text-gray-400 bg-gray-100";
-                } else {
-                    option.innerText = slot.label;
-                    validSlotCount++;
-                }
-
-                timeSelect.appendChild(option);
-            });
-
-            if (previousValue && Array.from(timeSelect.options).some(opt => opt.value === previousValue && !opt.disabled)) {
-                timeSelect.value = previousValue;
-            } else {
-                const firstValidOption = Array.from(timeSelect.options).find(opt => !opt.disabled);
-                if (firstValidOption) {
-                    timeSelect.value = firstValidOption.value;
-                }
-            }
-
-            return { isToday, validSlotCount };
-        }
-
-        function validatePickupCutoff() {
-            const dateInput = document.getElementById('pickup-date');
-            const noticeText = document.getElementById('cutoff-notice-text');
-            const noticeBox = document.getElementById('cutoff-notice');
-            if (!dateInput || !noticeText) return true;
-
-            const selectedDateStr = dateInput.value;
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
-
-            const { isToday, validSlotCount } = populateTimeSlots(selectedDateStr);
-
-            if (isToday) {
-                if (now.getHours() >= 15 || validSlotCount === 0) {
-                    noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
-                    noticeText.innerHTML = "⚠️ Same-day pickup is closed (past 3:00 PM cutoff or all slots passed). Please select tomorrow or a future date.";
-                    return false;
-                } else {
-                    noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
-                    noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>. Passed time slots are disabled.";
-                    return true;
-                }
-            } else {
-                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
-                noticeText.innerHTML = "Future collection date selected. Available pickup from 12:00 PM to 6:00 PM.";
-                return true;
-            }
         }
 
         function closeCheckoutModal() {
@@ -1278,9 +1342,8 @@
             const phone = document.getElementById('customer-phone').value.trim();
             const email = document.getElementById('customer-email').value.trim();
             const pickupDate = document.getElementById('pickup-date').value;
-            const pickupTimeSelect = document.getElementById('pickup-time');
-            const pickupTime = pickupTimeSelect ? pickupTimeSelect.value : '';
-            const selectedOption = pickupTimeSelect ? pickupTimeSelect.options[pickupTimeSelect.selectedIndex] : null;
+            const pickupTime = document.getElementById('pickup-time').value;
+            const timeSelect = document.getElementById('pickup-time');
             const notes = document.getElementById('dietary-notes').value.trim();
 
             if (!name || !email) {
@@ -1293,13 +1356,13 @@
                 return;
             }
 
-            if (selectedOption && selectedOption.disabled) {
-                triggerToast('The selected time slot has already passed today. Please select an available time.', 'error');
+            if (timeSelect && timeSelect.selectedOptions[0]?.disabled) {
+                triggerToast('This pickup time has already passed today. Please select a future time slot.', 'error');
                 return;
             }
 
             if (!validatePickupCutoff()) {
-                triggerToast('Same-day orders close at 3:00 PM. Please select tomorrow or a later date.', 'error');
+                triggerToast('Selected pickup date or time is unavailable. Please pick a future date or time.', 'error');
                 return;
             }
 
@@ -1351,10 +1414,12 @@
                     archived: false
                 };
 
+                // Local save
                 const currentLocal = loadLocalOrders();
                 currentLocal.unshift(newOrder);
                 saveLocalOrders(currentLocal);
 
+                // Firestore sync
                 if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
                     try {
                         const docRef = window.getOrderDocRef(newOrder.id);
@@ -1425,7 +1490,6 @@
                     </div>
                 </div>
 
-                <!-- Tracker Progress Steps -->
                 <div class="grid grid-cols-5 gap-1 sm:gap-2 pt-2">
                     ${statusSteps.map((step, idx) => {
                         const isDone = idx <= currentIdx;
@@ -1441,7 +1505,6 @@
                     }).join('')}
                 </div>
 
-                <!-- Order Content Breakdown -->
                 <div class="bg-coastal-50/80 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
                     <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
                     <ul class="space-y-1 text-coastal-700">
@@ -1641,9 +1704,7 @@
                         if (authEmailInput) authEmailInput.value = cleanEmail;
                         return;
                     }
-                } catch(e) {
-                    console.warn("Firebase customer check warning:", e);
-                }
+                } catch(e) {}
             }
 
             const newCustomer = { name, email: cleanEmail, phone, registeredAt: Date.now() };
@@ -1652,9 +1713,7 @@
                 try {
                     const custRef = window.getCustomerDocRef(cleanEmail);
                     await window.firebaseFns.setDoc(custRef, newCustomer);
-                } catch(e) {
-                    console.warn("Failed to save customer to Firebase:", e);
-                }
+                } catch(e) {}
             }
 
             loggedInCustomer = newCustomer;
@@ -1702,8 +1761,7 @@
                         triggerToast('No account found for this email. Please Sign Up first.', 'error');
                     }
                 } catch(e) {
-                    console.warn("Firebase customer lookup error:", e);
-                    triggerToast('Unable to verify account. Please check your network connection.', 'error');
+                    triggerToast('Unable to verify account. Please check network connection.', 'error');
                 }
             } else {
                 triggerToast('Database offline. Unable to verify customer account.', 'error');
@@ -1789,6 +1847,7 @@
                             snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
                             if (hampers.length > 0) {
                                 picnicPackages = hampers;
+                                saveLocalCatalog();
                                 renderPicnicPackages();
                             }
                         }
@@ -1805,6 +1864,23 @@
                             snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
                             if (extras.length > 0) {
                                 byoAvailableItems = extras;
+                                saveLocalCatalog();
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
+            }
+
+            // 4. Live Custom Fields & Drink Upgrades Sync
+            if (window.getCustomFieldsColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getCustomFieldsColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const fields = [];
+                            snapshot.forEach(doc => fields.push({ ...doc.data(), id: doc.id }));
+                            if (fields.length > 0) {
+                                customFieldsList = fields;
+                                saveLocalCatalog();
                             }
                         }
                     }, (e) => {});
@@ -1812,12 +1888,19 @@
             }
         }
 
+        window.addEventListener('storage', () => {
+            loadLocalCatalog();
+            renderPicnicPackages();
+        });
+
         window.addEventListener('firebase-ready', () => {
+            loadLocalCatalog();
             allOrdersList = loadLocalOrders();
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            loadLocalCatalog();
             allOrdersList = loadLocalOrders();
             renderPicnicPackages();
             updateBasketSummary();
