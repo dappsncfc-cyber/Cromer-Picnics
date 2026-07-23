@@ -995,17 +995,18 @@
                 hampersList.push(newPkg);
             }
 
+            // Close modal immediately
+            closeHamperModal();
             saveLocalCatalog();
+            renderAdminDashboard();
+            triggerToast(`Hamper "${title}" saved successfully`, 'success');
+
             if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
                 try {
                     const docRef = window.getHamperDocRef(id);
                     await window.firebaseFns.setDoc(docRef, newPkg, { merge: true });
                 } catch(e) { console.warn("Firebase hamper save warning:", e); }
             }
-
-            closeHamperModal();
-            renderAdminDashboard();
-            triggerToast(`Hamper "${title}" saved successfully`, 'success');
         }
 
         async function toggleHamperAvailability(id) {
@@ -1084,7 +1085,12 @@
                 byoExtrasList.push(newItem);
             }
 
+            // Close modal immediately
+            closeExtraModal();
             saveLocalCatalog();
+            renderAdminDashboard();
+            triggerToast(`Delicacy "${title}" saved`, 'success');
+
             if (window.currentUser && window.firebaseFns && window.getExtraDocRef) {
                 try {
                     const docRef = window.getExtraDocRef(id);
@@ -1093,10 +1099,6 @@
                     console.warn("Firebase extra save warning:", e);
                 }
             }
-
-            closeExtraModal();
-            renderAdminDashboard();
-            triggerToast(`Delicacy "${title}" saved`, 'success');
         }
 
         async function deleteExtraOffering(id) {
@@ -1158,7 +1160,12 @@
                 customFieldsList.push(newFld);
             }
 
+            // Close modal immediately
+            closeCustomFieldModal();
             saveLocalCatalog();
+            renderAdminDashboard();
+            triggerToast(`Upgrade option "${title}" saved`, 'success');
+
             if (window.currentUser && window.firebaseFns && window.getCustomFieldDocRef) {
                 try {
                     const docRef = window.getCustomFieldDocRef(id);
@@ -1167,10 +1174,6 @@
                     console.warn("Firebase custom field save warning:", e);
                 }
             }
-
-            closeCustomFieldModal();
-            renderAdminDashboard();
-            triggerToast(`Upgrade option "${title}" saved`, 'success');
         }
 
         async function deleteCustomUpgradeField(id) {
