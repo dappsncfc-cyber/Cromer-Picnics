@@ -71,7 +71,6 @@
 </head>
 <body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white">
 
-    <!-- Admin Navigation Header -->
     <header class="sticky top-0 z-40 bg-coastal-900 text-white shadow-md border-b border-coastal-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <div class="flex items-center justify-between">
@@ -93,6 +92,10 @@
                 </div>
 
                 <div class="flex items-center space-x-2">
+                    <button id="admin-seed-btn" onclick="syncDefaultCatalogToFirebase()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-200 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
+                        <i data-lucide="database" class="w-4 h-4 text-crab-400"></i>
+                        <span class="hidden sm:inline">Sync Menu to Firebase</span>
+                    </button>
                     <button id="admin-lock-btn" onclick="lockAdminPortal()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-100 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
                         <i data-lucide="lock" class="w-4 h-4 text-crab-400"></i>
                         <span>Lock Admin</span>
@@ -135,10 +138,8 @@
             </div>
         </div>
 
-        <!-- Unlocked Admin Manager Dashboard -->
         <div id="admin-dashboard-content" class="hidden space-y-6">
             
-            <!-- Management Metrics Header -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between">
                     <div>
@@ -169,7 +170,6 @@
                 </div>
             </div>
 
-            <!-- Tabbed Controls Header -->
             <div class="glass-card p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div class="flex space-x-2 bg-coastal-50/80 p-1 rounded-2xl border border-coastal-100 text-xs font-bold w-full sm:w-auto">
@@ -194,24 +194,21 @@
                 </div>
             </div>
 
-            <!-- TAB 1: Hampers Catalog Editor Grid -->
             <div id="admin-section-hampers" class="space-y-4">
                 <div id="admin-hampers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Hampers Loaded Here -->
+                    <!-- Dynamic Hampers -->
                 </div>
             </div>
 
-            <!-- TAB 2: BYO Extras Editor List -->
             <div id="admin-section-extras" class="hidden space-y-4">
                 <div id="admin-extras-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <!-- Dynamic BYO Extras Loaded Here -->
+                    <!-- Dynamic BYO Extras -->
                 </div>
             </div>
 
-            <!-- TAB 3: Custom Upgrade Fields Editor -->
             <div id="admin-section-fields" class="hidden space-y-4">
                 <div id="admin-fields-list" class="space-y-2">
-                    <!-- Dynamic Custom Fields Loaded Here -->
+                    <!-- Dynamic Custom Fields -->
                 </div>
             </div>
 
@@ -219,7 +216,7 @@
 
     </main>
 
-    <!-- MODAL 1: Edit/Add Hamper Package Modal -->
+    <!-- Edit Hamper Modal -->
     <div id="admin-hamper-modal" onclick="if(event.target === this) closeHamperModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeHamperModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50">
@@ -265,7 +262,7 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Edit/Add BYO Extra Modal -->
+    <!-- Edit BYO Extra Modal -->
     <div id="admin-extra-modal" onclick="if(event.target === this) closeExtraModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeExtraModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50">
@@ -299,7 +296,6 @@
         </div>
     </div>
 
-    <!-- Firebase Imports & Initialization -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -391,7 +387,6 @@
         }
     </script>
 
-    <!-- Admin Portal Application Logic -->
     <script>
         let isAdminUnlocked = false;
         let activeAdminTab = 'hampers';
@@ -488,6 +483,38 @@
             { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' }
         ];
 
+        function safeCreateIcons() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                }
+            } catch (err) {}
+        }
+
+        async function syncDefaultCatalogToFirebase() {
+            if (!window.currentUser || !window.firebaseFns || !window.getHamperDocRef) {
+                triggerToast('Database offline. Catalog saved to local session.', 'info');
+                return;
+            }
+            try {
+                for (const h of hampersList) {
+                    const docRef = window.getHamperDocRef(h.id);
+                    await window.firebaseFns.setDoc(docRef, h, { merge: true });
+                }
+                for (const e of byoExtrasList) {
+                    const docRef = window.getExtraDocRef(e.id);
+                    await window.firebaseFns.setDoc(docRef, e, { merge: true });
+                }
+                for (const f of customFieldsList) {
+                    const docRef = window.getFieldDocRef(f.id);
+                    await window.firebaseFns.setDoc(docRef, f, { merge: true });
+                }
+                triggerToast('All menu hampers & items synced to Firebase!', 'success');
+            } catch(e) {
+                triggerToast('Error writing catalog to Firebase', 'error');
+            }
+        }
+
         function loadLocalCatalog() {
             try {
                 const h = localStorage.getItem('wh_admin_hampers');
@@ -521,7 +548,7 @@
                 </div>
             `;
             container.appendChild(toast);
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
 
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
             setTimeout(() => {
@@ -545,6 +572,7 @@
             document.getElementById('admin-pin-overlay').classList.add('hidden');
             document.getElementById('admin-dashboard-content').classList.remove('hidden');
             document.getElementById('admin-lock-btn').classList.remove('hidden');
+            document.getElementById('admin-seed-btn').classList.remove('hidden');
             renderAdminDashboard();
             triggerToast('Admin Portal Unlocked', 'success');
         }
@@ -554,6 +582,7 @@
             document.getElementById('admin-pin-overlay').classList.remove('hidden');
             document.getElementById('admin-dashboard-content').classList.add('hidden');
             document.getElementById('admin-lock-btn').classList.add('hidden');
+            document.getElementById('admin-seed-btn').classList.add('hidden');
         }
 
         function switchAdminTab(tab) {
@@ -585,14 +614,12 @@
                 if (actionBtn) actionBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i><span>Add Custom Field</span>`;
             }
 
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function triggerAdminAddModal() {
             if (activeAdminTab === 'hampers') {
                 openHamperModal();
-            } else if (activeAdminTab === 'extras') {
-                openExtraModal();
             } else {
                 openExtraModal();
             }
@@ -642,7 +669,7 @@
                 container.appendChild(card);
             });
 
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function renderByoExtrasGrid() {
@@ -669,7 +696,7 @@
                 container.appendChild(el);
             });
 
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function renderCustomFieldsList() {
@@ -690,7 +717,7 @@
                 container.appendChild(el);
             });
 
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function toggleHamperStock(id) {
@@ -734,7 +761,7 @@
                 document.getElementById('edit-hamper-available').checked = true;
             }
             modal.classList.remove('hidden');
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function closeHamperModal() {
@@ -803,7 +830,7 @@
                 document.getElementById('edit-extra-icon').value = '🦀';
             }
             modal.classList.remove('hidden');
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         }
 
         function closeExtraModal() {
@@ -881,7 +908,9 @@
             if (window.getHampersColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
-                        if (!snapshot.empty) {
+                        if (snapshot.empty) {
+                            syncDefaultCatalogToFirebase();
+                        } else {
                             const hampers = [];
                             snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
                             if (hampers.length > 0) {
@@ -941,7 +970,7 @@
                 });
             }
 
-            if (window.lucide) window.lucide.createIcons();
+            safeCreateIcons();
         });
     </script>
 </body>
