@@ -185,10 +185,16 @@
                     </button>
                 </div>
 
-                <button onclick="resetToDefaultCatalog()" class="touch-target px-3 py-2 rounded-xl text-xs font-bold transition-colors bg-sand-200 hover:bg-sand-300 text-coastal-900 border border-sand-300 flex items-center space-x-1.5">
-                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-crab-600"></i>
-                    <span>Reset Default Menu</span>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="syncDefaultCatalogToFirebase()" class="touch-target px-3 py-2 rounded-xl text-xs font-bold transition-colors bg-coastal-800 hover:bg-coastal-900 text-white flex items-center space-x-1.5 shadow-sm">
+                        <i data-lucide="cloud-upload" class="w-3.5 h-3.5 text-sand-200"></i>
+                        <span>Sync Menu to Firebase</span>
+                    </button>
+                    <button onclick="resetToDefaultCatalog()" class="touch-target px-3 py-2 rounded-xl text-xs font-bold transition-colors bg-sand-200 hover:bg-sand-300 text-coastal-900 border border-sand-300 flex items-center space-x-1.5">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-crab-600"></i>
+                        <span>Reset Default Menu</span>
+                    </button>
+                </div>
             </div>
 
             <!-- TAB 1: Hamper Packages Editor -->
@@ -1003,8 +1009,12 @@
         }
 
         async function syncDefaultCatalogToFirebase() {
-            if (!window.currentUser || !window.firebaseFns) return;
+            if (!window.currentUser || !window.firebaseFns) {
+                triggerToast('Firebase connection not ready or offline', 'error');
+                return;
+            }
             try {
+                triggerToast('Syncing menu catalog to Firebase...', 'info');
                 for (const h of hampersList) {
                     const docRef = window.getHamperDocRef(h.id);
                     await window.firebaseFns.setDoc(docRef, h, { merge: true });
@@ -1017,8 +1027,10 @@
                     const docRef = window.getCustomFieldDocRef(f.id);
                     await window.firebaseFns.setDoc(docRef, f, { merge: true });
                 }
+                triggerToast('Menu catalog successfully synced to Firebase!', 'success');
             } catch(e) {
                 console.warn("Catalog sync warning:", e);
+                triggerToast('Failed to sync menu to Firebase', 'error');
             }
         }
 
