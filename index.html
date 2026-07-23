@@ -33,7 +33,11 @@
                             50: '#f0f7f7',
                             100: '#d9ebed',
                             200: '#b4d7d7',
+                            300: '#8ec0c3',
+                            400: '#5a9fa5',
+                            500: '#38838a',
                             600: '#2a6f78',
+                            700: '#20565e',
                             800: '#1d3557',
                             900: '#0f2038',
                         },
@@ -66,19 +70,12 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f0f7f7; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         
-        /* Glassmorphism utility classes */
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.90);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 40px -15px rgba(15, 32, 56, 0.15);
-        }
-        .glass-panel {
-            background: rgba(240, 247, 247, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px -15px rgba(15, 32, 56, 0.12);
         }
     </style>
 </head>
@@ -411,18 +408,18 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
-                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" value="Sarah Jenkins" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
-                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" value="07700 900123" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
-                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Date *</label>
@@ -451,7 +448,7 @@
 
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Special Dietary Notes</label>
-                    <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, no mustard..." class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
+                    <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, gluten free bread..." class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
                 </div>
 
                 <!-- Financial Summary Box -->
@@ -474,7 +471,7 @@
                 <div class="bg-coastal-900/90 text-white p-4 rounded-2xl space-y-2 backdrop-blur-md">
                     <div class="flex items-center justify-between border-b border-coastal-800 pb-2">
                         <span class="text-[10px] font-bold uppercase text-sand-200 tracking-wider">Instant Payment Sandbox</span>
-                        <span class="text-[10px] text-emerald-400 font-mono font-bold">● Live Firebase Connected</span>
+                        <span class="text-[10px] text-emerald-400 font-mono font-bold">● Live Sync Ready</span>
                     </div>
                     <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
                         <div>
@@ -552,7 +549,7 @@
             <div id="auth-form-login" class="hidden space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Registered Email Address *</label>
-                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" value="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                 </div>
                 <button onclick="saveCustomerLogin()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
                     <i data-lucide="log-in" class="w-4 h-4"></i>
@@ -564,11 +561,11 @@
 
     <!-- Firebase Imports & Initialization -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Live Cromer Picnics Firebase Configuration
+        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyDkrSDAVFeTPJC13a1GKdx8SZ1t4ik36zU",
             authDomain: "cromer-picnics.firebaseapp.com",
@@ -590,11 +587,10 @@
             window.firebaseApp = app;
             window.firebaseAuth = auth;
             window.firebaseDb = db;
-            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot };
+            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDoc };
             window.appId = appId;
             window.currentUser = null;
 
-            // Flexible Firestore collection helpers
             window.getOrdersColRef = () => {
                 if (typeof __app_id !== 'undefined') {
                     return collection(db, 'artifacts', appId, 'public', 'data', 'orders');
@@ -631,14 +627,16 @@
                         await signInAnonymously(auth);
                     }
                     window.currentUser = auth.currentUser;
-                    window.dispatchEvent(new Event('firebase-ready'));
                 } catch (error) {
-                    console.error("Auth error:", error);
+                    console.warn("Firebase auth warning (local mode active):", error);
+                } finally {
+                    window.dispatchEvent(new Event('firebase-ready'));
                 }
             }
             initAuth();
         } catch (err) {
-            console.error("Firebase init failed:", err);
+            console.warn("Firebase initialization skipped (offline fallback active):", err);
+            window.dispatchEvent(new Event('firebase-ready'));
         }
     </script>
 
@@ -648,7 +646,7 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
         let authMode = 'signup';
         let registeredCustomersList = [];
-        let loggedInCustomer = { name: 'Sarah Jenkins', email: 'sarah@example.co.uk', phone: '07700 900123' };
+        let loggedInCustomer = null; // Starts clean as Guest Session
         let activeCustomizingPkg = null;
         let activeOrder = null;
         let hasUnreadTrackerUpdate = false;
@@ -741,7 +739,16 @@
             }
         ];
 
-        // Toast Notification Helper
+        function safeCreateIcons() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                }
+            } catch (err) {
+                console.warn('Lucide icon rendering warning:', err);
+            }
+        }
+
         function triggerToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
@@ -756,22 +763,19 @@
                 </div>
             `;
             container.appendChild(toast);
-            lucide.createIcons();
+            safeCreateIcons();
 
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
+                setTimeout(() => toast.remove(), 350);
             }, 3500);
         }
 
-        // Web Audio Kitchen Notification Chime
         function playNotificationSound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') ctx.resume();
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
@@ -786,7 +790,20 @@
             } catch(e) {}
         }
 
-        // Navigation View Switcher
+        function loadLocalOrders() {
+            try {
+                const stored = localStorage.getItem('wh_kitchen_orders');
+                if (stored) return JSON.parse(stored);
+            } catch(e) {}
+            return [];
+        }
+
+        function saveLocalOrders(orders) {
+            try {
+                localStorage.setItem('wh_kitchen_orders', JSON.stringify(orders));
+            } catch(e) {}
+        }
+
         function switchView(viewId) {
             document.getElementById('customer-explore').classList.add('hidden');
             document.getElementById('order-tracker').classList.add('hidden');
@@ -821,11 +838,10 @@
                 renderCustomerOrderHistory();
             }
 
-            lucide.createIcons();
+            safeCreateIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Render Picnic Package Cards
         function renderPicnicPackages() {
             const container = document.getElementById('picnic-packages-container');
             if (!container) return;
@@ -864,10 +880,9 @@
                 container.appendChild(card);
             });
 
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
-        // Add Item to Basket with Clean Alphanumeric Key
         function addToBasket(packageId, customOpts = null) {
             const pkg = picnicPackages.find(p => p.id === packageId);
             if (!pkg) return;
@@ -920,7 +935,6 @@
             updateBasketSummary();
         }
 
-        // Update Basket Totals & Summaries
         function updateBasketSummary() {
             const listContainer = document.getElementById('basket-items-list');
             const mobileListContainer = document.getElementById('mobile-basket-items-list');
@@ -944,8 +958,8 @@
                 if (item.custom) {
                     if (item.custom.byoItems && item.custom.byoItems.length > 0) {
                         customText = `<p class="text-[10px] text-crab-600 font-semibold truncate">${item.custom.byoItems.length} Items: ${item.custom.byoItems.join(', ')}</p>`;
-                    } else if (item.custom.diet || item.custom.drinks.length) {
-                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${item.custom.drinks.length ? '+ Drinks' : ''}</p>`;
+                    } else if (item.custom.diet || (item.custom.drinks && item.custom.drinks.length)) {
+                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Drinks' : ''}</p>`;
                     }
                 }
 
@@ -1031,12 +1045,12 @@
             if (mobileQtyBadge) mobileQtyBadge.innerText = totalQty;
             if (mobileTotalSpan) mobileTotalSpan.innerText = `£${grandTotal.toFixed(2)}`;
 
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function openMobileBasketModal() {
             document.getElementById('mobile-basket-modal').classList.remove('hidden');
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function closeMobileBasketModal() {
@@ -1078,7 +1092,7 @@
             }
 
             document.getElementById('customize-modal').classList.remove('hidden');
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function renderByoChecklist() {
@@ -1190,9 +1204,13 @@
             document.getElementById('modal-grandtotal').innerText = `£${grandTotal.toFixed(2)}`;
 
             if (loggedInCustomer) {
-                if (loggedInCustomer.name) document.getElementById('customer-name').value = loggedInCustomer.name;
-                if (loggedInCustomer.email) document.getElementById('customer-email').value = loggedInCustomer.email;
-                if (loggedInCustomer.phone) document.getElementById('customer-phone').value = loggedInCustomer.phone;
+                document.getElementById('customer-name').value = loggedInCustomer.name || '';
+                document.getElementById('customer-email').value = loggedInCustomer.email || '';
+                document.getElementById('customer-phone').value = loggedInCustomer.phone || '';
+            } else {
+                document.getElementById('customer-name').value = '';
+                document.getElementById('customer-email').value = '';
+                document.getElementById('customer-phone').value = '';
             }
 
             const today = new Date();
@@ -1224,7 +1242,7 @@
             document.getElementById('modal-processing-content').classList.add('hidden');
             document.getElementById('checkout-modal').classList.remove('hidden');
             
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function validatePickupCutoff() {
@@ -1300,13 +1318,14 @@
 
                 const deposit = coolboxCount * 20.00;
                 const grandTotal = subtotal + deposit;
-                const orderRef = 'CMP-' + Math.floor(100000 + Math.random() * 900000);
+                const refNum = Math.floor(1000 + Math.random() * 9000);
+                const orderRef = 'WH-' + refNum;
 
                 const dateParts = pickupDate.split('-');
                 const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : pickupDate;
 
                 const newOrder = {
-                    id: 'ord-' + Date.now(),
+                    id: 'ord_' + Date.now(),
                     orderRef: orderRef,
                     customerName: name,
                     customerPhone: phone,
@@ -1325,18 +1344,27 @@
                     archived: false
                 };
 
-                // Dispatch directly to Firestore if online
-                if (window.currentUser && window.firebaseFns) {
-                    const docRef = window.getOrderDocRef(newOrder.id);
-                    window.firebaseFns.setDoc(docRef, newOrder).catch(console.error);
+                // Save locally first
+                const currentLocal = loadLocalOrders();
+                currentLocal.unshift(newOrder);
+                saveLocalOrders(currentLocal);
+
+                // Dispatch to Firestore if online
+                if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
+                    try {
+                        const docRef = window.getOrderDocRef(newOrder.id);
+                        window.firebaseFns.setDoc(docRef, newOrder).catch(console.warn);
+                    } catch(e) {}
                 }
                 
                 activeOrder = newOrder;
 
                 loggedInCustomer = { name: name, email: email, phone: phone };
-                if (window.currentUser && window.firebaseFns) {
-                    const custRef = window.getCustomerDocRef(email);
-                    window.firebaseFns.setDoc(custRef, loggedInCustomer).catch(console.error);
+                if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
+                    try {
+                        const custRef = window.getCustomerDocRef(email);
+                        window.firebaseFns.setDoc(custRef, loggedInCustomer).catch(console.warn);
+                    } catch(e) {}
                 }
                 updateHeaderUserBadge();
 
@@ -1357,7 +1385,6 @@
             }, 1200);
         }
 
-        // Render 5-Step Live Order Tracker UI
         function renderLiveTrackerContent() {
             const activeContainer = document.getElementById('tracker-active-content');
             const emptyContainer = document.getElementById('tracker-empty-content');
@@ -1393,7 +1420,7 @@
                     </div>
                 </div>
 
-                <!-- Tracker 5-Step Progress Bar -->
+                <!-- Tracker Progress Steps -->
                 <div class="grid grid-cols-5 gap-1 sm:gap-2 pt-2">
                     ${statusSteps.map((step, idx) => {
                         const isDone = idx <= currentIdx;
@@ -1413,16 +1440,16 @@
                 <div class="bg-coastal-50/80 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
                     <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
                     <ul class="space-y-1 text-coastal-700">
-                        ${activeOrder.items.map(i => `
+                        ${(activeOrder.items || []).map(i => `
                             <li class="flex justify-between">
-                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet})` : ''}</span>
+                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet || 'Standard'})` : ''}</span>
                                 <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
                             </li>
                         `).join('')}
                     </ul>
                     <div class="pt-2 border-t border-coastal-200 flex justify-between font-bold text-coastal-900">
                         <span>Refundable Cool Box Deposit Held:</span>
-                        <span class="text-emerald-700">£${activeOrder.deposit.toFixed(2)}</span>
+                        <span class="text-emerald-700">£${(activeOrder.deposit || 20.00).toFixed(2)}</span>
                     </div>
                 </div>
 
@@ -1435,7 +1462,7 @@
                 </div>
             `;
 
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function renderCustomerOrderHistory() {
@@ -1446,9 +1473,11 @@
             const loggedEmailSpan = document.getElementById('history-logged-email');
             if (loggedEmailSpan) loggedEmailSpan.innerText = loggedInCustomer ? loggedInCustomer.email : 'Guest Session';
 
-            let filteredOrders = allOrdersList;
+            let sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
+
+            let filteredOrders = sourceOrders;
             if (loggedInCustomer && loggedInCustomer.email) {
-                filteredOrders = allOrdersList.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === loggedInCustomer.email.toLowerCase());
+                filteredOrders = sourceOrders.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === loggedInCustomer.email.toLowerCase());
             }
 
             if (filteredOrders.length === 0) {
@@ -1459,7 +1488,7 @@
                         <button onclick="switchView('customer-explore')" class="text-crab-600 font-bold hover:underline">Browse menu to place a booking</button>
                     </div>
                 `;
-                lucide.createIcons();
+                safeCreateIcons();
                 return;
             }
 
@@ -1471,14 +1500,14 @@
                     <div class="space-y-1">
                         <div class="flex items-center space-x-2">
                             <span class="font-extrabold font-mono text-coastal-900 text-sm">${order.orderRef}</span>
-                            <span class="bg-coastal-200 text-coastal-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${order.status.replace('_', ' ')}</span>
+                            <span class="bg-coastal-200 text-coastal-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${(order.status || 'pending').replace('_', ' ')}</span>
                             ${isReturned ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">£20 Deposit Refunded</span>' : ''}
                         </div>
-                        <p class="text-coastal-600 font-medium">${order.items.map(i => `${i.qty}x ${i.title}`).join(', ')}</p>
+                        <p class="text-coastal-600 font-medium">${(order.items || []).map(i => `${i.qty}x ${i.title}`).join(', ')}</p>
                         <p class="text-[11px] text-coastal-400">Pick-up: ${order.pickupDate} at ${order.pickupTime}</p>
                     </div>
                     <div class="flex items-center justify-between sm:justify-end space-x-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-coastal-200">
-                        <span class="font-serif font-black text-coastal-900 text-base">£${order.grandTotal.toFixed(2)}</span>
+                        <span class="font-serif font-black text-coastal-900 text-base">£${(order.grandTotal || 0).toFixed(2)}</span>
                         ${!isReturned ? `
                             <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
                                 <i data-lucide="eye" class="w-3.5 h-3.5"></i>
@@ -1490,11 +1519,12 @@
                 container.appendChild(el);
             });
 
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function setupActiveOrderTracker(orderId) {
-            const found = allOrdersList.find(o => o.id === orderId);
+            const sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
+            const found = sourceOrders.find(o => o.id === orderId);
             if (found) {
                 if (found.status === 'returned') {
                     triggerToast('Order completed & cool box deposit refunded.', 'info');
@@ -1507,7 +1537,7 @@
 
         function openAuthModal() {
             document.getElementById('auth-modal').classList.remove('hidden');
-            lucide.createIcons();
+            safeCreateIcons();
         }
 
         function closeAuthModal() {
@@ -1537,7 +1567,7 @@
             }
         }
 
-        function registerNewCustomer() {
+        async function registerNewCustomer() {
             const nameInput = document.getElementById('signup-name-input');
             const emailInput = document.getElementById('signup-email-input');
             const phoneInput = document.getElementById('signup-phone-input');
@@ -1551,14 +1581,37 @@
                 return;
             }
 
-            const newCustomer = { name, email, phone, registeredAt: Date.now() };
-            loggedInCustomer = newCustomer;
+            const cleanEmail = email.toLowerCase();
 
-            if (window.currentUser && window.firebaseFns) {
-                const custRef = window.getCustomerDocRef(email);
-                window.firebaseFns.setDoc(custRef, newCustomer).catch(console.error);
+            // Check if record already exists in Firebase
+            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    const docSnap = await window.firebaseFns.getDoc(custRef);
+                    if (docSnap.exists()) {
+                        triggerToast('An account already exists with this email. Please Log In.', 'error');
+                        setAuthMode('login');
+                        const authEmailInput = document.getElementById('auth-email-input');
+                        if (authEmailInput) authEmailInput.value = cleanEmail;
+                        return;
+                    }
+                } catch(e) {
+                    console.warn("Firebase customer check warning:", e);
+                }
             }
 
+            const newCustomer = { name, email: cleanEmail, phone, registeredAt: Date.now() };
+
+            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    await window.firebaseFns.setDoc(custRef, newCustomer);
+                } catch(e) {
+                    console.warn("Failed to save customer to Firebase:", e);
+                }
+            }
+
+            loggedInCustomer = newCustomer;
             updateHeaderUserBadge();
             closeAuthModal();
             triggerToast(`Welcome ${name}! Account created and signed in.`, 'success');
@@ -1569,7 +1622,7 @@
             }
         }
 
-        function saveCustomerLogin() {
+        async function saveCustomerLogin() {
             const emailInput = document.getElementById('auth-email-input');
             const email = emailInput ? emailInput.value.trim() : '';
             if (!email) {
@@ -1577,23 +1630,50 @@
                 return;
             }
 
-            loggedInCustomer = { name: email.split('@')[0], email: email, phone: '' };
-            updateHeaderUserBadge();
-            closeAuthModal();
-            triggerToast(`Logged in as ${loggedInCustomer.email}`, 'success');
+            const cleanEmail = email.toLowerCase();
 
-            const activeTab = document.getElementById('customer-history');
-            if (activeTab && !activeTab.classList.contains('hidden')) {
-                renderCustomerOrderHistory();
+            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    const docSnap = await window.firebaseFns.getDoc(custRef);
+
+                    if (docSnap.exists()) {
+                        const customerData = docSnap.data();
+                        loggedInCustomer = {
+                            name: customerData.name || cleanEmail.split('@')[0],
+                            email: customerData.email || cleanEmail,
+                            phone: customerData.phone || ''
+                        };
+                        updateHeaderUserBadge();
+                        closeAuthModal();
+                        triggerToast(`Welcome back, ${loggedInCustomer.name}!`, 'success');
+
+                        const activeTab = document.getElementById('customer-history');
+                        if (activeTab && !activeTab.classList.contains('hidden')) {
+                            renderCustomerOrderHistory();
+                        }
+                    } else {
+                        triggerToast('No account found for this email. Please Sign Up first.', 'error');
+                    }
+                } catch(e) {
+                    console.warn("Firebase customer lookup error:", e);
+                    triggerToast('Unable to verify account. Please check your network connection.', 'error');
+                }
+            } else {
+                triggerToast('Database offline. Unable to verify customer account.', 'error');
             }
         }
 
         function updateHeaderUserBadge() {
-            const label = loggedInCustomer ? loggedInCustomer.name : 'Guest';
             const desktopLabel = document.getElementById('header-user-status');
             const mobileLabel = document.getElementById('header-user-status-mobile');
-            if (desktopLabel) desktopLabel.innerText = label;
-            if (mobileLabel) mobileLabel.innerText = label;
+            if (loggedInCustomer && loggedInCustomer.name) {
+                if (desktopLabel) desktopLabel.innerText = loggedInCustomer.name;
+                if (mobileLabel) mobileLabel.innerText = loggedInCustomer.name;
+            } else {
+                if (desktopLabel) desktopLabel.innerText = 'Customer Sign In';
+                if (mobileLabel) mobileLabel.innerText = 'Guest';
+            }
         }
 
         function handleCustomerOrdersTabClick() {
@@ -1601,60 +1681,64 @@
         }
 
         function startFirestoreSync() {
-            if (!window.currentUser || !window.firebaseFns) return;
+            if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
 
-            window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
-                const orders = [];
-                snapshot.forEach(doc => {
-                    orders.push({ ...doc.data(), id: doc.id });
-                });
-                
-                if (activeOrder) {
-                    const updatedActive = orders.find(o => o.id === activeOrder.id);
-                    if (updatedActive && updatedActive.status !== activeOrder.status) {
-                        let msg = '';
-                        if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
-                        if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection!';
-                        if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
-                        if (updatedActive.status === 'returned') msg = '💰 Order Update: Cool box returned! £20 deposit refunded.';
-                        
-                        if (msg) {
-                            triggerToast(msg, 'success');
-                            hasUnreadTrackerUpdate = true;
-                            const trackerBadge = document.getElementById('tracker-badge');
-                            if (trackerBadge) trackerBadge.classList.remove('hidden');
-                        }
-                        
-                        if (updatedActive.status === 'returned') {
+            try {
+                window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
+                    const orders = [];
+                    snapshot.forEach(doc => {
+                        orders.push({ ...doc.data(), id: doc.id });
+                    });
+                    
+                    if (activeOrder) {
+                        const updatedActive = orders.find(o => o.id === activeOrder.id);
+                        if (updatedActive && updatedActive.status !== activeOrder.status) {
+                            let msg = '';
+                            if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
+                            if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection!';
+                            if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
+                            if (updatedActive.status === 'returned') msg = '💰 Order Update: Cool box returned! £20 deposit refunded.';
+                            
+                            if (msg) {
+                                triggerToast(msg, 'success');
+                                hasUnreadTrackerUpdate = true;
+                                const trackerBadge = document.getElementById('tracker-badge');
+                                if (trackerBadge) trackerBadge.classList.remove('hidden');
+                            }
+                            
+                            if (updatedActive.status === 'returned') {
+                                activeOrder = null;
+                                const navTracker = document.getElementById('nav-tracker');
+                                if (navTracker) navTracker.classList.add('hidden');
+                            } else {
+                                activeOrder = updatedActive;
+                            }
+                        } else if (!updatedActive) {
                             activeOrder = null;
-                            const navTracker = document.getElementById('nav-tracker');
-                            if (navTracker) navTracker.classList.add('hidden');
                         } else {
                             activeOrder = updatedActive;
                         }
-                    } else if (!updatedActive) {
-                        activeOrder = null;
-                    } else {
-                        activeOrder = updatedActive;
                     }
-                }
 
-                allOrdersList = orders;
-                renderCustomerOrderHistory();
-                if (!document.getElementById('order-tracker').classList.contains('hidden')) renderLiveTrackerContent();
-                
-            }, (error) => console.error("Orders sync error:", error));
+                    allOrdersList = orders;
+                    renderCustomerOrderHistory();
+                    if (!document.getElementById('order-tracker').classList.contains('hidden')) renderLiveTrackerContent();
+                    
+                }, (error) => console.warn("Orders sync warning:", error));
+            } catch(e) {}
         }
 
         window.addEventListener('firebase-ready', () => {
+            allOrdersList = loadLocalOrders();
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            allOrdersList = loadLocalOrders();
             renderPicnicPackages();
             updateBasketSummary();
             updateHeaderUserBadge();
-            lucide.createIcons();
+            safeCreateIcons();
         });
     </script>
 </body>
