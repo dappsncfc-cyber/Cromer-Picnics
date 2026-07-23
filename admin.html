@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Staff Admin Portal | Cromer Picnics Menu Manager</title>
+    <title>Hamper Admin Portal | The White Horse, Cromer</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -33,7 +33,11 @@
                             50: '#f0f7f7',
                             100: '#d9ebed',
                             200: '#b4d7d7',
+                            300: '#8ec0c3',
+                            400: '#5a9fa5',
+                            500: '#38838a',
                             600: '#2a6f78',
+                            700: '#20565e',
                             800: '#1d3557',
                             900: '#0f2038',
                         },
@@ -42,6 +46,12 @@
                             200: '#f7f1e5',
                             300: '#eddcd0',
                             700: '#c29b68',
+                            800: '#9e7943',
+                        },
+                        sage: {
+                            100: '#f1f5f2',
+                            600: '#52796f',
+                            800: '#2f3e46',
                         }
                     },
                     fontFamily: {
@@ -69,7 +79,7 @@
         }
     </style>
 </head>
-<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white">
+<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-12">
 
     <header class="sticky top-0 z-40 bg-coastal-900 text-white shadow-md border-b border-coastal-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
@@ -81,28 +91,24 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-2">
-                            <h1 class="font-serif text-base sm:text-lg font-extrabold text-sand-100 tracking-tight leading-tight">Picnic Menu Admin Portal</h1>
-                            <span class="bg-crab-500 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Live Manager</span>
+                            <h1 class="font-serif text-base sm:text-lg font-extrabold text-sand-100 tracking-tight leading-tight">Staff Hamper Admin Portal</h1>
+                            <span class="bg-crab-500 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Live Editor</span>
                         </div>
                         <p class="text-[11px] text-coastal-200 font-medium flex items-center space-x-1">
                             <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
-                            <span>The White Horse • 24 West Street, Cromer, NR27 9DX</span>
+                            <span>The White Horse • 24 West Street, Cromer</span>
                         </p>
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2">
-                    <button id="admin-seed-btn" onclick="syncDefaultCatalogToFirebase()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-200 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
-                        <i data-lucide="database" class="w-4 h-4 text-crab-400"></i>
-                        <span class="hidden sm:inline">Sync Menu to Firebase</span>
-                    </button>
-                    <button id="admin-lock-btn" onclick="lockAdminPortal()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-100 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
+                    <button id="lock-btn" onclick="lockAdminPortal()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-100 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
                         <i data-lucide="lock" class="w-4 h-4 text-crab-400"></i>
                         <span>Lock Admin</span>
                     </button>
-                    <a href="index.html" target="_blank" class="touch-target bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold px-3.5 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors shadow-sm">
+                    <a href="index.html" target="_blank" class="touch-target bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors">
                         <i data-lucide="external-link" class="w-4 h-4 text-crab-600"></i>
-                        <span class="hidden sm:inline">Preview Customer Menu</span>
+                        <span class="hidden sm:inline">Open Customer Menu</span>
                     </a>
                 </div>
 
@@ -115,21 +121,20 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-        <!-- Staff PIN Unlock Overlay -->
         <div id="admin-pin-overlay" class="glass-card p-8 rounded-3xl border-2 border-coastal-800 shadow-xl max-w-md mx-auto space-y-4 text-center my-12">
             <div class="bg-coastal-800 text-sand-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-md">
-                <i data-lucide="sliders" class="w-7 h-7 text-crab-400"></i>
+                <i data-lucide="shield-check" class="w-7 h-7 text-crab-400"></i>
             </div>
             <div class="space-y-1">
                 <h3 class="font-serif text-xl font-bold text-coastal-900">Pub Staff Admin Portal</h3>
-                <p class="text-xs text-coastal-600">Enter staff PIN to edit hamper offerings, prices, stock availability, and extra fields.</p>
+                <p class="text-xs text-coastal-600">Enter staff PIN to manage picnic packages, prices, extra fields, and delicacies.</p>
             </div>
             
             <div class="space-y-2 pt-2">
                 <input type="password" id="staff-pin-input" placeholder="PIN (Default: 1884)" maxlength="6" class="w-full bg-white/90 border border-coastal-200 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner">
                 <button onclick="unlockAdminPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-2">
                     <i data-lucide="key" class="w-4 h-4 text-sand-200"></i>
-                    <span>Unlock Menu Manager</span>
+                    <span>Unlock Staff Admin Portal</span>
                 </button>
                 <button onclick="demoUnlockAdmin()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-2.5 rounded-2xl text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
                     <i data-lucide="key-round" class="w-4 h-4"></i>
@@ -140,166 +145,268 @@
 
         <div id="admin-dashboard-content" class="hidden space-y-6">
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Picnic Packages</p>
-                        <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-hampers-count">6</h4>
-                    </div>
-                    <div class="bg-coastal-50 p-2.5 rounded-xl text-coastal-800">
-                        <i data-lucide="shopping-bag" class="w-6 h-6 text-crab-500"></i>
-                    </div>
+            <!-- Staff Admin Metrics Bar -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Active Hampers</p>
+                    <h4 class="font-serif text-2xl font-black text-coastal-800" id="stat-hampers-count">0</h4>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">BYO Delicacies</p>
-                        <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-extras-count">13</h4>
-                    </div>
-                    <div class="bg-coastal-50 p-2.5 rounded-xl text-coastal-800">
-                        <i data-lucide="check-square" class="w-6 h-6 text-crab-500"></i>
-                    </div>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Build Your Own Extras</p>
+                    <h4 class="font-serif text-2xl font-black text-crab-600" id="stat-extras-count">0</h4>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Custom Fields / Drinks</p>
-                        <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-fields-count">4</h4>
-                    </div>
-                    <div class="bg-coastal-50 p-2.5 rounded-xl text-coastal-800">
-                        <i data-lucide="plus-circle" class="w-6 h-6 text-crab-500"></i>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Custom Fields</p>
+                    <h4 class="font-serif text-2xl font-black text-emerald-700" id="stat-fields-count">0</h4>
+                </div>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Live Sync Status</p>
+                    <div class="flex items-center space-x-1.5 mt-1">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-xs font-bold text-emerald-700" id="stat-sync-status">Connected</span>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div class="flex space-x-2 bg-coastal-50/80 p-1 rounded-2xl border border-coastal-100 text-xs font-bold w-full sm:w-auto">
-                        <button id="admin-tab-hampers" onclick="switchAdminTab('hampers')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl transition-all bg-white text-coastal-900 shadow-sm flex items-center justify-center space-x-1.5">
-                            <i data-lucide="shopping-bag" class="w-4 h-4 text-crab-500"></i>
-                            <span>Hampers Catalog</span>
-                        </button>
-                        <button id="admin-tab-extras" onclick="switchAdminTab('extras')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl transition-all text-coastal-600 hover:text-coastal-900 flex items-center justify-center space-x-1.5">
-                            <i data-lucide="list-plus" class="w-4 h-4"></i>
-                            <span>BYO Extras</span>
-                        </button>
-                        <button id="admin-tab-fields" onclick="switchAdminTab('fields')" class="flex-1 sm:flex-none px-4 py-2 rounded-xl transition-all text-coastal-600 hover:text-coastal-900 flex items-center justify-center space-x-1.5">
-                            <i data-lucide="sliders" class="w-4 h-4"></i>
-                            <span>Custom Fields</span>
-                        </button>
-                    </div>
-
-                    <button id="admin-action-btn" onclick="triggerAdminAddModal()" class="touch-target w-full sm:w-auto bg-crab-500 hover:bg-crab-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md transition-all flex items-center justify-center space-x-1.5">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span>Add New Hamper</span>
+            <!-- Navigation Sub-Tabs -->
+            <div class="glass-card p-3 sm:p-4 rounded-3xl border border-coastal-200 shadow-sm flex flex-wrap gap-2 justify-between items-center">
+                <div class="flex flex-wrap gap-2">
+                    <button id="tab-btn-hampers" onclick="switchAdminTab('hampers')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 text-crab-400"></i>
+                        <span>Hamper Packages</span>
+                    </button>
+                    <button id="tab-btn-byo" onclick="switchAdminTab('byo')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2">
+                        <i data-lucide="utensils" class="w-4 h-4 text-coastal-600"></i>
+                        <span>"Build Your Own" Delicacies</span>
+                    </button>
+                    <button id="tab-btn-custom" onclick="switchAdminTab('custom')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2">
+                        <i data-lucide="sliders" class="w-4 h-4 text-coastal-600"></i>
+                        <span>Extra Fields & Upgrades</span>
                     </button>
                 </div>
+
+                <button onclick="resetToDefaultCatalog()" class="touch-target px-3 py-2 rounded-xl text-xs font-bold transition-colors bg-sand-200 hover:bg-sand-300 text-coastal-900 border border-sand-300 flex items-center space-x-1.5">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-crab-600"></i>
+                    <span>Reset Default Menu</span>
+                </button>
             </div>
 
-            <div id="admin-section-hampers" class="space-y-4">
-                <div id="admin-hampers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Hampers -->
+            <!-- TAB 1: Hamper Packages Editor -->
+            <section id="admin-tab-hampers" class="space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-coastal-900">Manage Hamper Packages</h3>
+                        <p class="text-xs text-coastal-500">Edit prices, titles, images, descriptions, or add new coastal hampers.</p>
+                    </div>
+                    <button onclick="openAddHamperModal()" class="touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-md transition-all">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>+ Add New Hamper</span>
+                    </button>
                 </div>
-            </div>
 
-            <div id="admin-section-extras" class="hidden space-y-4">
-                <div id="admin-extras-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <!-- Dynamic BYO Extras -->
+                <div id="hampers-list-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated dynamically via JS -->
                 </div>
-            </div>
+            </section>
 
-            <div id="admin-section-fields" class="hidden space-y-4">
-                <div id="admin-fields-list" class="space-y-2">
-                    <!-- Dynamic Custom Fields -->
+            <!-- TAB 2: "Build Your Own" Delicacies Editor -->
+            <section id="admin-tab-byo" class="hidden space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-coastal-900">"Build Your Own" Pick & Mix Offerings</h3>
+                        <p class="text-xs text-coastal-500">Configure seafood, meats, cheeses, bakery, and drinks available for bespoke hampers.</p>
+                    </div>
+                    <button onclick="openAddExtraModal()" class="touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-md transition-all">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>+ Add Extra Offering</span>
+                    </button>
                 </div>
-            </div>
+
+                <div id="byo-extras-list-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- TAB 3: Extra Fields & Upgrades Editor -->
+            <section id="admin-tab-custom" class="hidden space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
+                    <div>
+                        <h3 class="font-serif text-lg font-bold text-coastal-900">Global Dietary Swaps & Drink Upgrade Fields</h3>
+                        <p class="text-xs text-coastal-500">Add or edit customization dropdowns and drink add-ons for hamper packages.</p>
+                    </div>
+                    <button onclick="openAddCustomFieldModal()" class="touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-md transition-all">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>+ Add Upgrade Option</span>
+                    </button>
+                </div>
+
+                <div id="custom-fields-list" class="space-y-3">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
 
         </div>
 
     </main>
 
-    <!-- Edit Hamper Modal -->
-    <div id="admin-hamper-modal" onclick="if(event.target === this) closeHamperModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4">
+    <!-- MODAL 1: Add/Edit Hamper Package Modal -->
+    <div id="hamper-modal" onclick="if(event.target === this) closeHamperModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 relative space-y-4">
-            <button onclick="closeHamperModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50">
+            <button onclick="closeHamperModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
+            <div class="border-b border-coastal-100 pb-3">
+                <h3 class="font-serif text-xl font-bold text-coastal-900" id="hamper-modal-title">Edit Hamper Package</h3>
+                <p class="text-xs text-coastal-500">Update hamper details or pricing for live customer ordering.</p>
+            </div>
 
-            <h3 class="font-serif text-xl font-bold text-coastal-900" id="hamper-modal-title">Edit Picnic Hamper</h3>
-
-            <div class="space-y-3 text-xs">
-                <input type="hidden" id="edit-hamper-id">
+            <form id="hamper-form" onsubmit="event.preventDefault(); saveHamperPackage();" class="space-y-3 text-xs">
+                <input type="hidden" id="hamper-form-id">
+                
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Hamper Title *</label>
-                    <input type="text" id="edit-hamper-title" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                    <input type="text" id="hamper-form-title" required placeholder="e.g. The Cromer Crab Feast" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block font-bold text-coastal-800 mb-1">Base Price (£) *</label>
-                        <input type="number" step="0.50" id="edit-hamper-price" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                        <label class="block font-bold text-coastal-800 mb-1">Price (£) *</label>
+                        <input type="number" step="0.50" id="hamper-form-price" required placeholder="48.00" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold text-coastal-800 mb-1">Tag Badge Title</label>
-                        <input type="text" id="edit-hamper-badge" placeholder="e.g. Signature" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                        <label class="block font-bold text-coastal-800 mb-1">Badge / Tag *</label>
+                        <input type="text" id="hamper-form-badge" required placeholder="e.g. Signature, Popular" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
                     </div>
                 </div>
+
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Badge Color Style</label>
+                    <select id="hamper-form-color" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                        <option value="bg-crab-500 text-white">Crab Red (Signature)</option>
+                        <option value="bg-crab-600 text-white">Dark Crab Red (Bespoke)</option>
+                        <option value="bg-sand-700 text-white">Gold Sand (Popular)</option>
+                        <option value="bg-sage-600 text-white">Sage Green (Vegetarian/Vegan)</option>
+                        <option value="bg-coastal-800 text-white">Navy Blue (Luxury)</option>
+                        <option value="bg-coastal-600 text-white">Coastal Teal (Family)</option>
+                    </select>
+                </div>
+
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Image URL</label>
-                    <input type="url" id="edit-hamper-image" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                    <input type="url" id="hamper-form-image" placeholder="https://images.unsplash.com/photo-..." class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
                 </div>
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Hamper Description *</label>
-                    <textarea id="edit-hamper-desc" rows="3" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none"></textarea>
-                </div>
-                <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" id="edit-hamper-available" checked class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                    <label for="edit-hamper-available" class="font-bold text-coastal-800 cursor-pointer">In Stock & Available for Order</label>
-                </div>
-            </div>
 
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeHamperModal()" class="touch-target flex-1 bg-coastal-100 text-coastal-800 font-bold py-3 rounded-xl border border-coastal-200">Cancel</button>
-                <button onclick="saveHamperItem()" class="touch-target flex-1 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3 rounded-xl shadow-md">Save Hamper</button>
-            </div>
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Description *</label>
+                    <textarea id="hamper-form-desc" rows="3" required placeholder="Describe the contents of this hamper..." class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none"></textarea>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-1">
+                    <input type="checkbox" id="hamper-form-available" checked class="w-4 h-4 rounded text-crab-500 focus:ring-crab-500">
+                    <label for="hamper-form-available" class="font-bold text-coastal-800 cursor-pointer">In Stock & Available for Ordering</label>
+                </div>
+
+                <div class="pt-3 grid grid-cols-2 gap-2">
+                    <button type="button" onclick="closeHamperModal()" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-2.5 rounded-xl border border-coastal-200 transition-all">Cancel</button>
+                    <button type="submit" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center space-x-1">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Save Hamper</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Edit BYO Extra Modal -->
-    <div id="admin-extra-modal" onclick="if(event.target === this) closeExtraModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
-            <button onclick="closeExtraModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50">
+    <!-- MODAL 2: Add/Edit Extra Delicacy Modal -->
+    <div id="extra-modal" onclick="if(event.target === this) closeExtraModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
+        <div class="glass-card rounded-3xl w-full max-w-md border border-white/60 shadow-2xl p-6 relative space-y-4">
+            <button onclick="closeExtraModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
+            <div class="border-b border-coastal-100 pb-3">
+                <h3 class="font-serif text-xl font-bold text-coastal-900" id="extra-modal-title">Edit Extra Delicacy</h3>
+                <p class="text-xs text-coastal-500">Add or edit offerings for the "Build Your Own" hamper.</p>
+            </div>
 
-            <h3 class="font-serif text-lg font-bold text-coastal-900" id="extra-modal-title">Edit BYO Extra</h3>
-
-            <div class="space-y-3 text-xs">
-                <input type="hidden" id="edit-extra-id">
+            <form id="extra-form" onsubmit="event.preventDefault(); saveExtraOffering();" class="space-y-3 text-xs">
+                <input type="hidden" id="extra-form-id">
+                
                 <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Item Title *</label>
-                    <input type="text" id="edit-extra-title" placeholder="e.g. Fresh Samphire" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2">
+                    <label class="block font-bold text-coastal-800 mb-1">Delicacy Title *</label>
+                    <input type="text" id="extra-form-title" required placeholder="e.g. Fresh Dressed Cromer Crab" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Price (£) *</label>
-                        <input type="number" step="0.50" id="edit-extra-price" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2">
+                        <input type="number" step="0.50" id="extra-form-price" required placeholder="14.00" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold text-coastal-800 mb-1">Emoji Icon</label>
-                        <input type="text" id="edit-extra-icon" placeholder="e.g. 🦀" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2">
+                        <label class="block font-bold text-coastal-800 mb-1">Icon / Emoji</label>
+                        <input type="text" id="extra-form-icon" placeholder="🦀" maxlength="4" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none text-center">
                     </div>
                 </div>
+
+                <div class="pt-3 grid grid-cols-2 gap-2">
+                    <button type="button" onclick="closeExtraModal()" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-2.5 rounded-xl border border-coastal-200 transition-all">Cancel</button>
+                    <button type="submit" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center space-x-1">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Save Delicacy</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Add Custom Field/Upgrade Option Modal -->
+    <div id="custom-field-modal" onclick="if(event.target === this) closeCustomFieldModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
+        <div class="glass-card rounded-3xl w-full max-w-md border border-white/60 shadow-2xl p-6 relative space-y-4">
+            <button onclick="closeCustomFieldModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="border-b border-coastal-100 pb-3">
+                <h3 class="font-serif text-xl font-bold text-coastal-900" id="field-modal-title">Add Custom Upgrade Field</h3>
+                <p class="text-xs text-coastal-500">Configure additional drinks or dietary options for customer selection.</p>
             </div>
 
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeExtraModal()" class="touch-target flex-1 bg-coastal-100 text-coastal-800 font-bold py-2.5 rounded-xl border border-coastal-200">Cancel</button>
-                <button onclick="saveExtraItem()" class="touch-target flex-1 bg-coastal-800 text-white font-bold py-2.5 rounded-xl shadow-md">Save Extra</button>
-            </div>
+            <form id="custom-field-form" onsubmit="event.preventDefault(); saveCustomUpgradeField();" class="space-y-3 text-xs">
+                <input type="hidden" id="field-form-id">
+                
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Upgrade Name *</label>
+                    <input type="text" id="field-form-title" required placeholder="e.g. Chilled Norfolk Cider (500ml)" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Extra Charge (£)</label>
+                        <input type="number" step="0.50" id="field-form-price" placeholder="4.50" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Category</label>
+                        <select id="field-form-type" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                            <option value="drink">Drink Upgrade</option>
+                            <option value="dietary">Dietary Swap Option</option>
+                            <option value="extra">Special Addition</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-3 grid grid-cols-2 gap-2">
+                    <button type="button" onclick="closeCustomFieldModal()" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-2.5 rounded-xl border border-coastal-200 transition-all">Cancel</button>
+                    <button type="submit" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2.5 rounded-xl shadow-md transition-all flex items-center justify-center space-x-1">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        <span>Save Upgrade</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyDkrSDAVFeTPJC13a1GKdx8SZ1t4ik36zU",
@@ -322,51 +429,19 @@
             window.firebaseApp = app;
             window.firebaseAuth = auth;
             window.firebaseDb = db;
-            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot };
+            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDocs };
             window.appId = appId;
             window.currentUser = null;
 
-            window.getHampersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'hampers');
-                }
-                return collection(db, 'hampers');
-            };
+            /* STRICT FIX: Collections explicitly use /artifacts/{appId}/public/data/ path to match Rule #13 */
+            window.getHampersColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'hampers');
+            window.getHamperDocRef = (id) => doc(db, 'artifacts', appId, 'public', 'data', 'hampers', id);
 
-            window.getExtrasColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'extras');
-                }
-                return collection(db, 'extras');
-            };
+            window.getExtrasColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'extras');
+            window.getExtraDocRef = (id) => doc(db, 'artifacts', appId, 'public', 'data', 'extras', id);
 
-            window.getCustomFieldsColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'custom_fields');
-                }
-                return collection(db, 'custom_fields');
-            };
-
-            window.getHamperDocRef = (id) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'hampers', id);
-                }
-                return doc(db, 'hampers', id);
-            };
-
-            window.getExtraDocRef = (id) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'extras', id);
-                }
-                return doc(db, 'extras', id);
-            };
-
-            window.getFieldDocRef = (id) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'custom_fields', id);
-                }
-                return doc(db, 'custom_fields', id);
-            };
+            window.getCustomFieldsColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'custom_fields');
+            window.getCustomFieldDocRef = (id) => doc(db, 'artifacts', appId, 'public', 'data', 'custom_fields', id);
 
             async function initAuth() {
                 try {
@@ -376,13 +451,15 @@
                         await signInAnonymously(auth);
                     }
                     window.currentUser = auth.currentUser;
-                } catch (e) {
+                } catch (error) {
+                    console.warn("Auth offline warning:", error);
                 } finally {
                     window.dispatchEvent(new Event('firebase-ready'));
                 }
             }
             initAuth();
         } catch (err) {
+            console.warn("Firebase initialization skipped:", err);
             window.dispatchEvent(new Event('firebase-ready'));
         }
     </script>
@@ -390,76 +467,81 @@
     <script>
         let isAdminUnlocked = false;
         let activeAdminTab = 'hampers';
+        
+        // Safe Lucide Icon Renderer Guard
+        function safeCreateIcons() {
+            try {
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons();
+                }
+            } catch (err) {}
+        }
 
+        // Default Hamper Catalog State
         let hampersList = [
             {
                 id: 'build-your-own',
                 title: 'Build Your Own Coastal Hamper',
-                tagline: 'Create your bespoke Norfolk beach feast.',
                 price: 10.00,
-                desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.',
                 badge: 'Bespoke',
                 badgeColor: 'bg-crab-600 text-white',
                 image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
+                desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.',
                 available: true
             },
             {
                 id: 'crab-feast',
                 title: 'The Cromer Crab Feast',
-                tagline: 'Freshly caught local crab & sea samphire.',
                 price: 48.00,
-                desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.',
                 badge: 'Signature',
                 badgeColor: 'bg-crab-500 text-white',
                 image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80',
+                desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.',
                 available: true
             },
             {
                 id: 'ploughmans-classic',
                 title: 'Norfolk Artisan Ploughman’s',
-                tagline: 'Hearty pub deli selections.',
                 price: 38.00,
-                desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.',
                 badge: 'Popular',
                 badgeColor: 'bg-sand-700 text-white',
                 image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80',
+                desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.',
                 available: true
             },
             {
                 id: 'saltmarsh-vegan',
                 title: 'Saltmarsh Wild Grazing (V)',
-                tagline: 'Vegetarian harvest selection.',
                 price: 36.00,
-                desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.',
                 badge: 'Vegetarian',
                 badgeColor: 'bg-sage-600 text-white',
                 image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
+                desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.',
                 available: true
             },
             {
                 id: 'sunset-prosecco',
                 title: 'Pier Sunset Romance (For Two)',
-                tagline: 'Luxury seaside celebration.',
                 price: 68.00,
-                desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.',
                 badge: 'Luxury',
                 badgeColor: 'bg-coastal-800 text-white',
                 image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+                desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.',
                 available: true
             },
             {
                 id: 'shipmates-family',
                 title: 'Little Shipmates Family Feast',
-                tagline: 'Family friendly beach treats.',
                 price: 28.00,
-                desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.',
                 badge: 'Family',
                 badgeColor: 'bg-coastal-600 text-white',
                 image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80',
+                desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.',
                 available: true
             }
         ];
 
+        // Default BYO Delicacies State
         let byoExtrasList = [
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
@@ -476,64 +558,13 @@
             { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
 
+        // Default Custom Fields & Upgrade Fields State
         let customFieldsList = [
             { id: 'fld-1', title: 'Add Chilled Norfolk Apple Juice', price: 3.50, type: 'drink' },
             { id: 'fld-2', title: 'Add Artisan Ginger Beer', price: 3.50, type: 'drink' },
             { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
             { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' }
         ];
-
-        function safeCreateIcons() {
-            try {
-                if (window.lucide && typeof window.lucide.createIcons === 'function') {
-                    window.lucide.createIcons();
-                }
-            } catch (err) {}
-        }
-
-        async function syncDefaultCatalogToFirebase() {
-            if (!window.currentUser || !window.firebaseFns || !window.getHamperDocRef) {
-                triggerToast('Database offline. Catalog saved to local session.', 'info');
-                return;
-            }
-            try {
-                for (const h of hampersList) {
-                    const docRef = window.getHamperDocRef(h.id);
-                    await window.firebaseFns.setDoc(docRef, h, { merge: true });
-                }
-                for (const e of byoExtrasList) {
-                    const docRef = window.getExtraDocRef(e.id);
-                    await window.firebaseFns.setDoc(docRef, e, { merge: true });
-                }
-                for (const f of customFieldsList) {
-                    const docRef = window.getFieldDocRef(f.id);
-                    await window.firebaseFns.setDoc(docRef, f, { merge: true });
-                }
-                triggerToast('All menu hampers & items synced to Firebase!', 'success');
-            } catch(e) {
-                triggerToast('Error writing catalog to Firebase', 'error');
-            }
-        }
-
-        function loadLocalCatalog() {
-            try {
-                const h = localStorage.getItem('wh_admin_hampers');
-                const e = localStorage.getItem('wh_admin_extras');
-                const f = localStorage.getItem('wh_admin_fields');
-
-                if (h) hampersList = JSON.parse(h);
-                if (e) byoExtrasList = JSON.parse(e);
-                if (f) customFieldsList = JSON.parse(f);
-            } catch(err) {}
-        }
-
-        function saveLocalCatalog() {
-            try {
-                localStorage.setItem('wh_admin_hampers', JSON.stringify(hampersList));
-                localStorage.setItem('wh_admin_extras', JSON.stringify(byoExtrasList));
-                localStorage.setItem('wh_admin_fields', JSON.stringify(customFieldsList));
-            } catch(err) {}
-        }
 
         function triggerToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -553,7 +584,7 @@
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 350);
+                setTimeout(() => toast.remove(), 300);
             }, 3500);
         }
 
@@ -571,58 +602,150 @@
             isAdminUnlocked = true;
             document.getElementById('admin-pin-overlay').classList.add('hidden');
             document.getElementById('admin-dashboard-content').classList.remove('hidden');
-            document.getElementById('admin-lock-btn').classList.remove('hidden');
-            document.getElementById('admin-seed-btn').classList.remove('hidden');
+            document.getElementById('lock-btn').classList.remove('hidden');
             renderAdminDashboard();
-            triggerToast('Admin Portal Unlocked', 'success');
+            triggerToast('Staff Admin Portal Unlocked', 'success');
         }
 
         function lockAdminPortal() {
             isAdminUnlocked = false;
             document.getElementById('admin-pin-overlay').classList.remove('hidden');
             document.getElementById('admin-dashboard-content').classList.add('hidden');
-            document.getElementById('admin-lock-btn').classList.add('hidden');
-            document.getElementById('admin-seed-btn').classList.add('hidden');
+            document.getElementById('lock-btn').classList.add('hidden');
         }
 
-        function switchAdminTab(tab) {
-            activeAdminTab = tab;
-            document.getElementById('admin-section-hampers').classList.add('hidden');
-            document.getElementById('admin-section-extras').classList.add('hidden');
-            document.getElementById('admin-section-fields').classList.add('hidden');
+        function switchAdminTab(tabKey) {
+            activeAdminTab = tabKey;
+            
+            const btnHampers = document.getElementById('tab-btn-hampers');
+            const btnByo = document.getElementById('tab-btn-byo');
+            const btnCustom = document.getElementById('tab-btn-custom');
 
-            const btnHampers = document.getElementById('admin-tab-hampers');
-            const btnExtras = document.getElementById('admin-tab-extras');
-            const btnFields = document.getElementById('admin-tab-fields');
-            const actionBtn = document.getElementById('admin-action-btn');
+            const secHampers = document.getElementById('admin-tab-hampers');
+            const secByo = document.getElementById('admin-tab-byo');
+            const secCustom = document.getElementById('admin-tab-custom');
 
-            const inactiveStyle = "flex-1 sm:flex-none px-4 py-2 rounded-xl transition-all text-coastal-600 hover:text-coastal-900 flex items-center justify-center space-x-1.5";
-            const activeStyle = "flex-1 sm:flex-none px-4 py-2 rounded-xl transition-all bg-white text-coastal-900 shadow-sm flex items-center justify-center space-x-1.5";
+            const activeClass = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2";
+            const inactiveClass = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2";
 
-            if (btnHampers) btnHampers.className = tab === 'hampers' ? activeStyle : inactiveStyle;
-            if (btnExtras) btnExtras.className = tab === 'extras' ? activeStyle : inactiveStyle;
-            if (btnFields) btnFields.className = tab === 'fields' ? activeStyle : inactiveStyle;
+            if (btnHampers) btnHampers.className = tabKey === 'hampers' ? activeClass : inactiveClass;
+            if (btnByo) btnByo.className = tabKey === 'byo' ? activeClass : inactiveClass;
+            if (btnCustom) btnCustom.className = tabKey === 'custom' ? activeClass : inactiveClass;
 
-            if (tab === 'hampers') {
-                document.getElementById('admin-section-hampers').classList.remove('hidden');
-                if (actionBtn) actionBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i><span>Add New Hamper</span>`;
-            } else if (tab === 'extras') {
-                document.getElementById('admin-section-extras').classList.remove('hidden');
-                if (actionBtn) actionBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i><span>Add BYO Extra</span>`;
-            } else {
-                document.getElementById('admin-section-fields').classList.remove('hidden');
-                if (actionBtn) actionBtn.innerHTML = `<i data-lucide="plus" class="w-4 h-4"></i><span>Add Custom Field</span>`;
-            }
+            if (secHampers) secHampers.classList.toggle('hidden', tabKey !== 'hampers');
+            if (secByo) secByo.classList.toggle('hidden', tabKey !== 'byo');
+            if (secCustom) secCustom.classList.toggle('hidden', tabKey !== 'custom');
 
             safeCreateIcons();
         }
 
-        function triggerAdminAddModal() {
-            if (activeAdminTab === 'hampers') {
-                openHamperModal();
-            } else {
-                openExtraModal();
-            }
+        function renderHampersGrid() {
+            const container = document.getElementById('hampers-list-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            hampersList.forEach(pkg => {
+                const card = document.createElement('div');
+                card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm flex flex-col justify-between ${!pkg.available ? 'opacity-60 bg-gray-50' : ''}`;
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-40 overflow-hidden bg-coastal-100">
+                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
+                                ${pkg.badge}
+                            </span>
+                            ${!pkg.available ? '<span class="absolute top-3 right-3 bg-crab-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow">Out of Stock</span>' : ''}
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
+                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${Number(pkg.price).toFixed(2)}</span>
+                            </div>
+                            <p class="text-xs text-coastal-600 line-clamp-2 leading-relaxed">${pkg.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 grid grid-cols-3 gap-2">
+                        <button onclick="toggleHamperAvailability('${pkg.id}')" class="touch-target col-span-1 text-[11px] font-bold py-2 rounded-xl border border-coastal-200 hover:bg-coastal-50 transition-colors flex items-center justify-center">
+                            ${pkg.available ? '🟢 In Stock' : '🔴 Hidden'}
+                        </button>
+                        <button onclick="openEditHamperModal('${pkg.id}')" class="touch-target col-span-1 bg-coastal-800 hover:bg-coastal-900 text-white text-[11px] font-bold py-2 rounded-xl transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                            <span>Edit</span>
+                        </button>
+                        <button onclick="deleteHamperPackage('${pkg.id}')" class="touch-target col-span-1 bg-crab-50 hover:bg-crab-100 text-crab-700 text-[11px] font-bold py-2 rounded-xl border border-crab-200 transition-colors flex items-center justify-center space-x-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            safeCreateIcons();
+        }
+
+        function renderByoExtrasGrid() {
+            const container = document.getElementById('byo-extras-list-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            byoExtrasList.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between space-x-2 text-xs";
+                card.innerHTML = `
+                    <div class="flex items-center space-x-2.5 truncate">
+                        <span class="text-xl bg-coastal-50 p-2 rounded-xl border border-coastal-100 shrink-0">${item.icon || '🥪'}</span>
+                        <div class="truncate">
+                            <h5 class="font-bold text-coastal-900 truncate">${item.title}</h5>
+                            <span class="font-serif font-extrabold text-crab-600">£${Number(item.price).toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1 shrink-0">
+                        <button onclick="openEditExtraModal('${item.id}')" class="p-2 hover:bg-coastal-100 text-coastal-700 rounded-lg transition-colors" title="Edit">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteExtraOffering('${item.id}')" class="p-2 hover:bg-crab-50 text-crab-600 rounded-lg transition-colors" title="Delete">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            safeCreateIcons();
+        }
+
+        function renderCustomFieldsList() {
+            const container = document.getElementById('custom-fields-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            customFieldsList.forEach(fld => {
+                const card = document.createElement('div');
+                card.className = "bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between text-xs";
+                
+                let badgeType = "bg-coastal-100 text-coastal-800";
+                if (fld.type === 'drink') badgeType = "bg-amber-100 text-amber-900";
+                if (fld.type === 'dietary') badgeType = "bg-sage-100 text-sage-800";
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${badgeType}">${fld.type}</span>
+                        <div>
+                            <h5 class="font-bold text-coastal-900">${fld.title}</h5>
+                            <span class="text-coastal-500 font-medium">${fld.price > 0 ? `+£${Number(fld.price).toFixed(2)} extra` : 'Free Option / Swap'}</span>
+                        </div>
+                    </div>
+                    <button onclick="deleteCustomUpgradeField('${fld.id}')" class="touch-target px-3 py-1.5 bg-crab-50 hover:bg-crab-100 text-crab-700 rounded-xl font-bold border border-crab-200 flex items-center space-x-1 transition-colors">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        <span>Remove</span>
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+
+            safeCreateIcons();
         }
 
         function renderAdminDashboard() {
@@ -635,271 +758,268 @@
             renderCustomFieldsList();
         }
 
-        function renderHampersGrid() {
-            const container = document.getElementById('admin-hampers-grid');
-            if (!container) return;
-            container.innerHTML = '';
+        function openAddHamperModal() {
+            document.getElementById('hamper-modal-title').innerText = "Add New Hamper Package";
+            document.getElementById('hamper-form-id').value = '';
+            document.getElementById('hamper-form-title').value = '';
+            document.getElementById('hamper-form-price').value = '';
+            document.getElementById('hamper-form-badge').value = 'New Hamper';
+            document.getElementById('hamper-form-color').value = 'bg-crab-500 text-white';
+            document.getElementById('hamper-form-image').value = '';
+            document.getElementById('hamper-form-desc').value = '';
+            document.getElementById('hamper-form-available').checked = true;
 
-            hampersList.forEach(pkg => {
-                const isOut = pkg.available === false;
-                const card = document.createElement('div');
-                card.className = "bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm p-4 space-y-3 flex flex-col justify-between";
-                card.innerHTML = `
-                    <div class="space-y-2">
-                        <div class="relative h-32 rounded-2xl overflow-hidden bg-coastal-100">
-                            <img src="${pkg.image}" class="w-full h-full object-cover">
-                            <span class="absolute top-2 left-2 text-[9px] font-bold px-2 py-0.5 rounded-full ${pkg.badgeColor || 'bg-coastal-800 text-white'}">${pkg.badge || 'Hamper'}</span>
-                            <span class="absolute top-2 right-2 text-[9px] font-bold px-2 py-0.5 rounded-full ${isOut ? 'bg-crab-600 text-white' : 'bg-emerald-600 text-white'}">${isOut ? 'Out of Stock' : 'In Stock'}</span>
-                        </div>
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-serif font-bold text-sm text-coastal-900">${pkg.title}</h4>
-                            <span class="font-bold text-crab-600 text-sm">£${Number(pkg.price).toFixed(2)}</span>
-                        </div>
-                        <p class="text-[11px] text-coastal-500 line-clamp-2">${pkg.desc}</p>
-                    </div>
-                    <div class="pt-2 border-t border-coastal-100 grid grid-cols-2 gap-2 text-xs">
-                        <button onclick="toggleHamperStock('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 font-bold py-1.5 rounded-xl text-coastal-800">
-                            ${isOut ? 'Set In-Stock' : 'Set Out-of-Stock'}
-                        </button>
-                        <button onclick="openHamperModal('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-1.5 rounded-xl">
-                            Edit Details
-                        </button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-
+            document.getElementById('hamper-modal').classList.remove('hidden');
             safeCreateIcons();
         }
 
-        function renderByoExtrasGrid() {
-            const container = document.getElementById('admin-extras-grid');
-            if (!container) return;
-            container.innerHTML = '';
+        function openEditHamperModal(id) {
+            const pkg = hampersList.find(h => h.id === id);
+            if (!pkg) return;
 
-            byoExtrasList.forEach(item => {
-                const el = document.createElement('div');
-                el.className = "bg-white/90 p-3 rounded-2xl border border-coastal-200 flex items-center justify-between text-xs";
-                el.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <span class="text-base">${item.icon || '🥪'}</span>
-                        <div>
-                            <p class="font-bold text-coastal-900">${item.title}</p>
-                            <p class="text-crab-600 font-bold">+£${Number(item.price).toFixed(2)}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-1">
-                        <button onclick="openExtraModal('${item.id}')" class="p-1.5 hover:bg-coastal-100 rounded-lg text-coastal-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-                        <button onclick="deleteExtraItem('${item.id}')" class="p-1.5 hover:bg-crab-50 rounded-lg text-crab-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                `;
-                container.appendChild(el);
-            });
+            document.getElementById('hamper-modal-title').innerText = "Edit Hamper Package";
+            document.getElementById('hamper-form-id').value = pkg.id;
+            document.getElementById('hamper-form-title').value = pkg.title;
+            document.getElementById('hamper-form-price').value = pkg.price;
+            document.getElementById('hamper-form-badge').value = pkg.badge || '';
+            document.getElementById('hamper-form-color').value = pkg.badgeColor || 'bg-crab-500 text-white';
+            document.getElementById('hamper-form-image').value = pkg.image || '';
+            document.getElementById('hamper-form-desc').value = pkg.desc || '';
+            document.getElementById('hamper-form-available').checked = pkg.available !== false;
 
-            safeCreateIcons();
-        }
-
-        function renderCustomFieldsList() {
-            const container = document.getElementById('admin-fields-list');
-            if (!container) return;
-            container.innerHTML = '';
-
-            customFieldsList.forEach(fld => {
-                const el = document.createElement('div');
-                el.className = "bg-white/90 p-3 rounded-2xl border border-coastal-200 flex items-center justify-between text-xs";
-                el.innerHTML = `
-                    <div>
-                        <p class="font-bold text-coastal-900">${fld.title}</p>
-                        <p class="text-coastal-500 capitalize">Type: ${fld.type} • Price modifier: £${Number(fld.price).toFixed(2)}</p>
-                    </div>
-                    <button onclick="deleteCustomFieldItem('${fld.id}')" class="p-1.5 hover:bg-crab-50 rounded-lg text-crab-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                `;
-                container.appendChild(el);
-            });
-
-            safeCreateIcons();
-        }
-
-        function toggleHamperStock(id) {
-            const found = hampersList.find(h => h.id === id);
-            if (found) {
-                found.available = found.available === false ? true : false;
-                saveLocalCatalog();
-
-                if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
-                    try {
-                        const docRef = window.getHamperDocRef(found.id);
-                        window.firebaseFns.setDoc(docRef, found).catch(console.warn);
-                    } catch(e) {}
-                }
-
-                renderAdminDashboard();
-                triggerToast(`${found.title} availability updated`, 'success');
-            }
-        }
-
-        function openHamperModal(id = null) {
-            const modal = document.getElementById('admin-hamper-modal');
-            if (id) {
-                const pkg = hampersList.find(h => h.id === id);
-                if (pkg) {
-                    document.getElementById('edit-hamper-id').value = pkg.id;
-                    document.getElementById('edit-hamper-title').value = pkg.title;
-                    document.getElementById('edit-hamper-price').value = pkg.price;
-                    document.getElementById('edit-hamper-badge').value = pkg.badge || '';
-                    document.getElementById('edit-hamper-image').value = pkg.image || '';
-                    document.getElementById('edit-hamper-desc').value = pkg.desc || '';
-                    document.getElementById('edit-hamper-available').checked = pkg.available !== false;
-                }
-            } else {
-                document.getElementById('edit-hamper-id').value = '';
-                document.getElementById('edit-hamper-title').value = '';
-                document.getElementById('edit-hamper-price').value = '35.00';
-                document.getElementById('edit-hamper-badge').value = 'Gourmet';
-                document.getElementById('edit-hamper-image').value = 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80';
-                document.getElementById('edit-hamper-desc').value = '';
-                document.getElementById('edit-hamper-available').checked = true;
-            }
-            modal.classList.remove('hidden');
+            document.getElementById('hamper-modal').classList.remove('hidden');
             safeCreateIcons();
         }
 
         function closeHamperModal() {
-            document.getElementById('admin-hamper-modal').classList.add('hidden');
+            document.getElementById('hamper-modal').classList.add('hidden');
         }
 
-        function saveHamperItem() {
-            const id = document.getElementById('edit-hamper-id').value;
-            const title = document.getElementById('edit-hamper-title').value.trim();
-            const price = parseFloat(document.getElementById('edit-hamper-price').value) || 0;
-            const badge = document.getElementById('edit-hamper-badge').value.trim();
-            const image = document.getElementById('edit-hamper-image').value.trim();
-            const desc = document.getElementById('edit-hamper-desc').value.trim();
-            const available = document.getElementById('edit-hamper-available').checked;
+        async function saveHamperPackage() {
+            const id = document.getElementById('hamper-form-id').value || ('pkg-' + Date.now());
+            const title = document.getElementById('hamper-form-title').value.trim();
+            const price = parseFloat(document.getElementById('hamper-form-price').value) || 0;
+            const badge = document.getElementById('hamper-form-badge').value.trim() || 'Signature';
+            const badgeColor = document.getElementById('hamper-form-color').value;
+            const image = document.getElementById('hamper-form-image').value.trim() || 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80';
+            const desc = document.getElementById('hamper-form-desc').value.trim();
+            const available = document.getElementById('hamper-form-available').checked;
 
-            if (!title) {
-                triggerToast('Please provide a hamper title', 'error');
-                return;
-            }
+            const newPkg = { id, title, price, badge, badgeColor, image, desc, available };
 
-            let pkg = hampersList.find(h => h.id === id);
-            if (pkg) {
-                pkg.title = title;
-                pkg.price = price;
-                pkg.badge = badge;
-                pkg.image = image;
-                pkg.desc = desc;
-                pkg.available = available;
+            const idx = hampersList.findIndex(h => h.id === id);
+            if (idx >= 0) {
+                hampersList[idx] = newPkg;
             } else {
-                pkg = {
-                    id: 'hmp_' + Date.now(),
-                    title, price, badge, image, desc, available,
-                    badgeColor: 'bg-coastal-800 text-white'
-                };
-                hampersList.push(pkg);
+                hampersList.push(newPkg);
             }
 
             saveLocalCatalog();
-
             if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
                 try {
-                    const docRef = window.getHamperDocRef(pkg.id);
-                    window.firebaseFns.setDoc(docRef, pkg).catch(console.warn);
-                } catch(e) {}
+                    const docRef = window.getHamperDocRef(id);
+                    await window.firebaseFns.setDoc(docRef, newPkg);
+                } catch(e) { console.warn("Firebase hamper save warning:", e); }
             }
 
             closeHamperModal();
             renderAdminDashboard();
-            triggerToast('Hamper saved successfully', 'success');
+            triggerToast(`Hamper "${title}" saved successfully`, 'success');
         }
 
-        function openExtraModal(id = null) {
-            const modal = document.getElementById('admin-extra-modal');
-            if (id) {
-                const item = byoExtrasList.find(e => e.id === id);
-                if (item) {
-                    document.getElementById('edit-extra-id').value = item.id;
-                    document.getElementById('edit-extra-title').value = item.title;
-                    document.getElementById('edit-extra-price').value = item.price;
-                    document.getElementById('edit-extra-icon').value = item.icon || '🦀';
-                }
-            } else {
-                document.getElementById('edit-extra-id').value = '';
-                document.getElementById('edit-extra-title').value = '';
-                document.getElementById('edit-extra-price').value = '5.00';
-                document.getElementById('edit-extra-icon').value = '🦀';
+        async function toggleHamperAvailability(id) {
+            const pkg = hampersList.find(h => h.id === id);
+            if (!pkg) return;
+            pkg.available = !pkg.available;
+
+            saveLocalCatalog();
+            if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
+                try {
+                    const docRef = window.getHamperDocRef(id);
+                    await window.firebaseFns.setDoc(docRef, pkg, { merge: true });
+                } catch(e) {}
             }
-            modal.classList.remove('hidden');
+
+            renderAdminDashboard();
+            triggerToast(`Hamper availability set to ${pkg.available ? 'In Stock' : 'Hidden'}`, 'info');
+        }
+
+        async function deleteHamperPackage(id) {
+            hampersList = hampersList.filter(h => h.id !== id);
+            saveLocalCatalog();
+
+            if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
+                try {
+                    const docRef = window.getHamperDocRef(id);
+                    await window.firebaseFns.deleteDoc(docRef);
+                } catch(e) {}
+            }
+
+            renderAdminDashboard();
+            triggerToast('Hamper package removed', 'info');
+        }
+
+        function openAddExtraModal() {
+            document.getElementById('extra-modal-title').innerText = "Add Extra Delicacy";
+            document.getElementById('extra-form-id').value = '';
+            document.getElementById('extra-form-title').value = '';
+            document.getElementById('extra-form-price').value = '';
+            document.getElementById('extra-form-icon').value = '🦀';
+
+            document.getElementById('extra-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function openEditExtraModal(id) {
+            const item = byoExtrasList.find(e => e.id === id);
+            if (!item) return;
+
+            document.getElementById('extra-modal-title').innerText = "Edit Extra Delicacy";
+            document.getElementById('extra-form-id').value = item.id;
+            document.getElementById('extra-form-title').value = item.title;
+            document.getElementById('extra-form-price').value = item.price;
+            document.getElementById('extra-form-icon').value = item.icon || '🥪';
+
+            document.getElementById('extra-modal').classList.remove('hidden');
             safeCreateIcons();
         }
 
         function closeExtraModal() {
-            document.getElementById('admin-extra-modal').classList.add('hidden');
+            document.getElementById('extra-modal').classList.add('hidden');
         }
 
-        function saveExtraItem() {
-            const id = document.getElementById('edit-extra-id').value;
-            const title = document.getElementById('edit-extra-title').value.trim();
-            const price = parseFloat(document.getElementById('edit-extra-price').value) || 0;
-            const icon = document.getElementById('edit-extra-icon').value.trim() || '🦀';
+        async function saveExtraOffering() {
+            const id = document.getElementById('extra-form-id').value || ('byo-' + Date.now());
+            const title = document.getElementById('extra-form-title').value.trim();
+            const price = parseFloat(document.getElementById('extra-form-price').value) || 0;
+            const icon = document.getElementById('extra-form-icon').value.trim() || '🥪';
 
-            if (!title) {
-                triggerToast('Please provide an item title', 'error');
-                return;
-            }
+            const newItem = { id, title, price, icon };
 
-            let item = byoExtrasList.find(e => e.id === id);
-            if (item) {
-                item.title = title;
-                item.price = price;
-                item.icon = icon;
+            const idx = byoExtrasList.findIndex(e => e.id === id);
+            if (idx >= 0) {
+                byoExtrasList[idx] = newItem;
             } else {
-                item = { id: 'byo_' + Date.now(), title, price, icon };
-                byoExtrasList.push(item);
+                byoExtrasList.push(newItem);
             }
 
             saveLocalCatalog();
-
             if (window.currentUser && window.firebaseFns && window.getExtraDocRef) {
                 try {
-                    const docRef = window.getExtraDocRef(item.id);
-                    window.firebaseFns.setDoc(docRef, item).catch(console.warn);
+                    const docRef = window.getExtraDocRef(id);
+                    await window.firebaseFns.setDoc(docRef, newItem);
                 } catch(e) {}
             }
 
             closeExtraModal();
             renderAdminDashboard();
-            triggerToast('BYO extra saved', 'success');
+            triggerToast(`Delicacy "${title}" saved`, 'success');
         }
 
-        function deleteExtraItem(id) {
+        async function deleteExtraOffering(id) {
             byoExtrasList = byoExtrasList.filter(e => e.id !== id);
             saveLocalCatalog();
 
             if (window.currentUser && window.firebaseFns && window.getExtraDocRef) {
                 try {
                     const docRef = window.getExtraDocRef(id);
-                    window.firebaseFns.deleteDoc(docRef).catch(console.warn);
+                    await window.firebaseFns.deleteDoc(docRef);
                 } catch(e) {}
             }
 
             renderAdminDashboard();
-            triggerToast('Extra deleted', 'info');
+            triggerToast('Extra delicacy removed', 'info');
         }
 
-        function deleteCustomFieldItem(id) {
+        function openAddCustomFieldModal() {
+            document.getElementById('field-form-id').value = '';
+            document.getElementById('field-form-title').value = '';
+            document.getElementById('field-form-price').value = '';
+            document.getElementById('field-form-type').value = 'drink';
+
+            document.getElementById('custom-field-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function closeCustomFieldModal() {
+            document.getElementById('custom-field-modal').classList.add('hidden');
+        }
+
+        async function saveCustomUpgradeField() {
+            const id = 'fld-' + Date.now();
+            const title = document.getElementById('field-form-title').value.trim();
+            const price = parseFloat(document.getElementById('field-form-price').value) || 0;
+            const type = document.getElementById('field-form-type').value;
+
+            const newFld = { id, title, price, type };
+            customFieldsList.push(newFld);
+
+            saveLocalCatalog();
+            if (window.currentUser && window.firebaseFns && window.getCustomFieldDocRef) {
+                try {
+                    const docRef = window.getCustomFieldDocRef(id);
+                    await window.firebaseFns.setDoc(docRef, newFld);
+                } catch(e) {}
+            }
+
+            closeCustomFieldModal();
+            renderAdminDashboard();
+            triggerToast(`Upgrade option "${title}" added`, 'success');
+        }
+
+        async function deleteCustomUpgradeField(id) {
             customFieldsList = customFieldsList.filter(f => f.id !== id);
             saveLocalCatalog();
 
-            if (window.currentUser && window.firebaseFns && window.getFieldDocRef) {
+            if (window.currentUser && window.firebaseFns && window.getCustomFieldDocRef) {
                 try {
-                    const docRef = window.getFieldDocRef(id);
-                    window.firebaseFns.deleteDoc(docRef).catch(console.warn);
+                    const docRef = window.getCustomFieldDocRef(id);
+                    await window.firebaseFns.deleteDoc(docRef);
                 } catch(e) {}
             }
 
             renderAdminDashboard();
-            triggerToast('Custom field removed', 'info');
+            triggerToast('Upgrade field removed', 'info');
+        }
+
+        function saveLocalCatalog() {
+            try {
+                localStorage.setItem('wh_admin_hampers', JSON.stringify(hampersList));
+                localStorage.setItem('wh_admin_extras', JSON.stringify(byoExtrasList));
+                localStorage.setItem('wh_admin_fields', JSON.stringify(customFieldsList));
+            } catch(e) {}
+        }
+
+        function loadLocalCatalog() {
+            try {
+                const h = localStorage.getItem('wh_admin_hampers');
+                const e = localStorage.getItem('wh_admin_extras');
+                const f = localStorage.getItem('wh_admin_fields');
+
+                if (h) hampersList = JSON.parse(h);
+                if (e) byoExtrasList = JSON.parse(e);
+                if (f) customFieldsList = JSON.parse(f);
+            } catch(err) {}
+        }
+
+        async function syncDefaultCatalogToFirebase() {
+            if (!window.currentUser || !window.firebaseFns) return;
+            try {
+                for (const h of hampersList) {
+                    const docRef = window.getHamperDocRef(h.id);
+                    await window.firebaseFns.setDoc(docRef, h, { merge: true });
+                }
+                for (const e of byoExtrasList) {
+                    const docRef = window.getExtraDocRef(e.id);
+                    await window.firebaseFns.setDoc(docRef, e, { merge: true });
+                }
+                for (const f of customFieldsList) {
+                    const docRef = window.getCustomFieldDocRef(f.id);
+                    await window.firebaseFns.setDoc(docRef, f, { merge: true });
+                }
+            } catch(e) {
+                console.warn("Catalog sync warning:", e);
+            }
         }
 
         function startAdminFirestoreSync() {
@@ -954,6 +1074,14 @@
                     }, (e) => {});
                 } catch(e) {}
             }
+        }
+
+        function resetToDefaultCatalog() {
+            localStorage.removeItem('wh_admin_hampers');
+            localStorage.removeItem('wh_admin_extras');
+            localStorage.removeItem('wh_admin_fields');
+
+            location.reload();
         }
 
         window.addEventListener('firebase-ready', () => {
