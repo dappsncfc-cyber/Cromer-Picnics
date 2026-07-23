@@ -430,12 +430,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Time *</label>
-                        <select id="pickup-time" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                            <option value="12:00 PM">12:00 PM (Lunch)</option>
-                            <option value="1:00 PM">1:00 PM (Lunch)</option>
-                            <option value="2:30 PM">2:30 PM (Afternoon)</option>
-                            <option value="4:00 PM">4:00 PM (High Tea)</option>
-                            <option value="6:00 PM">6:00 PM (Sunset Picnic)</option>
+                        <select id="pickup-time" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                            <!-- Options populated dynamically based on selected date & current time -->
                         </select>
                     </div>
                     <div class="flex items-end">
@@ -656,7 +652,6 @@
     </script>
 
     <!-- Application Logic Script -->
-    <!-- -->
     <script>
         // Global State Variables
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
@@ -668,6 +663,15 @@
         let hasUnreadTrackerUpdate = false;
         let basket = {};
         let allOrdersList = [];
+
+        // Daily Available Pickup Time Slots with 24h lookup values
+        const timeSlots = [
+            { value: '12:00 PM', label: '12:00 PM (Lunch)', hour: 12, minute: 0 },
+            { value: '1:00 PM', label: '1:00 PM (Lunch)', hour: 13, minute: 0 },
+            { value: '2:30 PM', label: '2:30 PM (Afternoon)', hour: 14, minute: 30 },
+            { value: '4:00 PM', label: '4:00 PM (High Tea)', hour: 16, minute: 0 },
+            { value: '6:00 PM', label: '6:00 PM (Sunset Picnic)', hour: 18, minute: 0 }
+        ];
 
         // Pick & Mix items available for "Build Your Own" Hamper
         const byoAvailableItems = [
@@ -1244,7 +1248,11 @@
 
             const dateInput = document.getElementById('pickup-date');
             
-            if (today.getHours() >= 15) {
+            // Check if today still has available pickup time slots remaining
+            const currentDecimalTime = today.getHours() + (today.getMinutes() / 60);
+            const hasRemainingTimeToday = today.getHours() < 15 && timeSlots.some(slot => (slot.hour + slot.minute / 60) > currentDecimalTime);
+
+            if (!hasRemainingTimeToday) {
                 dateInput.value = tomorrowStr;
                 dateInput.min = tomorrowStr;
             } else {
@@ -1261,6 +1269,53 @@
             safeCreateIcons();
         }
 
+        function populateTimeSlots(selectedDateStr) {
+            const timeSelect = document.getElementById('pickup-time');
+            if (!timeSelect) return { isToday: false, validSlotCount: timeSlots.length };
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const isToday = selectedDateStr === todayStr;
+            const currentDecimalTime = now.getHours() + (now.getMinutes() / 60);
+
+            const previousValue = timeSelect.value;
+            timeSelect.innerHTML = '';
+            let validSlotCount = 0;
+
+            timeSlots.forEach(slot => {
+                const slotDecimalTime = slot.hour + (slot.minute / 60);
+                const option = document.createElement('option');
+                option.value = slot.value;
+
+                if (isToday && slotDecimalTime <= currentDecimalTime) {
+                    option.disabled = true;
+                    option.innerText = `${slot.label} — Passed`;
+                    option.className = "text-gray-400 bg-gray-100";
+                } else {
+                    option.innerText = slot.label;
+                    validSlotCount++;
+                }
+
+                timeSelect.appendChild(option);
+            });
+
+            // Ensure a valid enabled option is selected
+            if (previousValue && Array.from(timeSelect.options).some(opt => opt.value === previousValue && !opt.disabled)) {
+                timeSelect.value = previousValue;
+            } else {
+                const firstValidOption = Array.from(timeSelect.options).find(opt => !opt.disabled);
+                if (firstValidOption) {
+                    timeSelect.value = firstValidOption.value;
+                }
+            }
+
+            return { isToday, validSlotCount };
+        }
+
         function validatePickupCutoff() {
             const dateInput = document.getElementById('pickup-date');
             const noticeText = document.getElementById('cutoff-notice-text');
@@ -1274,13 +1329,21 @@
             const day = String(now.getDate()).padStart(2, '0');
             const todayStr = `${year}-${month}-${day}`;
 
-            if (selectedDateStr === todayStr && now.getHours() >= 15) {
-                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
-                noticeText.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a future date.";
-                return false;
+            const { isToday, validSlotCount } = populateTimeSlots(selectedDateStr);
+
+            if (isToday) {
+                if (now.getHours() >= 15 || validSlotCount === 0) {
+                    noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                    noticeText.innerHTML = "⚠️ Same-day pickup is closed (past 3:00 PM cutoff or all slots passed). Please select tomorrow or a future date.";
+                    return false;
+                } else {
+                    noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
+                    noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>. Passed time slots are disabled.";
+                    return true;
+                }
             } else {
                 noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
-                noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>.";
+                noticeText.innerHTML = "Future collection date selected. Available pickup from 12:00 PM to 6:00 PM.";
                 return true;
             }
         }
@@ -1294,7 +1357,9 @@
             const phone = document.getElementById('customer-phone').value.trim();
             const email = document.getElementById('customer-email').value.trim();
             const pickupDate = document.getElementById('pickup-date').value;
-            const pickupTime = document.getElementById('pickup-time').value;
+            const pickupTimeSelect = document.getElementById('pickup-time');
+            const pickupTime = pickupTimeSelect ? pickupTimeSelect.value : '';
+            const selectedOption = pickupTimeSelect ? pickupTimeSelect.options[pickupTimeSelect.selectedIndex] : null;
             const notes = document.getElementById('dietary-notes').value.trim();
 
             if (!name || !email) {
@@ -1304,6 +1369,11 @@
 
             if (!pickupDate) {
                 triggerToast('Please select a collection date', 'error');
+                return;
+            }
+
+            if (selectedOption && selectedOption.disabled) {
+                triggerToast('The selected time slot has already passed today. Please select an available time.', 'error');
                 return;
             }
 
