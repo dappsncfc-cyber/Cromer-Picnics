@@ -743,10 +743,14 @@
                             <span class="text-coastal-500 font-medium">${fld.price > 0 ? `+£${Number(fld.price).toFixed(2)} extra` : 'Free Option / Swap'}</span>
                         </div>
                     </div>
-                    <button onclick="deleteCustomUpgradeField('${fld.id}')" class="touch-target px-3 py-1.5 bg-crab-50 hover:bg-crab-100 text-crab-700 rounded-xl font-bold border border-crab-200 flex items-center space-x-1 transition-colors">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                        <span>Remove</span>
-                    </button>
+                    <div class="flex items-center space-x-1 shrink-0">
+                        <button onclick="openEditCustomFieldModal('${fld.id}')" class="p-2 hover:bg-coastal-100 text-coastal-700 rounded-lg transition-colors" title="Edit">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteCustomUpgradeField('${fld.id}')" class="p-2 hover:bg-crab-50 text-crab-600 rounded-lg transition-colors" title="Remove">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -824,7 +828,7 @@
             if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
                 try {
                     const docRef = window.getHamperDocRef(id);
-                    await window.firebaseFns.setDoc(docRef, newPkg);
+                    await window.firebaseFns.setDoc(docRef, newPkg, { merge: true });
                 } catch(e) { console.warn("Firebase hamper save warning:", e); }
             }
 
@@ -913,8 +917,10 @@
             if (window.currentUser && window.firebaseFns && window.getExtraDocRef) {
                 try {
                     const docRef = window.getExtraDocRef(id);
-                    await window.firebaseFns.setDoc(docRef, newItem);
-                } catch(e) {}
+                    await window.firebaseFns.setDoc(docRef, newItem, { merge: true });
+                } catch(e) {
+                    console.warn("Firebase extra save warning:", e);
+                }
             }
 
             closeExtraModal();
@@ -938,10 +944,25 @@
         }
 
         function openAddCustomFieldModal() {
+            document.getElementById('field-modal-title').innerText = "Add Custom Upgrade Field";
             document.getElementById('field-form-id').value = '';
             document.getElementById('field-form-title').value = '';
             document.getElementById('field-form-price').value = '';
             document.getElementById('field-form-type').value = 'drink';
+
+            document.getElementById('custom-field-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function openEditCustomFieldModal(id) {
+            const fld = customFieldsList.find(f => f.id === id);
+            if (!fld) return;
+
+            document.getElementById('field-modal-title').innerText = "Edit Custom Upgrade Field";
+            document.getElementById('field-form-id').value = fld.id;
+            document.getElementById('field-form-title').value = fld.title;
+            document.getElementById('field-form-price').value = fld.price;
+            document.getElementById('field-form-type').value = fld.type || 'drink';
 
             document.getElementById('custom-field-modal').classList.remove('hidden');
             safeCreateIcons();
@@ -952,25 +973,33 @@
         }
 
         async function saveCustomUpgradeField() {
-            const id = 'fld-' + Date.now();
+            const id = document.getElementById('field-form-id').value || ('fld-' + Date.now());
             const title = document.getElementById('field-form-title').value.trim();
             const price = parseFloat(document.getElementById('field-form-price').value) || 0;
             const type = document.getElementById('field-form-type').value;
 
             const newFld = { id, title, price, type };
-            customFieldsList.push(newFld);
+
+            const idx = customFieldsList.findIndex(f => f.id === id);
+            if (idx >= 0) {
+                customFieldsList[idx] = newFld;
+            } else {
+                customFieldsList.push(newFld);
+            }
 
             saveLocalCatalog();
             if (window.currentUser && window.firebaseFns && window.getCustomFieldDocRef) {
                 try {
                     const docRef = window.getCustomFieldDocRef(id);
-                    await window.firebaseFns.setDoc(docRef, newFld);
-                } catch(e) {}
+                    await window.firebaseFns.setDoc(docRef, newFld, { merge: true });
+                } catch(e) {
+                    console.warn("Firebase custom field save warning:", e);
+                }
             }
 
             closeCustomFieldModal();
             renderAdminDashboard();
-            triggerToast(`Upgrade option "${title}" added`, 'success');
+            triggerToast(`Upgrade option "${title}" saved`, 'success');
         }
 
         async function deleteCustomUpgradeField(id) {
@@ -993,6 +1022,7 @@
                 localStorage.setItem('wh_admin_hampers', JSON.stringify(hampersList));
                 localStorage.setItem('wh_admin_extras', JSON.stringify(byoExtrasList));
                 localStorage.setItem('wh_admin_fields', JSON.stringify(customFieldsList));
+                window.dispatchEvent(new Event('storage'));
             } catch(e) {}
         }
 
