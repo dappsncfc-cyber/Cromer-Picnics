@@ -569,7 +569,8 @@
                 `24 West Street, Cromer`
             );
 
-            window.location.href = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
+            const mailtoUrl = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
+            window.open(mailtoUrl, '_blank');
             triggerToast(`Opening mail client to notify ${order.customerName}...`, 'info');
         }
 
@@ -633,8 +634,8 @@
                 archived: false,
                 notes: notes,
                 coolboxCount: 1,
-                deposit: 15.00,
-                grandTotal: price + 15.00,
+                deposit: 20.00,
+                grandTotal: price + 20.00,
                 createdAt: Date.now(),
                 items: [
                     {
@@ -649,14 +650,33 @@
                     }
                 ]
             };
-
-            // Firebase save attempt
-            if (window.currentUser && window.firebaseFns && window.getOrdersColRef) {
-                try {
-                    const docRef = window.getOrderDocRef(newOrder.id);
-                    window.firebaseFns.setDoc(docRef, newOrder).catch(console.warn);
-                } catch(err) {}
+        function sendCustomerReadyEmail(orderId) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if (!order || !order.customerEmail) {
+                triggerToast('No customer email address on file for this ticket.', 'error');
+                return;
             }
+
+            const subject = encodeURIComponent(`Your Cromer Picnic Order is Ready for Collection! (Ref: ${order.orderRef})`);
+            const body = encodeURIComponent(
+                `Hi ${order.customerName},\n\n` +
+                `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
+                `Collection Point:\n` +
+                `The White Horse\n` +
+                `24 West Street, Cromer, NR27 9DX\n\n` +
+                `Items in your hamper:\n` +
+                (order.items || []).map(i => `• ${i.qty}x ${i.title}${i.custom && i.custom.diet ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
+                `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
+                `When you finish your beach day, return the insulated cool box to bar staff to receive your £${(order.deposit !== undefined ? order.deposit : 20.00).toFixed(2)} deposit refund!\n\n` +
+                `Warm regards,\n` +
+                `The White Horse Kitchen Team\n` +
+                `24 West Street, Cromer`
+            );
+
+            const mailtoUrl = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
+            window.open(mailtoUrl, '_blank');
+            triggerToast(`Opening mail client to notify ${order.customerName}...`, 'info');
+        }
 
             allOrdersList.unshift(newOrder);
             saveLocalOrders(allOrdersList);
@@ -704,7 +724,7 @@
                 }
                 if (o.status !== 'returned' && !o.archived) {
                     boxesCount += (o.coolboxCount || 1);
-                    depositsHeld += (o.deposit || 15);
+                    depositsHeld += (o.deposit !== undefined ? o.deposit : 20.00);
                 }
                 if (!o.archived && (o.status === 'pending' || o.status === 'preparing')) {
                     pendingCount++;
@@ -799,7 +819,7 @@
                     dateNoticeBadge = `<span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">⏰ Due Today (${order.pickupTime})</span>`;
                 }
 
-                const depositVal = (order.deposit !== undefined ? order.deposit : 15.00);
+                const depositVal = (order.deposit !== undefined ? order.deposit : 20.00);
                 const totalVal = (order.grandTotal !== undefined ? order.grandTotal : 0.00);
 
                 card.innerHTML = `
