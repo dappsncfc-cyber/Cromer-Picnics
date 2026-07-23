@@ -570,10 +570,9 @@
     </div>
 
     <!-- Firebase Imports & Initialization -->
-    <!-- -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Firebase Configuration
@@ -587,7 +586,7 @@
             measurementId: "G-T76545M693"
         };
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
+        const getEffectiveAppId = () => typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
 
         let app, auth, db;
         try {
@@ -599,51 +598,44 @@
             window.firebaseAuth = auth;
             window.firebaseDb = db;
             window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDoc };
-            window.appId = appId;
+            window.appId = getEffectiveAppId();
             window.currentUser = null;
 
+            // STRICT PATH COMPLIANCE: Standardized to /artifacts/{appId}/public/data/orders across all environments
             window.getOrdersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'orders');
-                }
-                return collection(db, 'orders');
+                return collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders');
             };
 
             window.getCustomersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'customers');
-                }
-                return collection(db, 'customers');
+                return collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers');
             };
 
             window.getOrderDocRef = (orderId) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
-                }
-                return doc(db, 'orders', orderId);
+                return doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', orderId);
             };
 
             window.getCustomerDocRef = (email) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'customers', email.toLowerCase());
-                }
-                return doc(db, 'customers', email.toLowerCase());
+                return doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
             };
 
             async function initAuth() {
                 try {
-                    if (typeof __initial_auth_token !== 'undefined') {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         await signInWithCustomToken(auth, __initial_auth_token);
                     } else {
                         await signInAnonymously(auth);
                     }
-                    window.currentUser = auth.currentUser;
                 } catch (error) {
                     console.warn("Firebase auth warning (local mode active):", error);
-                } finally {
                     window.dispatchEvent(new Event('firebase-ready'));
                 }
             }
+
+            onAuthStateChanged(auth, (user) => {
+                window.currentUser = user;
+                window.dispatchEvent(new Event('firebase-ready'));
+            });
+
             initAuth();
         } catch (err) {
             console.warn("Firebase initialization skipped (offline fallback active):", err);
@@ -1809,26 +1801,31 @@
         }
 
         function startFirestoreSync() {
-            if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
+            if (!window.firebaseFns || !window.getOrdersColRef) return;
 
             try {
-                window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
+                const ordersCol = window.getOrdersColRef();
+                window.firebaseFns.onSnapshot(ordersCol, (snapshot) => {
                     const orders = [];
                     snapshot.forEach(doc => {
                         orders.push({ ...doc.data(), id: doc.id });
                     });
                     
+                    // Sort orders newest first
+                    orders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
                     if (activeOrder) {
                         const updatedActive = orders.find(o => o.id === activeOrder.id);
                         if (updatedActive && updatedActive.status !== activeOrder.status) {
                             let msg = '';
                             if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
-                            if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection!';
+                            if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection at 24 West St!';
                             if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
                             if (updatedActive.status === 'returned') msg = '💰 Order Update: Cool box returned! £20 deposit refunded.';
                             
                             if (msg) {
                                 triggerToast(msg, 'success');
+                                playNotificationSound();
                                 hasUnreadTrackerUpdate = true;
                                 const trackerBadge = document.getElementById('tracker-badge');
                                 if (trackerBadge) trackerBadge.classList.remove('hidden');
@@ -1852,8 +1849,12 @@
                     renderCustomerOrderHistory();
                     if (!document.getElementById('order-tracker').classList.contains('hidden')) renderLiveTrackerContent();
                     
-                }, (error) => console.warn("Orders sync warning:", error));
-            } catch(e) {}
+                }, (error) => {
+                    console.warn("Orders live sync error:", error);
+                });
+            } catch(e) {
+                console.warn("startFirestoreSync exception:", e);
+            }
         }
 
         window.addEventListener('firebase-ready', () => {
