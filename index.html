@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cromer Picnics | Gourmet Coastal Hampers by The White Horse</title>
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Google Fonts -->
@@ -601,22 +598,14 @@
             window.appId = getEffectiveAppId();
             window.currentUser = null;
 
-            // STRICT PATH COMPLIANCE: Standardized to /artifacts/{appId}/public/data/orders across all environments
-            window.getOrdersColRef = () => {
-                return collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders');
-            };
+            // STRICT PATH COMPLIANCE: /artifacts/{appId}/public/data/
+            window.getOrdersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders');
+            window.getCustomersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers');
+            window.getHampersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'hampers');
+            window.getExtrasColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'extras');
 
-            window.getCustomersColRef = () => {
-                return collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers');
-            };
-
-            window.getOrderDocRef = (orderId) => {
-                return doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', orderId);
-            };
-
-            window.getCustomerDocRef = (email) => {
-                return doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
-            };
+            window.getOrderDocRef = (orderId) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', orderId);
+            window.getCustomerDocRef = (email) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
 
             async function initAuth() {
                 try {
@@ -648,15 +637,14 @@
         // Global State Variables
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
         let authMode = 'signup';
-        let registeredCustomersList = [];
-        let loggedInCustomer = null; // Starts clean as Guest Session
+        let loggedInCustomer = null;
         let activeCustomizingPkg = null;
         let activeOrder = null;
         let hasUnreadTrackerUpdate = false;
         let basket = {};
         let allOrdersList = [];
 
-        // Daily Available Pickup Time Slots with 24h lookup values
+        // Daily Available Pickup Time Slots
         const timeSlots = [
             { value: '12:00 PM', label: '12:00 PM (Lunch)', hour: 12, minute: 0 },
             { value: '1:00 PM', label: '1:00 PM (Lunch)', hour: 13, minute: 0 },
@@ -665,8 +653,8 @@
             { value: '6:00 PM', label: '6:00 PM (Sunset Picnic)', hour: 18, minute: 0 }
         ];
 
-        // Pick & Mix items available for "Build Your Own" Hamper
-        const byoAvailableItems = [
+        // Default Delicacies
+        let byoAvailableItems = [
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
             { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
@@ -682,73 +670,13 @@
             { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
         
-        const picnicPackages = [
-            {
-                id: 'build-your-own',
-                title: 'Build Your Own Coastal Hamper',
-                tagline: 'Create your bespoke Norfolk beach feast.',
-                price: 10.00,
-                desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.',
-                badge: 'Bespoke',
-                badgeColor: 'bg-crab-600 text-white',
-                image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
-                available: true
-            },
-            {
-                id: 'crab-feast',
-                title: 'The Cromer Crab Feast',
-                tagline: 'Freshly caught local crab & sea samphire.',
-                price: 48.00,
-                desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.',
-                badge: 'Signature',
-                badgeColor: 'bg-crab-500 text-white',
-                image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80',
-                available: true
-            },
-            {
-                id: 'ploughmans-classic',
-                title: 'Norfolk Artisan Ploughman’s',
-                tagline: 'Hearty pub deli selections.',
-                price: 38.00,
-                desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.',
-                badge: 'Popular',
-                badgeColor: 'bg-sand-700 text-white',
-                image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80',
-                available: true
-            },
-            {
-                id: 'saltmarsh-vegan',
-                title: 'Saltmarsh Wild Grazing (V)',
-                tagline: 'Vegetarian harvest selection.',
-                price: 36.00,
-                desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.',
-                badge: 'Vegetarian',
-                badgeColor: 'bg-sage-600 text-white',
-                image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
-                available: true
-            },
-            {
-                id: 'sunset-prosecco',
-                title: 'Pier Sunset Romance (For Two)',
-                tagline: 'Luxury seaside celebration.',
-                price: 68.00,
-                desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.',
-                badge: 'Luxury',
-                badgeColor: 'bg-coastal-800 text-white',
-                image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
-                available: true
-            },
-            {
-                id: 'shipmates-family',
-                title: 'Little Shipmates Family Feast',
-                tagline: 'Family friendly beach treats.',
-                price: 28.00,
-                desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.',
-                badge: 'Family',
-                badgeColor: 'bg-coastal-600 text-white',
-                image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80',
-                available: true
-            }
+        let picnicPackages = [
+            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', available: true },
+            { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', available: true },
+            { id: 'ploughmans-classic', title: 'Norfolk Artisan Ploughman’s', price: 38.00, desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.', badge: 'Popular', badgeColor: 'bg-sand-700 text-white', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80', available: true },
+            { id: 'saltmarsh-vegan', title: 'Saltmarsh Wild Grazing (V)', price: 36.00, desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.', badge: 'Vegetarian', badgeColor: 'bg-sage-600 text-white', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', available: true },
+            { id: 'sunset-prosecco', title: 'Pier Sunset Romance (For Two)', price: 68.00, desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.', badge: 'Luxury', badgeColor: 'bg-coastal-800 text-white', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80', available: true },
+            { id: 'shipmates-family', title: 'Little Shipmates Family Feast', price: 28.00, desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.', badge: 'Family', badgeColor: 'bg-coastal-600 text-white', image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80', available: true }
         ];
 
         function safeCreateIcons() {
@@ -756,9 +684,7 @@
                 if (window.lucide && typeof window.lucide.createIcons === 'function') {
                     window.lucide.createIcons();
                 }
-            } catch (err) {
-                console.warn('Lucide icon rendering warning:', err);
-            }
+            } catch (err) {}
         }
 
         function triggerToast(message, type = 'info') {
@@ -859,21 +785,23 @@
             if (!container) return;
             container.innerHTML = '';
 
-            picnicPackages.forEach(pkg => {
+            const availablePackages = picnicPackages.filter(p => p.available !== false);
+
+            availablePackages.forEach(pkg => {
                 const card = document.createElement('div');
                 card.className = "bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-coastal-100">
                             <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
-                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor}">
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
                                 ${pkg.badge}
                             </span>
                         </div>
                         <div class="p-5 space-y-2">
                             <div class="flex justify-between items-start">
                                 <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
-                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${pkg.price.toFixed(2)}</span>
+                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${Number(pkg.price).toFixed(2)}</span>
                             </div>
                             <p class="text-xs text-coastal-600 font-medium leading-relaxed">${pkg.desc}</p>
                         </div>
@@ -891,6 +819,9 @@
                 `;
                 container.appendChild(card);
             });
+
+            const countBadge = document.getElementById('package-count-badge');
+            if (countBadge) countBadge.innerText = `${availablePackages.length} Hampers Available`;
 
             safeCreateIcons();
         }
@@ -1120,7 +1051,7 @@
                         <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
                         <span class="text-coastal-800 font-medium">${item.icon} ${item.title}</span>
                     </div>
-                    <span class="font-bold text-crab-600">+£${item.price.toFixed(2)}</span>
+                    <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
                 `;
                 container.appendChild(label);
             });
@@ -1134,7 +1065,7 @@
             checkboxes.forEach(cb => {
                 if (cb.checked) {
                     const found = byoAvailableItems.find(i => i.id === cb.value);
-                    if (found) total += found.price;
+                    if (found) total += Number(found.price);
                 }
             });
 
@@ -1155,7 +1086,7 @@
                         const item = byoAvailableItems.find(i => i.id === cb.value);
                         if (item) {
                             selectedItems.push(item.title);
-                            extraItemsTotal += item.price;
+                            extraItemsTotal += Number(item.price);
                         }
                     }
                 });
@@ -1240,7 +1171,6 @@
 
             const dateInput = document.getElementById('pickup-date');
             
-            // Check if today still has available pickup time slots remaining
             const currentDecimalTime = today.getHours() + (today.getMinutes() / 60);
             const hasRemainingTimeToday = today.getHours() < 15 && timeSlots.some(slot => (slot.hour + slot.minute / 60) > currentDecimalTime);
 
@@ -1295,7 +1225,6 @@
                 timeSelect.appendChild(option);
             });
 
-            // Ensure a valid enabled option is selected
             if (previousValue && Array.from(timeSelect.options).some(opt => opt.value === previousValue && !opt.disabled)) {
                 timeSelect.value = previousValue;
             } else {
@@ -1422,12 +1351,10 @@
                     archived: false
                 };
 
-                // Save locally first
                 const currentLocal = loadLocalOrders();
                 currentLocal.unshift(newOrder);
                 saveLocalOrders(currentLocal);
 
-                // Dispatch to Firestore if online
                 if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
                     try {
                         const docRef = window.getOrderDocRef(newOrder.id);
@@ -1703,7 +1630,6 @@
 
             const cleanEmail = email.toLowerCase();
 
-            // Check if record already exists in Firebase
             if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
                 try {
                     const custRef = window.getCustomerDocRef(cleanEmail);
@@ -1803,6 +1729,7 @@
         function startFirestoreSync() {
             if (!window.firebaseFns || !window.getOrdersColRef) return;
 
+            // 1. Live Orders Sync
             try {
                 const ordersCol = window.getOrdersColRef();
                 window.firebaseFns.onSnapshot(ordersCol, (snapshot) => {
@@ -1811,7 +1738,6 @@
                         orders.push({ ...doc.data(), id: doc.id });
                     });
                     
-                    // Sort orders newest first
                     orders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
                     if (activeOrder) {
@@ -1852,8 +1778,37 @@
                 }, (error) => {
                     console.warn("Orders live sync error:", error);
                 });
-            } catch(e) {
-                console.warn("startFirestoreSync exception:", e);
+            } catch(e) {}
+
+            // 2. Live Hampers Menu Catalog Sync
+            if (window.getHampersColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const hampers = [];
+                            snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
+                            if (hampers.length > 0) {
+                                picnicPackages = hampers;
+                                renderPicnicPackages();
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
+            }
+
+            // 3. Live BYO Extras Catalog Sync
+            if (window.getExtrasColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getExtrasColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const extras = [];
+                            snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
+                            if (extras.length > 0) {
+                                byoAvailableItems = extras;
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
             }
         }
 
