@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="h-full bg-coastal-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kitchen Orders Portal | The White Horse, Cromer</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        crab: {
+                            50: '#fff1f0',
+                            100: '#ffdfdc',
+                            200: '#ffc5c0',
+                            500: '#e63946',
+                            600: '#d0202f',
+                            700: '#b01523',
+                        },
+                        coastal: {
+                            50: '#f0f7f7',
+                            100: '#d9ebed',
+                            200: '#b4d7d7',
+                            600: '#2a6f78',
+                            800: '#1d3557',
+                            900: '#0f2038',
+                        },
+                        sand: {
+                            100: '#fdfbf7',
+                            200: '#f7f1e5',
+                            300: '#eddcd0',
+                            700: '#c29b68',
+                            800: '#9e7943',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Cinzel', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .touch-target { min-height: 44px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f0f7f7; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -15px rgba(15, 32, 56, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-coastal-900 text-white shadow-md border-b border-coastal-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-center justify-between">
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-coastal-800 rounded-2xl flex items-center justify-center text-sand-200 font-serif font-bold text-lg shadow-md border border-sand-300 shrink-0">
+                        WH
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-serif text-base sm:text-lg font-extrabold text-sand-100 tracking-tight leading-tight">Staff Kitchen Dashboard</h1>
+                            <span class="bg-crab-500 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Live Queue</span>
+                        </div>
+                        <p class="text-[11px] text-coastal-200 font-medium flex items-center space-x-1">
+                            <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
+                            <span>The White Horse • 24 West Street, Cromer, NR27 9DX</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <button onclick="playNotificationSound()" class="touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-200 border border-coastal-700 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors">
+                        <i data-lucide="bell" class="w-4 h-4 text-crab-500"></i>
+                        <span class="hidden sm:inline">Test Alert Sound</span>
+                    </button>
+                    <button id="lock-btn" onclick="lockKitchenPortal()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-100 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-colors">
+                        <i data-lucide="lock" class="w-4 h-4 text-crab-400"></i>
+                        <span>Lock Dashboard</span>
+                    </button>
+                    <a href="index.html" target="_blank" class="touch-target bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-colors">
+                        <i data-lucide="external-link" class="w-4 h-4 text-crab-600"></i>
+                        <span class="hidden sm:inline">Open Menu Site</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+        <!-- Staff PIN Unlock Overlay -->
+        <div id="kitchen-pin-overlay" class="glass-card p-8 rounded-3xl border-2 border-coastal-800 shadow-xl max-w-md mx-auto space-y-4 text-center my-12">
+            <div class="bg-coastal-800 text-sand-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-md">
+                <i data-lucide="lock" class="w-7 h-7 text-crab-400"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-serif text-xl font-bold text-coastal-900">The White Horse Kitchen Portal</h3>
+                <p class="text-xs text-coastal-600">Enter kitchen staff PIN to access live ticket prep queue and cool box deposit ledger.</p>
+            </div>
+            
+            <div class="space-y-2 pt-2">
+                <input type="password" id="staff-pin-input" placeholder="PIN (Default: 1884)" maxlength="6" class="w-full bg-white/90 border border-coastal-200 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner">
+                <button onclick="unlockKitchenPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-2">
+                    <i data-lucide="key" class="w-4 h-4 text-sand-200"></i>
+                    <span>Unlock Kitchen Dashboard</span>
+                </button>
+                <button onclick="demoUnlockKitchen()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-2.5 rounded-2xl text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
+                    <i data-lucide="key-round" class="w-4 h-4"></i>
+                    <span>Quick Access (Demo PIN 1884)</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Kitchen Staff Dashboard Content (Unlocked) -->
+        <div id="kitchen-dashboard-content" class="hidden space-y-6">
+            
+            <!-- Staff Metrics Bar -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Pending Orders</p>
+                    <h4 class="font-serif text-2xl font-black text-crab-600" id="stat-pending-count">0</h4>
+                </div>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Boxes On Loan</p>
+                    <h4 class="font-serif text-2xl font-black text-coastal-800" id="stat-boxes-count">0</h4>
+                </div>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Active Deposits Held</p>
+                    <h4 class="font-serif text-2xl font-black text-emerald-700" id="stat-deposits-held">£0.00</h4>
+                </div>
+                <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Today's Revenue</p>
+                    <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-gross-revenue">£0.00</h4>
+                    <p class="text-[9px] text-coastal-400 font-medium mt-0.5">Resets daily at 11:59 PM</p>
+                </div>
+            </div>
+
+            <!-- Kitchen Controls & Sub-Tabs -->
+            <div class="glass-card p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-coastal-800 text-white p-2.5 rounded-2xl shadow-sm">
+                            <i data-lucide="chef-hat" class="w-6 h-6 text-sand-200"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-serif text-lg font-bold text-coastal-900" id="kitchen-queue-title">Live Kitchen Orders Queue</h3>
+                            <p class="text-xs text-coastal-500">Chronologically sorted by collection date and time (soonest first).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kitchen View Sub-Tabs & Date Filter Bar -->
+                <div class="pt-3 border-t border-coastal-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                    <div class="flex space-x-2 w-full md:w-auto">
+                        <button id="btn-kitchen-tab-active" onclick="setKitchenViewMode('active')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2">
+                            <i data-lucide="list-todo" class="w-4 h-4"></i>
+                            <span>Active Queue</span>
+                            <span id="badge-kitchen-active-count" class="bg-crab-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                        </button>
+                        <button id="btn-kitchen-tab-archived" onclick="setKitchenViewMode('archived')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2">
+                            <i data-lucide="archive" class="w-4 h-4 text-coastal-600"></i>
+                            <span>Archived Tickets</span>
+                            <span id="badge-kitchen-archived-count" class="bg-coastal-300 text-coastal-800 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Date Filter Controls for Archived View -->
+                    <div id="kitchen-archive-filter-box" class="hidden flex items-center space-x-2 w-full md:w-auto bg-coastal-50/80 p-2 rounded-xl border border-coastal-200 text-xs">
+                        <span class="font-bold text-coastal-700 text-[11px] whitespace-nowrap"><i data-lucide="calendar" class="w-3.5 h-3.5 inline mr-1 text-crab-500"></i>Filter Collection Date:</span>
+                        <input type="date" id="kitchen-archive-date-input" onchange="filterKitchenArchiveByDate(this.value)" class="bg-white border border-coastal-200 rounded-lg px-2.5 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-coastal-600">
+                        <button onclick="clearKitchenArchiveDateFilter()" class="text-[11px] text-coastal-700 hover:text-crab-600 font-bold px-2.5 py-1 bg-white border border-coastal-200 rounded-lg shadow-sm transition-colors">Show All</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kitchen Ticket Grid -->
+            <div id="kitchen-tickets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Firebase Imports & Initialization -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+
+        let app, auth, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+            
+            window.firebaseApp = app;
+            window.firebaseAuth = auth;
+            window.firebaseDb = db;
+            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot };
+            window.appId = appId;
+            window.currentUser = null;
+
+            async function initAuth() {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined') {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    window.currentUser = auth.currentUser;
+                    window.dispatchEvent(new Event('firebase-ready'));
+                } catch (error) {
+                    console.error("Auth error:", error);
+                }
+            }
+            initAuth();
+        } catch (err) {
+            console.error("Firebase init failed:", err);
+        }
+    </script>
+
+    <!-- Kitchen Portal Application Logic -->
+    <script>
+        let isKitchenUnlocked = false;
+        let allOrdersList = [];
+        let kitchenViewMode = 'active'; // 'active' or 'archived'
+        let kitchenArchiveDateFilter = ''; // YYYY-MM-DD or empty
+        let previousPendingCount = 0;
+
+        // Toast Notification Trigger
+        function triggerToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            const bgClass = type === 'success' ? 'bg-emerald-800/95 text-white backdrop-blur-md' : type === 'error' ? 'bg-crab-600/95 text-white backdrop-blur-md' : 'bg-coastal-800/95 text-white backdrop-blur-md';
+            toast.className = `pointer-events-auto p-3.5 rounded-2xl shadow-xl text-xs font-bold flex items-center justify-between space-x-2 transition-all duration-300 transform translate-y-2 opacity-0 border border-white/20 ${bgClass}`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4 shrink-0"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Web Audio Synthesised Kitchen Alert Chime
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15); // A5
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.5);
+            } catch(e) {}
+        }
+
+        // Calculate pickup timestamp for accurate chronological sorting
+        function getPickupTimestamp(order) {
+            if (!order || !order.rawPickupDate) return order ? (order.createdAt || 0) : 0;
+            const parts = order.rawPickupDate.split('-').map(Number);
+            if (parts.length !== 3) return order.createdAt || 0;
+            let hours = 12;
+            let minutes = 0;
+            if (order.pickupTime) {
+                const match = order.pickupTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+                if (match) {
+                    hours = parseInt(match[1], 10);
+                    minutes = parseInt(match[2], 10);
+                    const ampm = match[3].toUpperCase();
+                    if (ampm === 'PM' && hours < 12) hours += 12;
+                    if (ampm === 'AM' && hours === 12) hours = 0;
+                }
+            }
+            return new Date(parts[0], parts[1] - 1, parts[2], hours, minutes).getTime();
+        }
+
+        function unlockKitchenPortal() {
+            const pinInput = document.getElementById('staff-pin-input');
+            const pin = pinInput ? pinInput.value.trim() : '';
+            if (pin === '1884') {
+                demoUnlockKitchen();
+            } else {
+                triggerToast('Incorrect Staff PIN (Default Demo PIN is 1884)', 'error');
+            }
+        }
+
+        function demoUnlockKitchen() {
+            isKitchenUnlocked = true;
+            document.getElementById('kitchen-pin-overlay').classList.add('hidden');
+            document.getElementById('kitchen-dashboard-content').classList.remove('hidden');
+            document.getElementById('lock-btn').classList.remove('hidden');
+
+            renderKitchenDashboard();
+            triggerToast('Kitchen Dashboard Unlocked', 'success');
+        }
+
+        function lockKitchenPortal() {
+            isKitchenUnlocked = false;
+            document.getElementById('kitchen-pin-overlay').classList.remove('hidden');
+            document.getElementById('kitchen-dashboard-content').classList.add('hidden');
+            document.getElementById('lock-btn').classList.add('hidden');
+        }
+
+        // Generate and launch customer order ready email
+        function sendCustomerReadyEmail(orderId) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if (!order || !order.customerEmail) {
+                triggerToast('No customer email address on file for this order.', 'error');
+                return;
+            }
+
+            const subject = encodeURIComponent(`Your Cromer Picnic Order is Ready for Collection! (Ref: ${order.orderRef})`);
+            const body = encodeURIComponent(
+                `Hi ${order.customerName},\n\n` +
+                `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
+                `Collection Point:\n` +
+                `The White Horse\n` +
+                `24 West Street, Cromer, NR27 9DX\n\n` +
+                `Items in your hamper:\n` +
+                order.items.map(i => `• ${i.qty}x ${i.title}${i.custom && i.custom.diet ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
+                `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
+                `When you finish your beach day, return the insulated cool box to bar staff to receive your £${order.deposit.toFixed(2)} deposit refund!\n\n` +
+                `Warm regards,\n` +
+                `The White Horse Kitchen Team\n` +
+                `24 West Street, Cromer`
+            );
+
+            window.location.href = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
+            triggerToast(`Opening email client to notify ${order.customerName}...`, 'info');
+        }
+
+        function updateKitchenOrderStatus(orderId, newStatus) {
+            if (!window.currentUser) return;
+            const docRef = window.firebaseFns.doc(window.firebaseDb, 'artifacts', window.appId, 'public', 'data', 'orders', orderId);
+            window.firebaseFns.updateDoc(docRef, { status: newStatus }).catch(console.error);
+            triggerToast(`Ticket updated to ${newStatus.toUpperCase()}`, 'success');
+        }
+
+        function archiveKitchenOrder(orderId) {
+            if (!window.currentUser) return;
+            const docRef = window.firebaseFns.doc(window.firebaseDb, 'artifacts', window.appId, 'public', 'data', 'orders', orderId);
+            window.firebaseFns.updateDoc(docRef, { archived: true }).catch(console.error);
+            triggerToast(`Ticket archived`, 'info');
+        }
+
+        function deleteArchivedKitchenOrder(orderId) {
+            if (!window.currentUser) return;
+            const docRef = window.firebaseFns.doc(window.firebaseDb, 'artifacts', window.appId, 'public', 'data', 'orders', orderId);
+            window.firebaseFns.deleteDoc(docRef).catch(console.error);
+            triggerToast(`Archived ticket permanently deleted`, 'info');
+        }
+
+        function restoreKitchenOrder(orderId) {
+            if (!window.currentUser) return;
+            const docRef = window.firebaseFns.doc(window.firebaseDb, 'artifacts', window.appId, 'public', 'data', 'orders', orderId);
+            window.firebaseFns.updateDoc(docRef, { archived: false }).catch(console.error);
+            triggerToast(`Ticket restored to Active Queue`, 'success');
+        }
+
+        function setKitchenViewMode(mode) {
+            kitchenViewMode = mode;
+            renderKitchenDashboard();
+        }
+
+        function filterKitchenArchiveByDate(dateVal) {
+            kitchenArchiveDateFilter = dateVal;
+            renderKitchenDashboard();
+        }
+
+        function clearKitchenArchiveDateFilter() {
+            kitchenArchiveDateFilter = '';
+            const input = document.getElementById('kitchen-archive-date-input');
+            if (input) input.value = '';
+            renderKitchenDashboard();
+        }
+
+        function renderKitchenDashboard() {
+            const container = document.getElementById('kitchen-tickets-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const btnActive = document.getElementById('btn-kitchen-tab-active');
+            const btnArchived = document.getElementById('btn-kitchen-tab-archived');
+            const filterBox = document.getElementById('kitchen-archive-filter-box');
+
+            if (btnActive && btnArchived) {
+                if (kitchenViewMode === 'active') {
+                    btnActive.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2";
+                    btnArchived.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2";
+                    if (filterBox) filterBox.classList.add('hidden');
+                } else {
+                    btnActive.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2";
+                    btnArchived.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2";
+                    if (filterBox) filterBox.classList.remove('hidden');
+                }
+            }
+
+            let pendingCount = 0;
+            let boxesCount = 0;
+            let depositsHeld = 0;
+            let todayRev = 0;
+            let activeQueueCount = 0;
+            let archivedQueueCount = 0;
+
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const endOfToday = startOfToday + (24 * 60 * 60 * 1000) - 1;
+
+            allOrdersList.forEach(o => {
+                // Today's Revenue auto-resets at 11:59 PM (computes current day's creation timestamp)
+                if (o.createdAt >= startOfToday && o.createdAt <= endOfToday) {
+                    todayRev += o.grandTotal;
+                }
+                if (o.status !== 'returned' && !o.archived) {
+                    boxesCount += o.coolboxCount;
+                    depositsHeld += o.deposit;
+                }
+                if (!o.archived && (o.status === 'pending' || o.status === 'preparing')) {
+                    pendingCount++;
+                }
+                if (!o.archived) activeQueueCount++;
+                if (o.archived) archivedQueueCount++;
+            });
+
+            document.getElementById('stat-pending-count').innerText = pendingCount;
+            document.getElementById('stat-boxes-count').innerText = boxesCount;
+            document.getElementById('stat-deposits-held').innerText = `£${depositsHeld.toFixed(2)}`;
+            document.getElementById('stat-gross-revenue').innerText = `£${todayRev.toFixed(2)}`;
+
+            const badgeActive = document.getElementById('badge-kitchen-active-count');
+            const badgeArchived = document.getElementById('badge-kitchen-archived-count');
+            if (badgeActive) badgeActive.innerText = activeQueueCount;
+            if (badgeArchived) badgeArchived.innerText = archivedQueueCount;
+
+            // Filter target orders by active/archived mode
+            let targetOrders = [];
+            if (kitchenViewMode === 'active') {
+                targetOrders = allOrdersList.filter(o => !o.archived);
+            } else {
+                targetOrders = allOrdersList.filter(o => o.archived);
+                if (kitchenArchiveDateFilter) {
+                    targetOrders = targetOrders.filter(o => {
+                        if (o.rawPickupDate) return o.rawPickupDate === kitchenArchiveDateFilter;
+                        const parts = kitchenArchiveDateFilter.split('-');
+                        if (parts.length === 3) {
+                            const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                            return o.pickupDate === formatted;
+                        }
+                        return true;
+                    });
+                }
+            }
+
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const todayISO = `${yyyy}-${mm}-${dd}`;
+
+            // Sort chronologically (soonest pickup time first)
+            targetOrders.sort((a, b) => getPickupTimestamp(a) - getPickupTimestamp(b));
+
+            if (targetOrders.length === 0) {
+                const isArchiveMode = kitchenViewMode === 'archived';
+                const emptyMsg = isArchiveMode 
+                    ? (kitchenArchiveDateFilter ? `No archived tickets found for collection date ${kitchenArchiveDateFilter.split('-').reverse().join('/')}.` : `No archived tickets in database history yet.`)
+                    : `No active kitchen tickets in queue right now.`;
+
+                container.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-xs text-coastal-400 space-y-2 bg-white/80 backdrop-blur-md rounded-3xl border border-coastal-200">
+                        <i data-lucide="${isArchiveMode ? 'archive' : 'check-circle-2'}" class="w-8 h-8 mx-auto text-coastal-400"></i>
+                        <p>${emptyMsg}</p>
+                        ${isArchiveMode && kitchenArchiveDateFilter ? `
+                            <button onclick="clearKitchenArchiveDateFilter()" class="text-crab-600 font-bold hover:underline">Clear Date Filter</button>
+                        ` : ''}
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            targetOrders.forEach(order => {
+                const isToday = order.rawPickupDate === todayISO;
+                const isFuture = order.rawPickupDate ? order.rawPickupDate > todayISO : false;
+                const isPast = order.rawPickupDate ? order.rawPickupDate < todayISO : false;
+
+                let dateBadge = '';
+                if (isFuture) {
+                    dateBadge = `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center space-x-1"><i data-lucide="calendar-clock" class="w-3 h-3 text-indigo-500"></i><span>Advance Order (${order.pickupDate})</span></span>`;
+                } else if (isToday) {
+                    dateBadge = `<span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center space-x-1"><i data-lucide="clock" class="w-3 h-3 text-emerald-600"></i><span>Due Today (${order.pickupTime})</span></span>`;
+                } else if (isPast) {
+                    dateBadge = `<span class="bg-rose-50 text-rose-800 border border-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center space-x-1"><i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i><span>Past Date (${order.pickupDate})</span></span>`;
+                }
+
+                const cardBg = isFuture ? "bg-slate-50/90 border-indigo-200" : "bg-white/90 border-coastal-200";
+
+                const card = document.createElement('div');
+                card.className = `${cardBg} backdrop-blur-md p-5 rounded-3xl border shadow-sm space-y-4 flex flex-col justify-between`;
+                
+                let statusBadge = 'bg-amber-100 text-amber-800';
+                if (order.status === 'preparing') statusBadge = 'bg-blue-100 text-blue-800';
+                if (order.status === 'ready') statusBadge = 'bg-emerald-100 text-emerald-800';
+                if (order.status === 'collected') statusBadge = 'bg-purple-100 text-purple-800';
+                if (order.status === 'returned') statusBadge = 'bg-coastal-100 text-coastal-600';
+
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start border-b border-coastal-100 pb-2">
+                            <div>
+                                <div class="flex items-center space-x-1.5 mb-1">
+                                    <span class="font-extrabold font-mono text-coastal-900 text-base">${order.orderRef}</span>
+                                    ${dateBadge}
+                                </div>
+                                <p class="text-xs font-bold text-coastal-700">${order.customerName}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase ${statusBadge}">${order.status.replace('_', ' ')}</span>
+                                ${order.archived ? '<span class="block text-[9px] text-coastal-400 font-bold uppercase mt-1">Archived</span>' : ''}
+                            </div>
+                        </div>
+
+                        <div class="text-xs space-y-1">
+                            <p class="text-coastal-500 font-medium">Collection: <strong class="text-coastal-900">${order.pickupDate} at ${order.pickupTime}</strong></p>
+                            <p class="text-coastal-500 font-medium">Contact: ${order.customerPhone} (${order.customerEmail})</p>
+                            ${order.notes ? `<p class="bg-amber-50 p-2 rounded-lg text-amber-900 text-[11px] border border-amber-200"><strong>Note:</strong> ${order.notes}</p>` : ''}
+                        </div>
+
+                        <div class="bg-coastal-50/80 p-3 rounded-2xl border border-coastal-100 text-xs space-y-1">
+                            <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items & Extras:</p>
+                            ${order.items.map(i => `
+                                <div class="text-coastal-700 space-y-0.5 border-b border-coastal-100/50 pb-1.5 last:border-b-0">
+                                    <div class="flex justify-between font-medium">
+                                        <span>${i.qty}x ${i.title}</span>
+                                        <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
+                                    </div>
+                                    ${i.custom ? `
+                                        <div class="text-[10px] space-y-0.5 pl-2 mt-0.5">
+                                            ${i.custom.diet && i.custom.diet !== 'Standard Recipe' ? `<p class="text-amber-800 font-bold"><strong>Dietary Option:</strong> ${i.custom.diet}</p>` : ''}
+                                            ${i.custom.drinks && i.custom.drinks.length > 0 ? `<p class="text-coastal-800 font-bold"><strong>Extras / Drinks:</strong> ${i.custom.drinks.join(', ')}</p>` : ''}
+                                            ${i.custom.byoItems && i.custom.byoItems.length > 0 ? `<p class="text-crab-600 font-medium"><strong>Box Contents:</strong> ${i.custom.byoItems.join(', ')}</p>` : ''}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('')}
+                            <div class="pt-1.5 border-t border-coastal-200 flex justify-between font-extrabold text-coastal-900 mt-1">
+                                <span>Total Paid:</span>
+                                <span>£${order.grandTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-2 border-t border-coastal-100">
+                        ${!order.archived && order.status === 'pending' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'preparing')" class="touch-target w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm">
+                                <i data-lucide="chef-hat" class="w-4 h-4"></i>
+                                <span>Start Preparation</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && order.status === 'preparing' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'ready')" class="touch-target w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm">
+                                <i data-lucide="package-check" class="w-4 h-4"></i>
+                                <span>Mark Ready for Pickup</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && (order.status === 'ready' || order.status === 'preparing') ? `
+                            <button onclick="sendCustomerReadyEmail('${order.id}')" class="touch-target w-full bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-sand-300">
+                                <i data-lucide="mail" class="w-4 h-4 text-crab-600"></i>
+                                <span>Email Customer Order Ready</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && order.status === 'ready' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'collected')" class="touch-target w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                                <span>Mark Order as Collected</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && order.status === 'collected' ? `
+                            <button onclick="updateKitchenOrderStatus('${order.id}', 'returned')" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4 text-emerald-400"></i>
+                                <span>Refund £${order.deposit.toFixed(2)} Deposit & Complete</span>
+                            </button>
+                        ` : ''}
+
+                        ${!order.archived && order.status === 'returned' ? `
+                            <p class="text-center text-xs text-emerald-700 font-bold py-1">✓ Box Returned & £${order.deposit.toFixed(2)} Refunded</p>
+                            <button onclick="archiveKitchenOrder('${order.id}')" class="touch-target w-full bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200 mt-1">
+                                <i data-lucide="archive" class="w-4 h-4 text-coastal-600"></i>
+                                <span>Archive Order Ticket</span>
+                            </button>
+                        ` : ''}
+
+                        ${order.archived ? `
+                            <p class="text-center text-[11px] text-coastal-500 font-bold py-0.5">Archived Ticket Record</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="restoreKitchenOrder('${order.id}')" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200">
+                                    <i data-lucide="undo" class="w-4 h-4 text-coastal-600"></i>
+                                    <span>Restore</span>
+                                </button>
+                                <button onclick="deleteArchivedKitchenOrder('${order.id}')" class="touch-target bg-crab-50 hover:bg-crab-100 text-crab-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-crab-200">
+                                    <i data-lucide="trash-2" class="w-4 h-4 text-crab-600"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function startFirestoreSync() {
+            if (!window.currentUser) return;
+            const db = window.firebaseDb;
+            const { collection, onSnapshot } = window.firebaseFns;
+            const appId = window.appId;
+
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), (snapshot) => {
+                const orders = [];
+                snapshot.forEach(doc => {
+                    orders.push({ ...doc.data(), id: doc.id });
+                });
+                
+                // Play chime if new order arrives
+                const newPendingCount = orders.filter(o => !o.archived && o.status === 'pending').length;
+                if (newPendingCount > previousPendingCount && isKitchenUnlocked) {
+                    playNotificationSound();
+                    triggerToast('🔔 New incoming picnic order received!', 'success');
+                }
+                previousPendingCount = newPendingCount;
+
+                allOrdersList = orders;
+                if (isKitchenUnlocked) renderKitchenDashboard();
+            }, (error) => console.error("Orders sync error:", error));
+        }
+
+        window.addEventListener('firebase-ready', () => {
+            startFirestoreSync();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
