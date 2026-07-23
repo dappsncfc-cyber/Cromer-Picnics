@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kitchen Orders Portal | The White Horse, Cromer</title>
+    <title>Cromer Picnics | Gourmet Coastal Hampers by The White Horse</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -47,6 +47,11 @@
                             300: '#eddcd0',
                             700: '#c29b68',
                             800: '#9e7943',
+                        },
+                        sage: {
+                            100: '#f1f5f2',
+                            600: '#52796f',
+                            800: '#2f3e46',
                         }
                     },
                     fontFamily: {
@@ -66,7 +71,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.90);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.7);
@@ -74,43 +79,65 @@
         }
     </style>
 </head>
-<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white">
+<body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-20 md:pb-0">
 
-    <!-- Navigation Header -->
-    <header class="sticky top-0 z-40 bg-coastal-900 text-white shadow-md border-b border-coastal-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-            <div class="flex flex-wrap items-center justify-between gap-3">
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-coastal-100/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
                 
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-coastal-800 rounded-2xl flex items-center justify-center text-sand-200 font-serif font-bold text-lg shadow-md border border-sand-300/30 shrink-0">
-                        WH
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <h1 class="font-serif text-base sm:text-lg font-extrabold text-sand-100 tracking-tight leading-tight">Kitchen Dashboard</h1>
-                            <span id="live-indicator" class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live Sync
-                            </span>
+                <!-- Brand & Pub Address Details -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('customer-explore')">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 bg-coastal-800 rounded-2xl flex items-center justify-center text-sand-200 font-serif font-bold text-lg shadow-md border border-sand-300 shrink-0">
+                            WH
                         </div>
-                        <p class="text-[11px] text-coastal-200 font-medium flex items-center space-x-1">
-                            <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
-                            <span>The White Horse • 24 West Street, Cromer, NR27 9DX</span>
-                        </p>
+                        <div>
+                            <div class="flex items-center space-x-1.5">
+                                <h1 class="font-serif text-base sm:text-lg font-extrabold text-coastal-900 tracking-tight leading-tight">Cromer Picnics</h1>
+                                <span class="bg-crab-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">The White Horse</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-coastal-600 font-medium flex items-center space-x-1">
+                                <i data-lucide="map-pin" class="w-3 h-3 text-crab-500 inline shrink-0"></i>
+                                <span>The White Horse • 24 West Street, Cromer, NR27 9DX</span>
+                            </p>
+                        </div>
                     </div>
+
+                    <!-- Mobile Account Button -->
+                    <button onclick="openAuthModal()" class="md:hidden touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
+                        <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
+                        <span id="header-user-status-mobile" class="truncate max-w-[90px]">Guest</span>
+                    </button>
                 </div>
 
-                <div class="flex items-center space-x-2">
-                    <button id="btn-test-sound" onclick="playNotificationSound()" class="touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-200 border border-coastal-700 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-all active:scale-95">
-                        <i data-lucide="bell" class="w-4 h-4 text-crab-500"></i>
-                        <span class="hidden sm:inline">Test Alert Sound</span>
-                    </button>
-                    <button id="lock-btn" onclick="lockKitchenPortal()" class="hidden touch-target bg-coastal-800 hover:bg-coastal-700 text-sand-100 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-700 transition-all active:scale-95">
-                        <i data-lucide="lock" class="w-4 h-4 text-crab-400"></i>
-                        <span>Lock Dashboard</span>
-                    </button>
-                    <button id="btn-open-demo-modal" onclick="openDemoModal()" class="hidden touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-all shadow-sm active:scale-95">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                        <span>+ Test Order</span>
+                <!-- Navigation Tabs & Account Switcher -->
+                <div class="flex items-center justify-between md:justify-end space-x-1.5 sm:space-x-2 w-full md:w-auto overflow-x-auto pb-0.5 md:pb-0">
+                    <nav class="flex space-x-1 bg-coastal-50/80 p-1 rounded-2xl border border-coastal-100 w-full md:w-auto justify-between md:justify-start">
+                        <button id="nav-customer" onclick="switchView('customer-explore')" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 shrink-0"></i>
+                            <span>Menu</span>
+                        </button>
+
+                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 animate-pulse shrink-0"></i>
+                            <span>Live Tracker</span>
+                            <!-- Animated Notification Badge -->
+                            <span id="tracker-badge" class="hidden flex h-2.5 w-2.5 relative ml-0.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crab-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-crab-500"></span>
+                            </span>
+                        </button>
+
+                        <button id="nav-orders" onclick="handleCustomerOrdersTabClick()" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="receipt" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-coastal-600 shrink-0"></i>
+                            <span>My Orders</span>
+                        </button>
+                    </nav>
+
+                    <!-- Desktop User Account Badge -->
+                    <button onclick="openAuthModal()" class="hidden md:flex items-center space-x-2 bg-coastal-50 hover:bg-coastal-100 px-3 py-2 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800 transition-all">
+                        <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
+                        <span id="header-user-status">Customer Sign In</span>
                     </button>
                 </div>
 
@@ -119,178 +146,416 @@
     </header>
 
     <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
+    <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
 
-        <!-- Staff PIN Unlock Overlay -->
-        <div id="kitchen-pin-overlay" class="glass-card p-6 sm:p-8 rounded-3xl border-2 border-coastal-800 shadow-xl max-w-md mx-auto space-y-4 text-center my-12 transition-all">
-            <div class="bg-coastal-800 text-sand-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-md">
-                <i data-lucide="lock" class="w-7 h-7 text-crab-400"></i>
+        <section id="customer-explore" class="space-y-6">
+            
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden bg-coastal-900 text-white shadow-xl border border-coastal-800">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80');"></div>
+                <div class="relative z-10 p-6 sm:p-10 max-w-3xl space-y-3">
+                    <div class="inline-flex items-center space-x-2 bg-sand-200/20 backdrop-blur-md px-3 py-1 rounded-full text-sand-200 text-xs font-bold border border-sand-300/30">
+                        <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+                        <span>The White Horse Pub • Cromer</span>
+                    </div>
+                    <h2 class="font-serif text-2xl sm:text-4xl font-extrabold text-sand-100 tracking-tight leading-tight">
+                        Artisan Coastal Hampers for Cromer Beach Days
+                    </h2>
+                    <p class="text-xs sm:text-base text-coastal-100 max-w-2xl font-light leading-relaxed">
+                        Order gourmet Norfolk picnics online and collect freshly packed from <strong class="font-semibold text-white">24 West Street</strong>. Every picnic includes an insulated cool box with a <strong>£20.00 refundable deposit</strong> returned instantly when you hand the box back to our bar staff.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-sand-200">
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Fresh Local Cromer Crab</span>
+                        </span>
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Norfolk Artisan Cheeses</span>
+                        </span>
+                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
+                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
+                            <span>Instant £20 Deposit Refund</span>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="space-y-1">
-                <h3 class="font-serif text-xl font-bold text-coastal-900">The White Horse Kitchen Portal</h3>
-                <p class="text-xs text-coastal-600">Enter kitchen staff PIN to access live ticket prep queue and cool box deposit ledger.</p>
+
+            <!-- Menu Grid & Basket Sidebar Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Package Cards Column -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center justify-between pb-2 border-b border-coastal-200">
+                        <h3 class="font-serif text-xl font-bold text-coastal-900 flex items-center space-x-2">
+                            <span>Select Picnic Packages</span>
+                        </h3>
+                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">6 Hampers Available</span>
+                    </div>
+
+                    <div id="picnic-packages-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <!-- Populated dynamically via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Basket Sidebar (Desktop) -->
+                <div class="hidden lg:block lg:col-span-1 sticky top-24 space-y-4">
+                    <div class="glass-card rounded-3xl p-6 border border-coastal-200 shadow-md space-y-4">
+                        <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
+                            <div class="flex items-center space-x-2">
+                                <i data-lucide="shopping-bag" class="w-5 h-5 text-crab-500"></i>
+                                <h3 class="font-serif text-lg font-bold text-coastal-900">Your Basket</h3>
+                            </div>
+                            <button onclick="clearBasket()" class="text-xs font-semibold text-coastal-400 hover:text-crab-600 transition-colors">Clear</button>
+                        </div>
+
+                        <div id="basket-items-list" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <div id="basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs">
+                            <!-- Financial summary loaded here -->
+                        </div>
+
+                        <button id="checkout-btn" onclick="openCheckoutModal()" disabled class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 disabled:bg-coastal-200 disabled:text-coastal-400 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2">
+                            <span>Proceed to Pickup Details</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+
+                        <div class="bg-coastal-50/80 p-3 rounded-xl border border-coastal-100 text-[11px] text-coastal-600 flex items-start space-x-2">
+                            <i data-lucide="info" class="w-4 h-4 text-coastal-600 shrink-0 mt-0.5"></i>
+                            <span>A <strong>£20.00 deposit</strong> per hamper is added for the insulated cool box. Returned in full at 24 West Street upon box hand-back.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="order-tracker" class="hidden max-w-3xl mx-auto space-y-6">
+            <div id="tracker-active-content" class="glass-card rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-xl space-y-6">
+                <!-- Tracker populated dynamically -->
             </div>
             
-            <div class="space-y-3 pt-2">
-                <div>
-                    <input type="password" id="staff-pin-input" placeholder="PIN (Default: 1884)" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
-                    <p id="pin-error-text" class="text-xs text-crab-600 font-bold mt-1.5 hidden"></p>
+            <div id="tracker-empty-content" class="bg-white/90 backdrop-blur-md rounded-3xl p-12 text-center border border-coastal-200 space-y-4 shadow-sm">
+                <div class="w-16 h-16 bg-coastal-50 rounded-2xl flex items-center justify-center mx-auto text-coastal-400">
+                    <i data-lucide="radio" class="w-8 h-8"></i>
                 </div>
-                <button id="btn-unlock" onclick="unlockKitchenPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-2">
-                    <i data-lucide="key" class="w-4 h-4 text-sand-200"></i>
-                    <span>Unlock Kitchen Dashboard</span>
-                </button>
-                <button id="btn-demo-unlock" onclick="demoUnlockKitchen()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 active:scale-[0.98] text-white font-bold py-2.5 rounded-2xl text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
-                    <i data-lucide="key-round" class="w-4 h-4"></i>
-                    <span>Quick Access (Demo PIN 1884)</span>
+                <h3 class="font-serif text-xl font-bold text-coastal-900">No Active Order Selected</h3>
+                <p class="text-xs sm:text-sm text-coastal-600 max-w-md mx-auto">Place an order from the menu or select a past order from your history tab to view real-time tracking.</p>
+                <button onclick="switchView('customer-explore')" class="touch-target bg-coastal-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs hover:bg-coastal-900 transition-all">
+                    Browse Picnic Menu
                 </button>
             </div>
-        </div>
+        </section>
 
-        <!-- Kitchen Staff Dashboard Content (Unlocked) -->
-        <div id="kitchen-dashboard-content" class="hidden space-y-6">
-            
-            <!-- Staff Metrics Bar -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Pending Orders</p>
-                    <h4 class="font-serif text-2xl font-black text-crab-600" id="stat-pending-count">0</h4>
+        <section id="customer-history" class="hidden max-w-4xl mx-auto space-y-6">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-md space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-4 border-b border-coastal-100">
+                    <div>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900">My Order History</h2>
+                        <p class="text-xs text-coastal-500">Track current and past Cromer picnic hamper bookings.</p>
+                    </div>
+                    <button onclick="openAuthModal()" class="touch-target text-xs bg-coastal-50/80 text-coastal-800 px-3 py-2 rounded-xl font-bold border border-coastal-200 self-start sm:self-auto flex items-center space-x-1.5">
+                        <i data-lucide="user-check" class="w-4 h-4 text-crab-500"></i>
+                        <span id="history-logged-email">Guest Session</span>
+                    </button>
                 </div>
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Boxes On Loan</p>
-                    <h4 class="font-serif text-2xl font-black text-coastal-800" id="stat-boxes-count">0</h4>
-                </div>
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Active Deposits Held</p>
-                    <h4 class="font-serif text-2xl font-black text-emerald-700" id="stat-deposits-held">£0.00</h4>
-                </div>
-                <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Today's Revenue</p>
-                    <h4 class="font-serif text-2xl font-black text-coastal-900" id="stat-gross-revenue">£0.00</h4>
-                    <p class="text-[9px] text-coastal-400 font-medium mt-0.5">Resets daily at 11:59 PM</p>
+
+                <div id="customer-orders-history-list" class="space-y-4">
+                    <!-- Populated dynamically via JavaScript -->
                 </div>
             </div>
-
-            <!-- Kitchen Controls & Sub-Tabs -->
-            <div class="glass-card p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="bg-coastal-800 text-white p-2.5 rounded-2xl shadow-sm shrink-0">
-                            <i data-lucide="chef-hat" class="w-6 h-6 text-sand-200"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-serif text-lg font-bold text-coastal-900" id="kitchen-queue-title">Live Kitchen Orders Queue</h3>
-                            <p class="text-xs text-coastal-600">Chronologically sorted by collection date and time (soonest first).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kitchen View Sub-Tabs & Date Filter Bar -->
-                <div class="pt-3 border-t border-coastal-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-                    <div class="flex space-x-2 w-full md:w-auto">
-                        <button id="btn-kitchen-tab-active" onclick="setKitchenViewMode('active')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2 active:scale-95">
-                            <i data-lucide="list-todo" class="w-4 h-4"></i>
-                            <span>Active Queue</span>
-                            <span id="badge-kitchen-active-count" class="bg-crab-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
-                        </button>
-                        <button id="btn-kitchen-tab-archived" onclick="setKitchenViewMode('archived')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2 active:scale-95">
-                            <i data-lucide="archive" class="w-4 h-4 text-coastal-600"></i>
-                            <span>Archived Tickets</span>
-                            <span id="badge-kitchen-archived-count" class="bg-coastal-300 text-coastal-800 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
-                        </button>
-                    </div>
-
-                    <!-- Date Filter Controls for Archived View -->
-                    <div id="kitchen-archive-filter-box" class="hidden flex items-center space-x-2 w-full md:w-auto bg-coastal-50/80 p-2 rounded-xl border border-coastal-200 text-xs">
-                        <span class="font-bold text-coastal-700 text-[11px] whitespace-nowrap"><i data-lucide="calendar" class="w-3.5 h-3.5 inline mr-1 text-crab-500"></i>Filter Date:</span>
-                        <input type="date" id="kitchen-archive-date-input" onchange="filterKitchenArchiveByDate(this.value)" class="bg-white border border-coastal-200 rounded-lg px-2.5 py-1 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-coastal-600">
-                        <button onclick="clearKitchenArchiveDateFilter()" class="text-[11px] text-coastal-700 hover:text-crab-600 font-bold px-2.5 py-1 bg-white border border-coastal-200 rounded-lg shadow-sm transition-colors">Show All</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kitchen Ticket Grid -->
-            <div id="kitchen-tickets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Populated dynamically via JS -->
-            </div>
-        </div>
+        </section>
 
     </main>
 
-    <!-- Create Test Order Modal -->
-    <div id="demo-order-modal" class="fixed inset-0 bg-coastal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-coastal-200 space-y-4">
-            <div class="flex justify-between items-center border-b border-coastal-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <i data-lucide="plus-circle" class="w-5 h-5 text-crab-600"></i>
-                    <h3 class="font-serif font-bold text-coastal-900 text-base">Generate Test Kitchen Ticket</h3>
-                </div>
-                <button onclick="closeDemoModal()" class="text-coastal-400 hover:text-coastal-700 p-1">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
+    <!-- Mobile Bottom Floating Basket Bar -->
+    <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="openMobileBasketModal()">
+            <div class="bg-crab-500 text-white font-bold text-xs w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" id="mobile-basket-qty">
+                0
             </div>
-
-            <form id="demo-order-form" onsubmit="handleDemoOrderSubmit(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Customer Name</label>
-                    <input type="text" id="demo-cust-name" required value="Sarah Jenkins" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Phone</label>
-                        <input type="text" id="demo-cust-phone" required value="07700 900123" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Email</label>
-                        <input type="email" id="demo-cust-email" required value="sarah.jenkins@example.com" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Pickup Date</label>
-                        <input type="date" id="demo-pickup-date" required class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Pickup Time</label>
-                        <select id="demo-pickup-time" required class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                            <option value="12:00">12:00 PM</option>
-                            <option value="12:30">12:30 PM</option>
-                            <option value="13:00">01:00 PM</option>
-                            <option value="13:30" selected>01:30 PM</option>
-                            <option value="14:00">02:00 PM</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Hamper Selection</label>
-                    <select id="demo-item-preset" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                        <option value="crab">Cromer Crab Feast (£42.00)</option>
-                        <option value="classic">Classic Norfolk Coastal Hamper (£38.00)</option>
-                        <option value="veggie">North Norfolk Veggie Box (£34.00)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Special Notes</label>
-                    <input type="text" id="demo-notes" placeholder="e.g. Extra napkins, gluten free bread" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-
-                <div class="pt-3 flex space-x-2">
-                    <button type="button" onclick="closeDemoModal()" class="w-1/2 bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-                    <button type="submit" class="w-1/2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add Ticket</button>
-                </div>
-            </form>
+            <div>
+                <span class="text-[10px] font-bold text-coastal-400 uppercase tracking-wider block">Basket Total <span class="text-crab-600 font-bold">(Tap to View)</span></span>
+                <span class="font-serif font-bold text-coastal-900 text-sm" id="mobile-basket-total">£0.00</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button onclick="openMobileBasketModal()" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 border border-coastal-200">
+                <i data-lucide="shopping-bag" class="w-4 h-4 text-crab-500"></i>
+                <span>View Basket</span>
+            </button>
+            <button id="mobile-checkout-btn" onclick="openCheckoutModal()" disabled class="touch-target bg-coastal-800 disabled:bg-coastal-200 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all flex items-center space-x-1.5">
+                <span>Checkout</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
         </div>
     </div>
 
-    <!-- Firebase Imports & Initialization -->
+    <div id="mobile-basket-modal" onclick="if(event.target === this) closeMobileBasketModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-200">
+        <div class="glass-card rounded-t-3xl sm:rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-5 space-y-4 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-crab-500"></i>
+                    <h3 class="font-serif text-lg font-bold text-coastal-900">Your Picnic Basket</h3>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="clearBasket()" class="text-xs font-semibold text-coastal-400 hover:text-crab-600 transition-colors mr-2">Clear All</button>
+                    <button onclick="closeMobileBasketModal()" class="touch-target text-coastal-400 hover:text-coastal-800 p-1.5 rounded-full hover:bg-coastal-100/50 transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="mobile-basket-items-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-[100px]">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <div id="mobile-basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs">
+                <!-- Summary populated dynamically -->
+            </div>
+
+            <button id="mobile-modal-checkout-btn" onclick="closeMobileBasketModal(); openCheckoutModal();" disabled class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 disabled:bg-coastal-200 disabled:text-coastal-400 text-white font-bold py-3 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2">
+                <span>Proceed to Pickup Details</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+        <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4">
+            <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="space-y-1 border-b border-coastal-100 pb-3">
+                <span class="text-[10px] font-bold text-crab-600 uppercase tracking-widest" id="custom-pkg-tag">Signature</span>
+                <h3 class="font-serif text-xl font-bold text-coastal-900" id="custom-pkg-title">Hamper Customiser</h3>
+                <p class="text-xs text-coastal-500" id="custom-pkg-desc">Adjust options for your beach picnic.</p>
+            </div>
+
+            <!-- Standard Customisation View -->
+            <div id="standard-custom-options" class="space-y-3 text-xs">
+                <label class="block font-bold text-coastal-800">Dietary Requirement Options</label>
+                <select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
+                </select>
+
+                <label class="block font-bold text-coastal-800">Norfolk Drinks & Add-on Upgrades</label>
+                <div class="space-y-2" id="custom-drinks-container">
+                    <!-- Populated dynamically via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Build Your Own (BYO) Pick & Mix Section -->
+            <div id="byo-custom-options" class="hidden space-y-3 text-xs">
+                <p class="text-[11px] text-coastal-700 bg-sand-100/80 p-2.5 rounded-xl border border-sand-300/80 backdrop-blur-sm">
+                    <strong>Base Hamper (£10.00):</strong> Includes insulated cool box packing, cutlery, napkins & Norfolk butter/condiments. Select your favourite delicacies below:
+                </p>
+                <div class="max-h-56 overflow-y-auto custom-scrollbar pr-1 space-y-2" id="byo-items-checklist">
+                    <!-- Dynamic BYO Items Checkboxes populated by JavaScript -->
+                </div>
+                <div class="p-3 bg-white/80 rounded-xl border border-coastal-200 flex justify-between items-center font-bold text-coastal-900 shadow-sm">
+                    <span>Bespoke Hamper Subtotal:</span>
+                    <span class="font-serif text-crab-600 text-sm" id="byo-live-total">£10.00</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5 pt-2">
+                <button onclick="closeCustomizeModal()" class="touch-target col-span-1 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-3.5 rounded-xl transition-all text-xs border border-coastal-200 flex items-center justify-center">
+                    Cancel
+                </button>
+                <button onclick="saveHamperCustomization()" class="touch-target col-span-2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-xl transition-all text-xs shadow-md flex items-center justify-center space-x-1">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Add to Basket</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+        <div class="glass-card rounded-3xl w-full max-w-xl border border-white/60 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
+            <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="border-b border-coastal-100 pb-3">
+                <h3 class="font-serif text-xl font-bold text-coastal-900">Complete Your Order</h3>
+                <p class="text-xs text-coastal-500">Collect from The White Horse Pub • 24 West Street, Cromer</p>
+            </div>
+
+            <!-- Checkout Form Content -->
+            <div id="modal-form-content" class="space-y-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
+                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
+                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
+                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Collection Date *</label>
+                        <input type="date" id="pickup-date" onchange="populateTimeSlots()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 font-bold text-coastal-900">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Collection Time *</label>
+                        <select id="pickup-time" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 font-bold text-coastal-900">
+                            <!-- Populated dynamically via populateTimeSlots -->
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <div id="cutoff-notice" class="w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 inline text-crab-500 mr-1"></i>
+                            <span id="cutoff-notice-text">Same-day pickup orders close daily at <strong>3:00 PM</strong>.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Special Dietary Notes</label>
+                    <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, gluten free bread..." class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
+                </div>
+
+                <!-- Financial Summary Box -->
+                <div class="bg-white/70 p-4 rounded-2xl border border-coastal-200 space-y-1.5">
+                    <div class="flex justify-between text-coastal-600">
+                        <span>Hampers Subtotal:</span>
+                        <span class="font-bold" id="modal-subtotal">£0.00</span>
+                    </div>
+                    <div class="flex justify-between text-emerald-700 font-medium">
+                        <span>Refundable Cool Box Deposit (£20/box):</span>
+                        <span class="font-bold" id="modal-deposit">£20.00</span>
+                    </div>
+                    <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-1.5 mt-1.5">
+                        <span>Total Payable:</span>
+                        <span class="font-serif text-crab-600 text-base" id="modal-grandtotal">£0.00</span>
+                    </div>
+                </div>
+
+                <!-- Card Authorisation Sandbox Box -->
+                <div class="bg-coastal-900/90 text-white p-4 rounded-2xl space-y-2 backdrop-blur-md">
+                    <div class="flex items-center justify-between border-b border-coastal-800 pb-2">
+                        <span class="text-[10px] font-bold uppercase text-sand-200 tracking-wider">Instant Payment Sandbox</span>
+                        <span class="text-[10px] text-emerald-400 font-mono font-bold">● Live Sync Ready</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[11px] font-mono">
+                        <div>
+                            <span class="text-coastal-400 block text-[9px]">Card Number</span>
+                            <span>4000 1234 5678 9010</span>
+                        </div>
+                        <div>
+                            <span class="text-coastal-400 block text-[9px]">Expires / CVC</span>
+                            <span>12/28 • 888</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="processSimulatedPayment()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Confirm & Authorise Payment</span>
+                </button>
+            </div>
+
+            <!-- Processing Loading View -->
+            <div id="modal-processing-content" class="hidden py-12 text-center space-y-4">
+                <div class="w-12 h-12 border-4 border-coastal-200 border-t-crab-500 rounded-full animate-spin mx-auto"></div>
+                <div>
+                    <h4 class="font-serif font-bold text-lg text-coastal-900">Authorising Payment...</h4>
+                    <p class="text-xs text-coastal-500">Securing your cool box deposit and sending order ticket to kitchen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+        <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
+            <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center space-y-1">
+                <div class="w-10 h-10 bg-coastal-800 text-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </div>
+                <h3 class="font-serif text-lg font-bold text-coastal-900" id="auth-modal-title">Customer Account</h3>
+                <p class="text-xs text-coastal-500" id="auth-modal-sub">Sign up for a new account or sign in to track orders.</p>
+            </div>
+
+            <div id="auth-tabs-container" class="flex bg-coastal-50/80 p-1 rounded-xl border border-coastal-200 text-xs font-bold">
+                <button id="auth-tab-signup" onclick="setAuthMode('signup')" class="flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm">
+                    Sign Up (New)
+                </button>
+                <button id="auth-tab-login" onclick="setAuthMode('login')" class="flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900">
+                    Log In (Existing)
+                </button>
+            </div>
+
+            <!-- Sign Up Form (New Customer) -->
+            <div id="auth-form-signup" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
+                    <input type="text" id="signup-name-input" placeholder="e.g. Sarah Jenkins" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
+                    <input type="email" id="signup-email-input" placeholder="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
+                    <input type="tel" id="signup-phone-input" placeholder="e.g. 07700 900123" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <button onclick="registerNewCustomer()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                    <span>Create Account & Sign In</span>
+                </button>
+            </div>
+
+            <!-- Log In Form (Existing Customer) -->
+            <div id="auth-form-login" class="hidden space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Registered Email Address *</label>
+                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <button onclick="saveCustomerLogin()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Sign In to Account</span>
+                </button>
+            </div>
+
+            <!-- Logged In Profile & Log Out View -->
+            <div id="auth-logged-in-view" class="hidden space-y-4 text-xs">
+                <div class="bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-200 space-y-1">
+                    <p class="text-coastal-500 text-[11px] font-medium">Signed in as</p>
+                    <p class="font-bold text-coastal-900 text-sm" id="logged-user-name"></p>
+                    <p class="text-coastal-600 font-mono text-xs" id="logged-user-email"></p>
+                    <p class="text-coastal-500 text-[11px]" id="logged-user-phone"></p>
+                </div>
+                <button onclick="logoutCustomer()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center space-x-1.5 shadow-sm">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Log Out</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyDkrSDAVFeTPJC13a1GKdx8SZ1t4ik36zU",
             authDomain: "cromer-picnics.firebaseapp.com",
@@ -301,7 +566,7 @@
             measurementId: "G-T76545M693"
         };
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
+        const getEffectiveAppId = () => typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
 
         let app, auth, db;
         try {
@@ -312,86 +577,104 @@
             window.firebaseApp = app;
             window.firebaseAuth = auth;
             window.firebaseDb = db;
-            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot };
-            window.appId = appId;
+            window.firebaseFns = { collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDoc };
+            window.appId = getEffectiveAppId();
+            window.currentUser = null;
 
-            window.getOrdersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'orders');
-                }
-                return collection(db, 'orders');
-            };
+            /* STRICT PATH COMPLIANCE: /artifacts/{appId}/public/data/ */
+            window.getOrdersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders');
+            window.getCustomersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers');
+            window.getOrderDocRef = (id) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'orders', id);
+            window.getCustomerDocRef = (email) => doc(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'customers', email.toLowerCase());
 
-            window.getOrderDocRef = (orderId) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
-                }
-                return doc(db, 'orders', orderId);
-            };
+            window.getHampersColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'hampers');
+            window.getExtrasColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'extras');
+            window.getCustomFieldsColRef = () => collection(db, 'artifacts', getEffectiveAppId(), 'public', 'data', 'custom_fields');
 
             async function initAuth() {
                 try {
-                    if (typeof __initial_auth_token !== 'undefined') {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         await signInWithCustomToken(auth, __initial_auth_token);
                     } else {
                         await signInAnonymously(auth);
                     }
-                    window.currentUser = auth.currentUser;
                 } catch (error) {
-                    console.warn("Firebase auth warning (using local fallback mode):", error);
-                } finally {
+                    console.warn("Auth offline warning:", error);
                     window.dispatchEvent(new Event('firebase-ready'));
                 }
             }
+
+            onAuthStateChanged(auth, (user) => {
+                window.currentUser = user;
+                window.dispatchEvent(new Event('firebase-ready'));
+            });
+
             initAuth();
         } catch (err) {
-            console.warn("Firebase initialization skipped (fallback active):", err);
+            console.warn("Firebase initialization skipped:", err);
             window.dispatchEvent(new Event('firebase-ready'));
         }
     </script>
 
-    <!-- Kitchen Portal Application Logic -->
     <script>
-        let isKitchenUnlocked = false;
+        let authMode = 'signup';
+        let loggedInCustomer = null;
+        let activeCustomizingPkg = null;
+        let activeOrder = null;
+        let hasUnreadTrackerUpdate = false;
+        let basket = {};
         let allOrdersList = [];
-        let kitchenViewMode = 'active';
-        let kitchenArchiveDateFilter = '';
-        let previousPendingCount = 0;
-        let audioCtx = null;
 
-        function getTodayFormatted(type = 'iso') {
-            const now = new Date();
-            const y = now.getFullYear();
-            const m = String(now.getMonth() + 1).padStart(2, '0');
-            const d = String(now.getDate()).padStart(2, '0');
-            if (type === 'uk') return `${d}/${m}/${y}`;
-            return `${y}-${m}-${d}`;
-        }
+        // Dynamic State loaded from Admin / LocalStorage / Firestore
+        let byoAvailableItems = [
+            { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
+            { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
+            { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
+            { id: 'byo-cheese', title: 'Binham Blue & Dapple Cheese Selection', price: 8.50, icon: '🧀' },
+            { id: 'byo-sausage-roll', title: 'Pork & Sage Sausage Rolls (2pcs)', price: 5.00, icon: '🥐' },
+            { id: 'byo-tartlet', title: 'Caramelised Onion & Spinach Tartlet (V)', price: 6.50, icon: '🥧' },
+            { id: 'byo-hummus', title: 'Roasted Pepper Hummus & Flatbreads', price: 5.50, icon: '🫓' },
+            { id: 'byo-lobster', title: 'Luxury Dressed Lobster Tail Platter', price: 18.00, icon: '🦞' },
+            { id: 'byo-strawberries', title: 'Norfolk Strawberries & Clotted Cream', price: 6.00, icon: '🍓' },
+            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖' },
+            { id: 'byo-prosecco', title: 'Chilled Bottle of Prosecco (75cl)', price: 18.00, icon: '🍾' },
+            { id: 'byo-apple-juice', title: 'Chilled Norfolk Apple Juice', price: 3.50, icon: '🧃' },
+            { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
+        ];
+        
+        let picnicPackages = [
+            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', available: true },
+            { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', available: true },
+            { id: 'ploughmans-classic', title: 'Norfolk Artisan Ploughman’s', price: 38.00, badge: 'Popular', badgeColor: 'bg-sand-700 text-white', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80', desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.', available: true },
+            { id: 'saltmarsh-vegan', title: 'Saltmarsh Wild Grazing (V)', price: 36.00, badge: 'Vegetarian', badgeColor: 'bg-sage-600 text-white', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.', available: true },
+            { id: 'sunset-prosecco', title: 'Pier Sunset Romance (For Two)', price: 68.00, badge: 'Luxury', badgeColor: 'bg-coastal-800 text-white', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80', desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.', available: true },
+            { id: 'shipmates-family', title: 'Little Shipmates Family Feast', price: 28.00, badge: 'Family', badgeColor: 'bg-coastal-600 text-white', image: 'https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=80', desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.', available: true }
+        ];
+
+        let customFieldsList = [
+            { id: 'fld-1', title: 'Add Chilled Norfolk Apple Juice', price: 3.50, type: 'drink' },
+            { id: 'fld-2', title: 'Add Artisan Ginger Beer', price: 3.50, type: 'drink' },
+            { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
+            { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' }
+        ];
 
         function safeCreateIcons() {
             try {
                 if (window.lucide && typeof window.lucide.createIcons === 'function') {
                     window.lucide.createIcons();
                 }
-            } catch (err) {
-                console.warn('Lucide icon rendering error:', err);
-            }
+            } catch (err) {}
         }
 
         function triggerToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
             if (!container) return;
             const toast = document.createElement('div');
-            const bgClass = type === 'success' 
-                ? 'bg-emerald-800/95 text-white backdrop-blur-md' 
-                : type === 'error' 
-                    ? 'bg-crab-600/95 text-white backdrop-blur-md' 
-                    : 'bg-coastal-800/95 text-white backdrop-blur-md';
-
+            const bgClass = type === 'success' ? 'bg-emerald-800/95 text-white backdrop-blur-md' : type === 'error' ? 'bg-crab-600/95 text-white backdrop-blur-md' : 'bg-coastal-800/95 text-white backdrop-blur-md';
             toast.className = `pointer-events-auto p-3.5 rounded-2xl shadow-xl text-xs font-bold flex items-center justify-between space-x-2 transition-all duration-300 transform translate-y-2 opacity-0 border border-white/20 ${bgClass}`;
             toast.innerHTML = `
                 <div class="flex items-center space-x-2">
-                    <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info'}" class="w-4 h-4 shrink-0"></i>
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-4 h-4 shrink-0"></i>
                     <span>${message}</span>
                 </div>
             `;
@@ -407,87 +690,26 @@
 
         function playNotificationSound() {
             try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
                 osc.connect(gain);
-                gain.connect(audioCtx.destination);
+                gain.connect(ctx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.5);
-                triggerToast('🔊 Audio alert chime tested', 'info');
-            } catch(e) {
-                console.warn('Audio playback restricted:', e);
-                triggerToast('Audio chime ready (Click page first)', 'info');
-            }
-        }
-
-        function unlockKitchenPortal() {
-            const pinInput = document.getElementById('staff-pin-input');
-            const errText = document.getElementById('pin-error-text');
-            const pin = pinInput ? pinInput.value.trim() : '';
-
-            if (errText) errText.classList.add('hidden');
-
-            if (pin === '1884' || pin === '0000') {
-                demoUnlockKitchen();
-            } else {
-                if (errText) {
-                    errText.innerText = 'Incorrect Staff PIN. Use default: 1884';
-                    errText.classList.remove('hidden');
-                }
-                triggerToast('Incorrect Staff PIN (Default: 1884)', 'error');
-            }
-        }
-
-        function demoUnlockKitchen() {
-            isKitchenUnlocked = true;
-            const overlay = document.getElementById('kitchen-pin-overlay');
-            const content = document.getElementById('kitchen-dashboard-content');
-            const lockBtn = document.getElementById('lock-btn');
-            const demoBtn = document.getElementById('btn-open-demo-modal');
-
-            if (overlay) overlay.classList.add('hidden');
-            if (content) content.classList.remove('hidden');
-            if (lockBtn) lockBtn.classList.remove('hidden');
-            if (demoBtn) demoBtn.classList.remove('hidden');
-
-            renderKitchenDashboard();
-            triggerToast('Kitchen Portal Unlocked Successfully', 'success');
-        }
-
-        function lockKitchenPortal() {
-            isKitchenUnlocked = false;
-            const overlay = document.getElementById('kitchen-pin-overlay');
-            const content = document.getElementById('kitchen-dashboard-content');
-            const lockBtn = document.getElementById('lock-btn');
-            const demoBtn = document.getElementById('btn-open-demo-modal');
-            const pinInput = document.getElementById('staff-pin-input');
-
-            if (overlay) overlay.classList.remove('hidden');
-            if (content) content.classList.add('hidden');
-            if (lockBtn) lockBtn.classList.add('hidden');
-            if (demoBtn) demoBtn.classList.add('hidden');
-            if (pinInput) pinInput.value = '';
-
-            triggerToast('Kitchen Dashboard Locked', 'info');
+                osc.stop(ctx.currentTime + 0.5);
+            } catch(e) {}
         }
 
         function loadLocalOrders() {
             try {
                 const stored = localStorage.getItem('wh_kitchen_orders');
-                if (stored) {
-                    return JSON.parse(stored);
-                }
+                if (stored) return JSON.parse(stored);
             } catch(e) {}
             return [];
         }
@@ -495,436 +717,105 @@
         function saveLocalOrders(orders) {
             try {
                 localStorage.setItem('wh_kitchen_orders', JSON.stringify(orders));
+                window.dispatchEvent(new Event('storage'));
             } catch(e) {}
         }
 
-        function syncOrderUpdate(orderId, updateObj) {
-            // Firestore sync if connected
-            if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
-                try {
-                    const docRef = window.getOrderDocRef(orderId);
-                    window.firebaseFns.updateDoc(docRef, updateObj).catch(err => {
-                        console.warn("Firestore sync fallback to local:", err);
-                    });
-                } catch(e) {}
+        function saveLocalCatalog() {
+            try {
+                localStorage.setItem('wh_admin_hampers', JSON.stringify(picnicPackages));
+                localStorage.setItem('wh_admin_extras', JSON.stringify(byoAvailableItems));
+                localStorage.setItem('wh_admin_fields', JSON.stringify(customFieldsList));
+            } catch(e) {}
+        }
+
+        function loadLocalCatalog() {
+            try {
+                const h = localStorage.getItem('wh_admin_hampers');
+                const e = localStorage.getItem('wh_admin_extras');
+                const f = localStorage.getItem('wh_admin_fields');
+
+                if (h) picnicPackages = JSON.parse(h);
+                if (e) byoAvailableItems = JSON.parse(e);
+                if (f) customFieldsList = JSON.parse(f);
+            } catch(err) {}
+        }
+
+        function switchView(viewId) {
+            document.getElementById('customer-explore').classList.add('hidden');
+            document.getElementById('order-tracker').classList.add('hidden');
+            document.getElementById('customer-history').classList.add('hidden');
+
+            const navCustomer = document.getElementById('nav-customer');
+            const navTracker = document.getElementById('nav-tracker');
+            const navOrders = document.getElementById('nav-orders');
+            
+            const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative";
+            const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none relative";
+
+            const hasActiveLiveOrder = activeOrder && activeOrder.status !== 'returned';
+
+            if (navCustomer) navCustomer.className = baseBtn;
+            if (navTracker) navTracker.className = hasActiveLiveOrder ? baseBtn : "hidden";
+            if (navOrders) navOrders.className = baseBtn;
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.remove('hidden');
+
+            if (viewId === 'customer-explore') {
+                if (navCustomer) navCustomer.className = activeBtn;
+            } else if (viewId === 'order-tracker') {
+                if (navTracker) navTracker.className = activeBtn;
+                hasUnreadTrackerUpdate = false;
+                const badge = document.getElementById('tracker-badge');
+                if (badge) badge.classList.add('hidden');
+                renderLiveTrackerContent();
+            } else if (viewId === 'customer-history') {
+                if (navOrders) navOrders.className = activeBtn;
+                renderCustomerOrderHistory();
             }
 
-            // Local state update
-            const idx = allOrdersList.findIndex(o => o.id === orderId);
-            if (idx !== -1) {
-                allOrdersList[idx] = { ...allOrdersList[idx], ...updateObj };
-                saveLocalOrders(allOrdersList);
-                if (isKitchenUnlocked) renderKitchenDashboard();
-            }
+            safeCreateIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function updateKitchenOrderStatus(orderId, newStatus) {
-            syncOrderUpdate(orderId, { status: newStatus });
-            triggerToast(`Ticket status updated to ${newStatus.toUpperCase()}`, 'success');
-        }
-
-        function archiveKitchenOrder(orderId) {
-            syncOrderUpdate(orderId, { archived: true });
-            triggerToast(`Ticket moved to Archive`, 'info');
-        }
-
-        function restoreKitchenOrder(orderId) {
-            syncOrderUpdate(orderId, { archived: false });
-            triggerToast(`Ticket restored to Active Queue`, 'success');
-        }
-
-        function deleteArchivedKitchenOrder(orderId) {
-            if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
-                try {
-                    const docRef = window.getOrderDocRef(orderId);
-                    window.firebaseFns.deleteDoc(docRef).catch(console.warn);
-                } catch(e) {}
-            }
-            allOrdersList = allOrdersList.filter(o => o.id !== orderId);
-            saveLocalOrders(allOrdersList);
-            if (isKitchenUnlocked) renderKitchenDashboard();
-            triggerToast(`Ticket permanently deleted`, 'info');
-        }
-
-        function sendCustomerReadyEmail(orderId) {
-            const order = allOrdersList.find(o => o.id === orderId);
-            if (!order || !order.customerEmail) {
-                triggerToast('No customer email address on file for this ticket.', 'error');
-                return;
-            }
-
-            const subject = encodeURIComponent(`Your Cromer Picnic Order is Ready for Collection! (Ref: ${order.orderRef})`);
-            const body = encodeURIComponent(
-                `Hi ${order.customerName},\n\n` +
-                `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
-                `Collection Point:\n` +
-                `The White Horse\n` +
-                `24 West Street, Cromer, NR27 9DX\n\n` +
-                `Items in your hamper:\n` +
-                (order.items || []).map(i => `• ${i.qty}x ${i.title}${i.custom && i.custom.diet ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
-                `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
-                `When you finish your beach day, return the insulated cool box to bar staff to receive your £${(order.deposit || 15).toFixed(2)} deposit refund!\n\n` +
-                `Warm regards,\n` +
-                `The White Horse Kitchen Team\n` +
-                `24 West Street, Cromer`
-            );
-
-            const mailtoUrl = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
-            window.open(mailtoUrl, '_blank');
-            triggerToast(`Opening mail client to notify ${order.customerName}...`, 'info');
-        }
-
-        function setKitchenViewMode(mode) {
-            kitchenViewMode = mode;
-            renderKitchenDashboard();
-        }
-
-        function filterKitchenArchiveByDate(dateVal) {
-            kitchenArchiveDateFilter = dateVal;
-            renderKitchenDashboard();
-        }
-
-        function clearKitchenArchiveDateFilter() {
-            kitchenArchiveDateFilter = '';
-            const input = document.getElementById('kitchen-archive-date-input');
-            if (input) input.value = '';
-            renderKitchenDashboard();
-        }
-
-        function openDemoModal() {
-            const modal = document.getElementById('demo-order-modal');
-            const dateInput = document.getElementById('demo-pickup-date');
-            if (dateInput) dateInput.value = getTodayFormatted('iso');
-            if (modal) modal.classList.remove('hidden');
-        }
-
-        function closeDemoModal() {
-            const modal = document.getElementById('demo-order-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function handleDemoOrderSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('demo-cust-name').value;
-            const phone = document.getElementById('demo-cust-phone').value;
-            const email = document.getElementById('demo-cust-email').value;
-            const rawDate = document.getElementById('demo-pickup-date').value;
-            const time = document.getElementById('demo-pickup-time').value;
-            const preset = document.getElementById('demo-item-preset').value;
-            const notes = document.getElementById('demo-notes').value;
-
-            const ukDate = rawDate.split('-').reverse().join('/');
-            const refNum = Math.floor(1000 + Math.random() * 9000);
-
-            let itemTitle = 'Cromer Crab Feast Hamper';
-            let price = 42.00;
-            if (preset === 'classic') { itemTitle = 'Classic Norfolk Coastal Hamper'; price = 38.00; }
-            if (preset === 'veggie') { itemTitle = 'North Norfolk Veggie Box'; price = 34.00; }
-
-            const newOrder = {
-                id: 'ord_' + Date.now(),
-                orderRef: `WH-${refNum}`,
-                customerName: name,
-                customerPhone: phone,
-                customerEmail: email,
-                pickupDate: ukDate,
-                rawPickupDate: rawDate,
-                pickupTime: time,
-                status: 'pending',
-                archived: false,
-                notes: notes,
-                coolboxCount: 1,
-                deposit: 20.00,
-                grandTotal: price + 20.00,
-                createdAt: Date.now(),
-                items: [
-                    {
-                        title: itemTitle,
-                        qty: 1,
-                        price: price,
-                        custom: {
-                            diet: 'Freshly Prepared',
-                            drinks: ['Norfolk Fruit Juice'],
-                            byoItems: ['Insulated Coolbox', 'Ice Pack']
-                        }
-                    }
-                ]
-            };
-        function sendCustomerReadyEmail(orderId) {
-            const order = allOrdersList.find(o => o.id === orderId);
-            if (!order || !order.customerEmail) {
-                triggerToast('No customer email address on file for this ticket.', 'error');
-                return;
-            }
-
-            const subject = encodeURIComponent(`Your Cromer Picnic Order is Ready for Collection! (Ref: ${order.orderRef})`);
-            const body = encodeURIComponent(
-                `Hi ${order.customerName},\n\n` +
-                `Good news! Your coastal picnic hamper (Ref: ${order.orderRef}) has been freshly prepared and is ready for collection at The White Horse Pub.\n\n` +
-                `Collection Point:\n` +
-                `The White Horse\n` +
-                `24 West Street, Cromer, NR27 9DX\n\n` +
-                `Items in your hamper:\n` +
-                (order.items || []).map(i => `• ${i.qty}x ${i.title}${i.custom && i.custom.diet ? ` (${i.custom.diet})` : ''}`).join('\n') + `\n\n` +
-                `Please show your order reference (${order.orderRef}) to our bar staff upon arrival.\n\n` +
-                `When you finish your beach day, return the insulated cool box to bar staff to receive your £${(order.deposit !== undefined ? order.deposit : 20.00).toFixed(2)} deposit refund!\n\n` +
-                `Warm regards,\n` +
-                `The White Horse Kitchen Team\n` +
-                `24 West Street, Cromer`
-            );
-
-            const mailtoUrl = `mailto:${order.customerEmail}?subject=${subject}&body=${body}`;
-            window.open(mailtoUrl, '_blank');
-            triggerToast(`Opening mail client to notify ${order.customerName}...`, 'info');
-        }
-
-            allOrdersList.unshift(newOrder);
-            saveLocalOrders(allOrdersList);
-            closeDemoModal();
-            if (isKitchenUnlocked) renderKitchenDashboard();
-            playNotificationSound();
-            triggerToast(`New test ticket ${newOrder.orderRef} created!`, 'success');
-        }
-
-        function renderKitchenDashboard() {
-            const container = document.getElementById('kitchen-tickets-container');
+        function renderPicnicPackages() {
+            const container = document.getElementById('picnic-packages-container');
+            const badgeEl = document.getElementById('package-count-badge');
             if (!container) return;
             container.innerHTML = '';
 
-            const btnActive = document.getElementById('btn-kitchen-tab-active');
-            const btnArchived = document.getElementById('btn-kitchen-tab-archived');
-            const filterBox = document.getElementById('kitchen-archive-filter-box');
+            const activePackages = picnicPackages.filter(p => p.available !== false);
+            if (badgeEl) badgeEl.innerText = `${activePackages.length} Hampers Available`;
 
-            if (btnActive && btnArchived) {
-                if (kitchenViewMode === 'active') {
-                    btnActive.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2 active:scale-95";
-                    btnArchived.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2 active:scale-95";
-                    if (filterBox) filterBox.classList.add('hidden');
-                } else {
-                    btnActive.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-100 hover:bg-coastal-200 text-coastal-800 flex items-center space-x-2 active:scale-95";
-                    btnArchived.className = "touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2 active:scale-95";
-                    if (filterBox) filterBox.classList.remove('hidden');
-                }
-            }
-
-            let pendingCount = 0;
-            let boxesCount = 0;
-            let depositsHeld = 0;
-            let todayRev = 0;
-            let activeQueueCount = 0;
-            let archivedQueueCount = 0;
-
-            const now = new Date();
-            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            const endOfToday = startOfToday + (24 * 60 * 60 * 1000) - 1;
-
-            allOrdersList.forEach(o => {
-                if (o.createdAt >= startOfToday && o.createdAt <= endOfToday) {
-                    todayRev += (o.grandTotal || 0);
-                }
-                if (o.status !== 'returned' && !o.archived) {
-                    boxesCount += (o.coolboxCount || 1);
-                    depositsHeld += (o.deposit !== undefined ? o.deposit : 20.00);
-                }
-                if (!o.archived && (o.status === 'pending' || o.status === 'preparing')) {
-                    pendingCount++;
-                }
-                if (!o.archived) activeQueueCount++;
-                if (o.archived) archivedQueueCount++;
-            });
-
-            const statPending = document.getElementById('stat-pending-count');
-            const statBoxes = document.getElementById('stat-boxes-count');
-            const statDeposits = document.getElementById('stat-deposits-held');
-            const statRev = document.getElementById('stat-gross-revenue');
-
-            if (statPending) statPending.innerText = pendingCount;
-            if (statBoxes) statBoxes.innerText = boxesCount;
-            if (statDeposits) statDeposits.innerText = `£${depositsHeld.toFixed(2)}`;
-            if (statRev) statRev.innerText = `£${todayRev.toFixed(2)}`;
-
-            const badgeActive = document.getElementById('badge-kitchen-active-count');
-            const badgeArchived = document.getElementById('badge-kitchen-archived-count');
-            if (badgeActive) badgeActive.innerText = activeQueueCount;
-            if (badgeArchived) badgeArchived.innerText = archivedQueueCount;
-
-            let targetOrders = [];
-            if (kitchenViewMode === 'active') {
-                targetOrders = allOrdersList.filter(o => !o.archived);
-            } else {
-                targetOrders = allOrdersList.filter(o => o.archived);
-                if (kitchenArchiveDateFilter) {
-                    targetOrders = targetOrders.filter(o => {
-                        if (o.rawPickupDate) return o.rawPickupDate === kitchenArchiveDateFilter;
-                        const parts = kitchenArchiveDateFilter.split('-');
-                        if (parts.length === 3) {
-                            return o.pickupDate === `${parts[2]}/${parts[1]}/${parts[0]}`;
-                        }
-                        return true;
-                    });
-                }
-            }
-
-            // Chronological Sorting: Soonest collection date/time first
-            targetOrders.sort((a, b) => {
-                const dateA = a.rawPickupDate || a.createdAt || '';
-                const dateB = b.rawPickupDate || b.createdAt || '';
-                if (dateA !== dateB) return dateA.localeCompare(dateB);
-                return (a.pickupTime || '').localeCompare(b.pickupTime || '');
-            });
-
-            if (targetOrders.length === 0) {
-                const isArchiveMode = kitchenViewMode === 'archived';
-                const emptyMsg = isArchiveMode 
-                    ? (kitchenArchiveDateFilter ? `No archived tickets found for collection date ${kitchenArchiveDateFilter.split('-').reverse().join('/')}.` : `No archived tickets in database history yet.`)
-                    : `No active kitchen tickets in queue right now.`;
-
-                container.innerHTML = `
-                    <div class="col-span-full py-12 text-center text-xs text-coastal-400 space-y-3 bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200">
-                        <i data-lucide="${isArchiveMode ? 'archive' : 'check-circle-2'}" class="w-8 h-8 mx-auto text-coastal-400"></i>
-                        <p class="font-medium">${emptyMsg}</p>
-                        ${!isArchiveMode ? `
-                            <button onclick="openDemoModal()" class="inline-flex items-center space-x-1.5 bg-coastal-800 text-white font-bold px-3.5 py-2 rounded-xl text-xs hover:bg-coastal-900 transition-all shadow-sm">
-                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                                <span>Create Demo Kitchen Ticket</span>
-                            </button>
-                        ` : ''}
-                        ${isArchiveMode && kitchenArchiveDateFilter ? `
-                            <button onclick="clearKitchenArchiveDateFilter()" class="text-crab-600 font-bold hover:underline block mx-auto mt-1">Clear Date Filter</button>
-                        ` : ''}
-                    </div>
-                `;
-                safeCreateIcons();
-                return;
-            }
-
-            const todayFormattedIso = getTodayFormatted('iso');
-
-            targetOrders.forEach(order => {
+            activePackages.forEach(pkg => {
                 const card = document.createElement('div');
-                const isAdvanceOrder = order.rawPickupDate && order.rawPickupDate > todayFormattedIso;
-                
-                card.className = `bg-white/90 backdrop-blur-md p-5 rounded-3xl border ${isAdvanceOrder ? 'border-sky-300 ring-2 ring-sky-100' : 'border-coastal-200'} shadow-sm space-y-4 flex flex-col justify-between transition-all hover:shadow-md`;
-                
-                let statusBadge = 'bg-amber-100 text-amber-800';
-                if (order.status === 'preparing') statusBadge = 'bg-blue-100 text-blue-800';
-                if (order.status === 'ready') statusBadge = 'bg-emerald-100 text-emerald-800';
-                if (order.status === 'collected') statusBadge = 'bg-purple-100 text-purple-800';
-                if (order.status === 'returned') statusBadge = 'bg-coastal-100 text-coastal-600';
-
-                let dateNoticeBadge = '';
-                if (isAdvanceOrder) {
-                    dateNoticeBadge = `<span class="bg-sky-100 text-sky-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">📅 Advance (${order.pickupDate})</span>`;
-                } else if (order.rawPickupDate === todayFormattedIso) {
-                    dateNoticeBadge = `<span class="bg-emerald-100 text-emerald-800 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">⏰ Due Today (${order.pickupTime})</span>`;
-                }
-
-                const depositVal = (order.deposit !== undefined ? order.deposit : 20.00);
-                const totalVal = (order.grandTotal !== undefined ? order.grandTotal : 0.00);
-
+                card.className = "bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between";
                 card.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-start border-b border-coastal-100 pb-2">
-                            <div>
-                                <div class="flex items-center space-x-1.5 flex-wrap gap-y-1">
-                                    <span class="font-extrabold font-mono text-coastal-900 text-base">${order.orderRef}</span>
-                                    ${dateNoticeBadge}
-                                </div>
-                                <p class="text-xs font-bold text-coastal-700 mt-0.5">${order.customerName}</p>
-                            </div>
-                            <div class="text-right shrink-0">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase ${statusBadge}">${(order.status || 'pending').replace('_', ' ')}</span>
-                                ${order.archived ? '<span class="block text-[9px] text-coastal-400 font-bold uppercase mt-1">Archived</span>' : ''}
-                            </div>
+                    <div>
+                        <div class="relative h-44 sm:h-48 overflow-hidden bg-coastal-100">
+                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
+                                ${pkg.badge}
+                            </span>
                         </div>
-
-                        <div class="text-xs space-y-1">
-                            <p class="text-coastal-500 font-medium">Collection: <strong class="text-coastal-900">${order.pickupDate} at ${order.pickupTime}</strong></p>
-                            <p class="text-coastal-500 font-medium">Contact: ${order.customerPhone} (${order.customerEmail})</p>
-                            ${order.notes ? `<p class="bg-amber-50 p-2 rounded-lg text-amber-900 text-[11px] border border-amber-200 mt-1"><strong>Note:</strong> ${order.notes}</p>` : ''}
-                        </div>
-
-                        <div class="bg-coastal-50/80 p-3 rounded-2xl border border-coastal-100 text-xs space-y-2">
-                            <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items & Customisations:</p>
-                            ${(order.items || []).map(i => `
-                                <div class="text-coastal-700 space-y-1 border-b border-coastal-100/50 pb-2 last:border-b-0">
-                                    <div class="flex justify-between font-bold text-coastal-900">
-                                        <span>${i.qty}x ${i.title}</span>
-                                        <span>£${(i.price * i.qty).toFixed(2)}</span>
-                                    </div>
-                                    ${i.custom ? `
-                                        <div class="pl-2 space-y-0.5 text-[11px]">
-                                            ${i.custom.diet ? `<p class="text-coastal-600"><strong>Dietary Swap:</strong> ${i.custom.diet}</p>` : ''}
-                                            ${i.custom.drinks && i.custom.drinks.length ? `<p class="text-coastal-600"><strong>Drinks Added:</strong> ${i.custom.drinks.join(', ')}</p>` : ''}
-                                            ${i.custom.byoItems && i.custom.byoItems.length ? `<p class="text-crab-700 font-semibold"><strong>Box Delicacies:</strong> ${i.custom.byoItems.join(', ')}</p>` : ''}
-                                        </div>
-                                    ` : ''}
-                                </div>
-                            `).join('')}
-                            <div class="pt-1.5 border-t border-coastal-200 flex justify-between font-extrabold text-coastal-900 mt-1">
-                                <span>Total Paid:</span>
-                                <span>£${totalVal.toFixed(2)}</span>
+                        <div class="p-5 space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
+                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${Number(pkg.price).toFixed(2)}</span>
                             </div>
+                            <p class="text-xs text-coastal-600 font-medium leading-relaxed">${pkg.desc}</p>
                         </div>
                     </div>
-
-                    <div class="space-y-2 pt-2 border-t border-coastal-100">
-                        ${!order.archived && order.status === 'pending' ? `
-                            <button onclick="updateKitchenOrderStatus('${order.id}', 'preparing')" class="touch-target w-full bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm transition-all">
-                                <i data-lucide="chef-hat" class="w-4 h-4"></i>
-                                <span>Start Preparation</span>
-                            </button>
-                        ` : ''}
-
-                        ${!order.archived && order.status === 'preparing' ? `
-                            <button onclick="updateKitchenOrderStatus('${order.id}', 'ready')" class="touch-target w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm transition-all">
-                                <i data-lucide="package-check" class="w-4 h-4"></i>
-                                <span>Mark Ready for Pickup</span>
-                            </button>
-                        ` : ''}
-
-                        ${!order.archived && (order.status === 'ready' || order.status === 'preparing') ? `
-                            <button onclick="sendCustomerReadyEmail('${order.id}')" class="touch-target w-full bg-sand-200 hover:bg-sand-300 text-coastal-900 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors border border-sand-300 active:scale-[0.98]">
-                                <i data-lucide="mail" class="w-4 h-4 text-crab-600"></i>
-                                <span>Email Customer Order Ready</span>
-                            </button>
-                        ` : ''}
-
-                        ${!order.archived && order.status === 'ready' ? `
-                            <button onclick="updateKitchenOrderStatus('${order.id}', 'collected')" class="touch-target w-full bg-purple-700 hover:bg-purple-800 active:scale-[0.98] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm transition-all">
-                                <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                                <span>Mark Order as Collected</span>
-                            </button>
-                        ` : ''}
-
-                        ${!order.archived && order.status === 'collected' ? `
-                            <button onclick="updateKitchenOrderStatus('${order.id}', 'returned')" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 active:scale-[0.98] text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-sm transition-all">
-                                <i data-lucide="rotate-ccw" class="w-4 h-4 text-emerald-400"></i>
-                                <span>Refund £${depositVal.toFixed(2)} Deposit & Complete</span>
-                            </button>
-                        ` : ''}
-
-                        ${!order.archived && order.status === 'returned' ? `
-                            <p class="text-center text-xs text-emerald-700 font-bold py-1">✓ Box Returned & £${depositVal.toFixed(2)} Refunded</p>
-                            <button onclick="archiveKitchenOrder('${order.id}')" class="touch-target w-full bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200 mt-1 active:scale-[0.98] transition-all">
-                                <i data-lucide="archive" class="w-4 h-4 text-coastal-600"></i>
-                                <span>Archive Order Ticket</span>
-                            </button>
-                        ` : ''}
-
-                        ${order.archived ? `
-                            <p class="text-center text-[11px] text-coastal-500 font-bold py-0.5">Archived Ticket Record</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="restoreKitchenOrder('${order.id}')" class="touch-target bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-coastal-200 active:scale-[0.98] transition-all">
-                                    <i data-lucide="undo" class="w-4 h-4 text-coastal-600"></i>
-                                    <span>Restore</span>
-                                </button>
-                                <button onclick="deleteArchivedKitchenOrder('${order.id}')" class="touch-target bg-crab-50 hover:bg-crab-100 text-crab-700 font-bold py-2 rounded-xl text-xs flex items-center justify-center space-x-1 border border-crab-200 active:scale-[0.98] transition-all">
-                                    <i data-lucide="trash-2" class="w-4 h-4 text-crab-600"></i>
-                                    <span>Delete</span>
-                                </button>
-                            </div>
-                        ` : ''}
+                    <div class="p-5 pt-0 grid grid-cols-2 gap-2">
+                        <button onclick="openCustomizeModal('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 text-coastal-800 font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                            <span>Customise</span>
+                        </button>
+                        <button onclick="addToBasket('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            <span>Add</span>
+                        </button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -933,55 +824,1085 @@
             safeCreateIcons();
         }
 
-        function startFirestoreSync() {
-            if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
+        function addToBasket(packageId, customOpts = null) {
+            const pkg = picnicPackages.find(p => p.id === packageId);
+            if (!pkg) return;
 
+            const customOptsStr = customOpts ? JSON.stringify(customOpts) : '';
+            const existingKey = Object.keys(basket).find(k => {
+                const item = basket[k];
+                const itemCustomStr = item.custom ? JSON.stringify(item.custom) : '';
+                return item.id === packageId && itemCustomStr === customOptsStr;
+            });
+
+            if (existingKey) {
+                basket[existingKey].qty += 1;
+            } else {
+                const newKey = 'item_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+                basket[newKey] = {
+                    id: packageId,
+                    title: pkg.title,
+                    basePrice: pkg.price,
+                    price: pkg.price + (customOpts ? customOpts.extraPrice : 0),
+                    qty: 1,
+                    custom: customOpts
+                };
+            }
+
+            updateBasketSummary();
+            triggerToast(`Added ${pkg.title} to basket`, 'success');
+        }
+
+        function updateQuantity(basketKey, delta) {
+            if (!basket[basketKey]) return;
+            basket[basketKey].qty += delta;
+            if (basket[basketKey].qty <= 0) {
+                delete basket[basketKey];
+            }
+            updateBasketSummary();
+        }
+
+        function removeFromBasket(basketKey) {
+            if (basket[basketKey]) {
+                const title = basket[basketKey].title;
+                delete basket[basketKey];
+                updateBasketSummary();
+                triggerToast(`Removed ${title} from basket`, 'info');
+            }
+        }
+
+        function clearBasket() {
+            basket = {};
+            updateBasketSummary();
+        }
+
+        function updateBasketSummary() {
+            const listContainer = document.getElementById('basket-items-list');
+            const mobileListContainer = document.getElementById('mobile-basket-items-list');
+            const summaryBox = document.getElementById('basket-summary-box');
+            const mobileSummaryBox = document.getElementById('mobile-basket-summary-box');
+            
+            let totalQty = 0;
+            let subtotal = 0;
+            let hamperCount = 0;
+
+            if (listContainer) listContainer.innerHTML = '';
+            if (mobileListContainer) mobileListContainer.innerHTML = '';
+
+            Object.keys(basket).forEach(key => {
+                const item = basket[key];
+                totalQty += item.qty;
+                hamperCount += item.qty;
+                subtotal += item.price * item.qty;
+
+                let customText = '';
+                if (item.custom) {
+                    if (item.custom.byoItems && item.custom.byoItems.length > 0) {
+                        customText = `<p class="text-[10px] text-crab-600 font-semibold truncate">${item.custom.byoItems.length} Items: ${item.custom.byoItems.join(', ')}</p>`;
+                    } else if (item.custom.diet || (item.custom.drinks && item.custom.drinks.length)) {
+                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Upgrades' : ''}</p>`;
+                    }
+                }
+
+                const itemHtml = `
+                    <div class="flex items-center justify-between bg-coastal-50/90 p-2.5 rounded-xl border border-coastal-100 text-xs">
+                        <div class="space-y-0.5 max-w-[150px] sm:max-w-[130px]">
+                            <p class="font-bold text-coastal-900 truncate">${item.title}</p>
+                            ${customText}
+                            <p class="text-coastal-600 font-semibold">£${(item.price * item.qty).toFixed(2)}</p>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <div class="flex items-center space-x-1 bg-white rounded-lg border border-coastal-200 p-0.5">
+                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Decrease quantity">-</button>
+                                <span class="w-5 text-center font-bold text-coastal-900 text-xs">${item.qty}</span>
+                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Increase quantity">+</button>
+                            </div>
+                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if (listContainer) {
+                    const itemEl = document.createElement('div');
+                    itemEl.innerHTML = itemHtml;
+                    listContainer.appendChild(itemEl.firstElementChild);
+                }
+
+                if (mobileListContainer) {
+                    const mobileItemEl = document.createElement('div');
+                    mobileItemEl.innerHTML = itemHtml;
+                    mobileListContainer.appendChild(mobileItemEl.firstElementChild);
+                }
+            });
+
+            const depositTotal = hamperCount * 20.00;
+            const grandTotal = subtotal + depositTotal;
+
+            const summaryHtml = totalQty === 0 ? `
+                <div class="flex justify-between text-coastal-500">
+                    <span>Subtotal:</span>
+                    <span>£0.00</span>
+                </div>
+            ` : `
+                <div class="flex justify-between text-coastal-600">
+                    <span>Hampers Subtotal:</span>
+                    <span class="font-bold">£${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-emerald-700 font-medium">
+                    <span>Refundable Cool Box Deposit (£20/box):</span>
+                    <span class="font-bold">£${depositTotal.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-2 mt-1">
+                    <span>Total Payable:</span>
+                    <span class="font-serif text-crab-600 text-base">£${grandTotal.toFixed(2)}</span>
+                </div>
+            `;
+
+            if (summaryBox) {
+                if (totalQty === 0 && listContainer) {
+                    listContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
+                }
+                summaryBox.innerHTML = summaryHtml;
+            }
+
+            if (mobileSummaryBox) {
+                if (totalQty === 0 && mobileListContainer) {
+                    mobileListContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
+                }
+                mobileSummaryBox.innerHTML = summaryHtml;
+            }
+
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const mobileCheckoutBtn = document.getElementById('mobile-checkout-btn');
+            const mobileModalCheckoutBtn = document.getElementById('mobile-modal-checkout-btn');
+            const mobileQtyBadge = document.getElementById('mobile-basket-qty');
+            const mobileTotalSpan = document.getElementById('mobile-basket-total');
+
+            if (checkoutBtn) checkoutBtn.disabled = totalQty === 0;
+            if (mobileCheckoutBtn) mobileCheckoutBtn.disabled = totalQty === 0;
+            if (mobileModalCheckoutBtn) mobileModalCheckoutBtn.disabled = totalQty === 0;
+            if (mobileQtyBadge) mobileQtyBadge.innerText = totalQty;
+            if (mobileTotalSpan) mobileTotalSpan.innerText = `£${grandTotal.toFixed(2)}`;
+
+            safeCreateIcons();
+        }
+
+        function openMobileBasketModal() {
+            document.getElementById('mobile-basket-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function closeMobileBasketModal() {
+            document.getElementById('mobile-basket-modal').classList.add('hidden');
+        }
+
+        function closeCustomizeModal() {
+            const modal = document.getElementById('customize-modal');
+            if (modal) modal.classList.add('hidden');
+            activeCustomizingPkg = null;
+        }
+
+        function openCustomizeModal(pkgId) {
+            const pkg = picnicPackages.find(p => p.id === pkgId);
+            if (!pkg) return;
+            activeCustomizingPkg = pkg;
+
+            document.getElementById('custom-pkg-tag').innerText = pkg.badge;
+            document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
+            document.getElementById('custom-pkg-desc').innerText = pkg.desc;
+
+            const stdOptions = document.getElementById('standard-custom-options');
+            const byoOptions = document.getElementById('byo-custom-options');
+
+            if (pkgId === 'build-your-own') {
+                if (stdOptions) stdOptions.classList.add('hidden');
+                if (byoOptions) {
+                    byoOptions.classList.remove('hidden');
+                    renderByoChecklist();
+                }
+            } else {
+                if (byoOptions) byoOptions.classList.add('hidden');
+                if (stdOptions) {
+                    stdOptions.classList.remove('hidden');
+                    
+                    const drinksContainer = document.getElementById('custom-drinks-container');
+                    const dietSelect = document.getElementById('custom-diet-select');
+                    
+                    if (dietSelect) {
+                        dietSelect.innerHTML = `<option value="Standard Recipe">Standard Recipe (Chef Special)</option>`;
+                        customFieldsList.filter(f => f.type === 'dietary').forEach(fld => {
+                            const opt = document.createElement('option');
+                            opt.value = fld.title;
+                            opt.innerText = fld.title;
+                            dietSelect.appendChild(opt);
+                        });
+                    }
+
+                    if (drinksContainer) {
+                        drinksContainer.innerHTML = '';
+                        const drinkUpgrades = customFieldsList.filter(f => f.type === 'drink' || f.type === 'extra');
+                        if (drinkUpgrades.length === 0) {
+                            drinksContainer.innerHTML = `<p class="text-coastal-400 text-[11px]">No extra drink upgrades currently available.</p>`;
+                        } else {
+                            drinkUpgrades.forEach(fld => {
+                                const lbl = document.createElement('label');
+                                lbl.className = "flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors";
+                                lbl.innerHTML = `
+                                    <input type="checkbox" value="${fld.id}" data-title="${fld.title}" data-price="${fld.price}" class="custom-upgrade-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                                    <span class="text-coastal-800 font-medium">${fld.title} (+£${Number(fld.price).toFixed(2)})</span>
+                                `;
+                                drinksContainer.appendChild(lbl);
+                            });
+                        }
+                    }
+                }
+            }
+
+            document.getElementById('customize-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function renderByoChecklist() {
+            const container = document.getElementById('byo-items-checklist');
+            if (!container) return;
+            container.innerHTML = '';
+
+            byoAvailableItems.forEach(item => {
+                const label = document.createElement('label');
+                label.className = "flex items-center justify-between bg-white/70 p-2.5 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 text-xs transition-colors";
+                label.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800 font-medium">${item.icon || '🥪'} ${item.title}</span>
+                    </div>
+                    <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
+                `;
+                container.appendChild(label);
+            });
+
+            updateByoLiveTotal();
+        }
+
+        function updateByoLiveTotal() {
+            let total = 10.00;
+            const checkboxes = document.querySelectorAll('.byo-item-checkbox');
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const found = byoAvailableItems.find(i => i.id === cb.value);
+                    if (found) total += found.price;
+                }
+            });
+
+            const liveTotalSpan = document.getElementById('byo-live-total');
+            if (liveTotalSpan) liveTotalSpan.innerText = `£${total.toFixed(2)}`;
+        }
+
+        function saveHamperCustomization() {
+            if (!activeCustomizingPkg) return;
+
+            if (activeCustomizingPkg.id === 'build-your-own') {
+                const selectedItems = [];
+                let extraItemsTotal = 0;
+                const checkboxes = document.querySelectorAll('.byo-item-checkbox');
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const item = byoAvailableItems.find(i => i.id === cb.value);
+                        if (item) {
+                            selectedItems.push(item.title);
+                            extraItemsTotal += item.price;
+                        }
+                    }
+                });
+
+                if (selectedItems.length === 0) {
+                    triggerToast('Please select at least one delicacy for your bespoke hamper', 'error');
+                    return;
+                }
+
+                const customOpts = {
+                    diet: 'Bespoke Selection',
+                    byoItems: selectedItems,
+                    drinks: [],
+                    extraPrice: extraItemsTotal
+                };
+
+                addToBasket(activeCustomizingPkg.id, customOpts);
+            } else {
+                const diet = document.getElementById('custom-diet-select').value;
+                const checkboxes = document.querySelectorAll('.custom-upgrade-checkbox');
+
+                let extraPrice = 0;
+                const drinksList = [];
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const p = parseFloat(cb.getAttribute('data-price')) || 0;
+                        const title = cb.getAttribute('data-title');
+                        extraPrice += p;
+                        drinksList.push(title);
+                    }
+                });
+
+                const customOpts = {
+                    diet: diet,
+                    drinks: drinksList,
+                    extraPrice: extraPrice
+                };
+
+                addToBasket(activeCustomizingPkg.id, customOpts);
+            }
+
+            closeCustomizeModal();
+        }
+
+        function populateTimeSlots() {
+            const timeSelect = document.getElementById('pickup-time');
+            const dateInput = document.getElementById('pickup-date');
+            if (!timeSelect || !dateInput) return;
+
+            const slots = [
+                { value: "12:00 PM", label: "12:00 PM (Lunch)", time: 12.0 },
+                { value: "1:00 PM", label: "1:00 PM (Lunch)", time: 13.0 },
+                { value: "2:30 PM", label: "2:30 PM (Afternoon)", time: 14.5 },
+                { value: "4:00 PM", label: "4:00 PM (High Tea)", time: 16.0 },
+                { value: "6:00 PM", label: "6:00 PM (Sunset Picnic)", time: 18.0 }
+            ];
+
+            const now = new Date();
+            const selectedDateStr = dateInput.value;
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const isToday = (selectedDateStr === todayStr);
+            const currentHourDecimal = now.getHours() + (now.getMinutes() / 60);
+
+            timeSelect.innerHTML = '';
+            let validSlotsCount = 0;
+            let firstValidValue = null;
+
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.value;
+                
+                const isPast = isToday && (slot.time <= currentHourDecimal);
+
+                if (isPast) {
+                    option.disabled = true;
+                    option.innerText = `${slot.label} — Passed`;
+                    option.className = "text-gray-400 bg-gray-100";
+                } else {
+                    option.innerText = slot.label;
+                    validSlotsCount++;
+                    if (!firstValidValue) firstValidValue = slot.value;
+                }
+                timeSelect.appendChild(option);
+            });
+
+            if (isToday && validSlotsCount === 0) {
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomYear = tomorrow.getFullYear();
+                const tomMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                const tomDay = String(tomorrow.getDate()).padStart(2, '0');
+                const tomorrowStr = `${tomYear}-${tomMonth}-${tomDay}`;
+
+                dateInput.value = tomorrowStr;
+                dateInput.min = tomorrowStr;
+                populateTimeSlots();
+
+                const noticeText = document.getElementById('cutoff-notice-text');
+                const noticeBox = document.getElementById('cutoff-notice');
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-bold leading-tight";
+                if (noticeText) noticeText.innerHTML = "All collection times for today have passed. Pickup date auto-set to tomorrow.";
+                return;
+            }
+
+            if (firstValidValue && (!timeSelect.value || timeSelect.selectedOptions[0]?.disabled)) {
+                timeSelect.value = firstValidValue;
+            }
+
+            validatePickupCutoff();
+        }
+
+        function validatePickupCutoff() {
+            const dateInput = document.getElementById('pickup-date');
+            const timeSelect = document.getElementById('pickup-time');
+            const noticeText = document.getElementById('cutoff-notice-text');
+            const noticeBox = document.getElementById('cutoff-notice');
+            if (!dateInput || !noticeText) return true;
+
+            const selectedDateStr = dateInput.value;
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const isToday = (selectedDateStr === todayStr);
+            const selectedOption = timeSelect ? timeSelect.selectedOptions[0] : null;
+
+            if (isToday && selectedOption && selectedOption.disabled) {
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                noticeText.innerHTML = "⚠️ Selected pickup time has already passed today. Please pick a future time.";
+                return false;
+            }
+
+            if (isToday && now.getHours() >= 15) {
+                if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 font-bold leading-tight";
+                noticeText.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a later date.";
+                return false;
+            }
+
+            if (noticeBox) noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
+            noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>.";
+            return true;
+        }
+
+        function openCheckoutModal() {
+            const keys = Object.keys(basket);
+            if (keys.length === 0) return;
+
+            let subtotal = 0;
+            let hamperCount = 0;
+
+            keys.forEach(k => {
+                const item = basket[k];
+                subtotal += item.price * item.qty;
+                hamperCount += item.qty;
+            });
+
+            const depositTotal = hamperCount * 20.00;
+            const grandTotal = subtotal + depositTotal;
+
+            document.getElementById('modal-subtotal').innerText = `£${subtotal.toFixed(2)}`;
+            document.getElementById('modal-deposit').innerText = `£${depositTotal.toFixed(2)}`;
+            document.getElementById('modal-grandtotal').innerText = `£${grandTotal.toFixed(2)}`;
+
+            if (loggedInCustomer) {
+                document.getElementById('customer-name').value = loggedInCustomer.name || '';
+                document.getElementById('customer-email').value = loggedInCustomer.email || '';
+                document.getElementById('customer-phone').value = loggedInCustomer.phone || '';
+            }
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${year}-${month}-${day}`;
+
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomYear = tomorrow.getFullYear();
+            const tomMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tomDay = String(tomorrow.getDate()).padStart(2, '0');
+            const tomorrowStr = `${tomYear}-${tomMonth}-${tomDay}`;
+
+            const dateInput = document.getElementById('pickup-date');
+            
+            if (today.getHours() >= 15) {
+                dateInput.value = tomorrowStr;
+                dateInput.min = tomorrowStr;
+            } else {
+                dateInput.value = todayStr;
+                dateInput.min = todayStr;
+            }
+
+            populateTimeSlots();
+
+            document.getElementById('modal-form-content').classList.remove('hidden');
+            document.getElementById('modal-processing-content').classList.add('hidden');
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            
+            safeCreateIcons();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        function processSimulatedPayment() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const email = document.getElementById('customer-email').value.trim();
+            const pickupDate = document.getElementById('pickup-date').value;
+            const pickupTime = document.getElementById('pickup-time').value;
+            const timeSelect = document.getElementById('pickup-time');
+            const notes = document.getElementById('dietary-notes').value.trim();
+
+            if (!name || !email) {
+                triggerToast('Please provide your name and email address', 'error');
+                return;
+            }
+
+            if (!pickupDate) {
+                triggerToast('Please select a collection date', 'error');
+                return;
+            }
+
+            if (timeSelect && timeSelect.selectedOptions[0]?.disabled) {
+                triggerToast('This pickup time has already passed today. Please select a future time slot.', 'error');
+                return;
+            }
+
+            if (!validatePickupCutoff()) {
+                triggerToast('Selected pickup date or time is unavailable. Please pick a future date or time.', 'error');
+                return;
+            }
+
+            document.getElementById('modal-form-content').classList.add('hidden');
+            document.getElementById('modal-processing-content').classList.remove('hidden');
+
+            setTimeout(() => {
+                let subtotal = 0;
+                let coolboxCount = 0;
+                const itemsPayload = [];
+
+                Object.keys(basket).forEach(k => {
+                    const item = basket[k];
+                    subtotal += item.price * item.qty;
+                    coolboxCount += item.qty;
+                    itemsPayload.push({
+                        title: item.title,
+                        qty: item.qty,
+                        price: item.price,
+                        custom: item.custom || null
+                    });
+                });
+
+                const deposit = coolboxCount * 20.00;
+                const grandTotal = subtotal + deposit;
+                const refNum = Math.floor(1000 + Math.random() * 9000);
+                const orderRef = 'WH-' + refNum;
+
+                const dateParts = pickupDate.split('-');
+                const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : pickupDate;
+
+                const newOrder = {
+                    id: 'ord_' + Date.now(),
+                    orderRef: orderRef,
+                    customerName: name,
+                    customerPhone: phone,
+                    customerEmail: email,
+                    pickupTime: pickupTime,
+                    pickupDate: formattedDate,
+                    rawPickupDate: pickupDate,
+                    notes: notes,
+                    items: itemsPayload,
+                    subtotal: subtotal,
+                    deposit: deposit,
+                    grandTotal: grandTotal,
+                    coolboxCount: coolboxCount,
+                    status: 'pending',
+                    createdAt: Date.now(),
+                    updatedAt: Date.now(),
+                    archived: false
+                };
+
+                // Local save & dispatch to listening Kitchen tab
+                const currentLocal = loadLocalOrders();
+                currentLocal.unshift(newOrder);
+                saveLocalOrders(currentLocal);
+
+                // Firestore sync
+                if (window.firebaseFns && window.getOrderDocRef) {
+                    try {
+                        const docRef = window.getOrderDocRef(newOrder.id);
+                        window.firebaseFns.setDoc(docRef, newOrder).catch(console.warn);
+                    } catch(e) {}
+                }
+                
+                activeOrder = newOrder;
+
+                loggedInCustomer = { name: name, email: email, phone: phone };
+                if (window.firebaseFns && window.getCustomerDocRef) {
+                    try {
+                        const custRef = window.getCustomerDocRef(email);
+                        window.firebaseFns.setDoc(custRef, loggedInCustomer).catch(console.warn);
+                    } catch(e) {}
+                }
+                updateHeaderUserBadge();
+
+                const navTracker = document.getElementById('nav-tracker');
+                if (navTracker) navTracker.classList.remove('hidden');
+
+                hasUnreadTrackerUpdate = true;
+                const trackerBadge = document.getElementById('tracker-badge');
+                if (trackerBadge) trackerBadge.classList.remove('hidden');
+
+                playNotificationSound();
+
+                closeCheckoutModal();
+                clearBasket();
+
+                triggerToast('Payment Authorised! Order ticket dispatched to kitchen.', 'success');
+                switchView('order-tracker');
+            }, 1200);
+        }
+
+        function renderLiveTrackerContent() {
+            const activeContainer = document.getElementById('tracker-active-content');
+            const emptyContainer = document.getElementById('tracker-empty-content');
+
+            if (!activeOrder || activeOrder.status === 'returned') {
+                if (activeContainer) activeContainer.classList.add('hidden');
+                if (emptyContainer) emptyContainer.classList.remove('hidden');
+                return;
+            }
+
+            if (activeContainer) activeContainer.classList.remove('hidden');
+            if (emptyContainer) emptyContainer.classList.add('hidden');
+
+            const statusSteps = [
+                { key: 'pending', label: 'Order Received', icon: 'receipt' },
+                { key: 'preparing', label: 'Kitchen Prep', icon: 'chef-hat' },
+                { key: 'ready', label: 'Ready at West St', icon: 'package-check' },
+                { key: 'collected', label: 'Order Collected', icon: 'shopping-bag' },
+                { key: 'returned', label: 'Deposit Refunded', icon: 'check-circle' }
+            ];
+
+            const currentIdx = statusSteps.findIndex(s => s.key === activeOrder.status);
+
+            activeContainer.innerHTML = `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 border-b border-coastal-100">
+                    <div>
+                        <span class="bg-crab-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Live Tracker</span>
+                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900 mt-1">Ref: ${activeOrder.orderRef}</h2>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-xs text-coastal-500">Pick-up Date & Location</p>
+                        <p class="text-xs font-bold text-coastal-800">24 West Street • ${activeOrder.pickupDate} (${activeOrder.pickupTime})</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-5 gap-1 sm:gap-2 pt-2">
+                    ${statusSteps.map((step, idx) => {
+                        const isDone = idx <= currentIdx;
+                        const isCurrent = idx === currentIdx;
+                        return `
+                            <div class="text-center space-y-1.5">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center mx-auto text-xs transition-all ${isCurrent ? 'bg-crab-500 text-white ring-4 ring-crab-100 font-bold' : isDone ? 'bg-coastal-800 text-white' : 'bg-coastal-100/80 text-coastal-400'}">
+                                    <i data-lucide="${step.icon}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                                </div>
+                                <span class="block text-[9px] sm:text-[10px] font-bold ${isDone ? 'text-coastal-900' : 'text-coastal-400'}">${step.label}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div class="bg-coastal-50/80 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
+                    <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
+                    <ul class="space-y-1 text-coastal-700">
+                        ${(activeOrder.items || []).map(i => `
+                            <li class="flex justify-between">
+                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet || 'Standard'})` : ''}</span>
+                                <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="pt-2 border-t border-coastal-200 flex justify-between font-bold text-coastal-900">
+                        <span>Refundable Cool Box Deposit Held:</span>
+                        <span class="text-emerald-700">£${(activeOrder.deposit || 20.00).toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="bg-sand-100/80 p-4 rounded-2xl border border-sand-300 text-xs text-coastal-800 flex items-start space-x-3">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-crab-500 shrink-0 mt-0.5"></i>
+                    <div>
+                        <strong class="block font-bold">Pick-up Instructions:</strong>
+                        <p class="mt-0.5">Present this screen or reference <strong>${activeOrder.orderRef}</strong> at the pub counter at 24 West Street, Cromer. Return cool box before pub closing to receive your <strong>£20 deposit refund</strong>.</p>
+                    </div>
+                </div>
+            `;
+
+            safeCreateIcons();
+        }
+
+        function renderCustomerOrderHistory() {
+            const container = document.getElementById('customer-orders-history-list');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const loggedEmailSpan = document.getElementById('history-logged-email');
+            if (loggedEmailSpan) loggedEmailSpan.innerText = loggedInCustomer ? loggedInCustomer.email : 'Guest Session';
+
+            let sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
+
+            let filteredOrders = sourceOrders;
+            if (loggedInCustomer && loggedInCustomer.email) {
+                filteredOrders = sourceOrders.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === loggedInCustomer.email.toLowerCase());
+            }
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="py-12 text-center text-xs text-coastal-400 space-y-2">
+                        <i data-lucide="receipt" class="w-8 h-8 mx-auto opacity-30"></i>
+                        <p>No past picnic hamper bookings found for ${loggedInCustomer ? loggedInCustomer.email : 'this session'}.</p>
+                        <button onclick="switchView('customer-explore')" class="text-crab-600 font-bold hover:underline">Browse menu to place a booking</button>
+                    </div>
+                `;
+                safeCreateIcons();
+                return;
+            }
+
+            filteredOrders.forEach(order => {
+                const isReturned = order.status === 'returned';
+                const el = document.createElement('div');
+                el.className = "bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs";
+                el.innerHTML = `
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-extrabold font-mono text-coastal-900 text-sm">${order.orderRef}</span>
+                            <span class="bg-coastal-200 text-coastal-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${(order.status || 'pending').replace('_', ' ')}</span>
+                            ${isReturned ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">£20 Deposit Refunded</span>' : ''}
+                        </div>
+                        <p class="text-coastal-600 font-medium">${(order.items || []).map(i => `${i.qty}x ${i.title}`).join(', ')}</p>
+                        <p class="text-[11px] text-coastal-400">Pick-up: ${order.pickupDate} at ${order.pickupTime}</p>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end space-x-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-coastal-200">
+                        <span class="font-serif font-black text-coastal-900 text-base">£${(order.grandTotal || 0).toFixed(2)}</span>
+                        ${!isReturned ? `
+                            <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
+                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                <span>Track Order</span>
+                            </button>
+                        ` : '<span class="text-xs text-coastal-400 font-bold">Order Completed</span>'}
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+
+            safeCreateIcons();
+        }
+
+        function setupActiveOrderTracker(orderId) {
+            const sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
+            const found = sourceOrders.find(o => o.id === orderId);
+            if (found) {
+                if (found.status === 'returned') {
+                    triggerToast('Order completed & cool box deposit refunded.', 'info');
+                    return;
+                }
+                activeOrder = found;
+                switchView('order-tracker');
+            }
+        }
+
+        function openAuthModal() {
+            const tabsContainer = document.getElementById('auth-tabs-container');
+            const formSignUp = document.getElementById('auth-form-signup');
+            const formLogIn = document.getElementById('auth-form-login');
+            const loggedInView = document.getElementById('auth-logged-in-view');
+            const modalTitle = document.getElementById('auth-modal-title');
+            const modalSub = document.getElementById('auth-modal-sub');
+
+            if (loggedInCustomer) {
+                if (tabsContainer) tabsContainer.classList.add('hidden');
+                if (formSignUp) formSignUp.classList.add('hidden');
+                if (formLogIn) formLogIn.classList.add('hidden');
+                if (loggedInView) loggedInView.classList.remove('hidden');
+
+                if (modalTitle) modalTitle.innerText = "My Account";
+                if (modalSub) modalSub.innerText = "Manage your active customer session or log out.";
+
+                const loggedName = document.getElementById('logged-user-name');
+                const loggedEmail = document.getElementById('logged-user-email');
+                const loggedPhone = document.getElementById('logged-user-phone');
+
+                if (loggedName) loggedName.innerText = loggedInCustomer.name || 'Customer';
+                if (loggedEmail) loggedEmail.innerText = loggedInCustomer.email || '';
+                if (loggedPhone) loggedPhone.innerText = loggedInCustomer.phone ? `Phone: ${loggedInCustomer.phone}` : '';
+            } else {
+                if (tabsContainer) tabsContainer.classList.remove('hidden');
+                if (loggedInView) loggedInView.classList.add('hidden');
+                if (modalTitle) modalTitle.innerText = "Customer Account";
+                setAuthMode(authMode || 'signup');
+            }
+
+            document.getElementById('auth-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function logoutCustomer() {
+            loggedInCustomer = null;
+            updateHeaderUserBadge();
+            closeAuthModal();
+            triggerToast('Logged out successfully', 'info');
+
+            const activeTab = document.getElementById('customer-history');
+            if (activeTab && !activeTab.classList.contains('hidden')) {
+                renderCustomerOrderHistory();
+            }
+        }
+
+        function setAuthMode(mode) {
+            authMode = mode;
+            const btnSignUp = document.getElementById('auth-tab-signup');
+            const btnLogIn = document.getElementById('auth-tab-login');
+            const formSignUp = document.getElementById('auth-form-signup');
+            const formLogIn = document.getElementById('auth-form-login');
+            const modalSub = document.getElementById('auth-modal-sub');
+
+            if (mode === 'signup') {
+                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
+                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
+                if (formSignUp) formSignUp.classList.remove('hidden');
+                if (formLogIn) formLogIn.classList.add('hidden');
+                if (modalSub) modalSub.innerText = "Register your details for fast coastal hamper pickup.";
+            } else {
+                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
+                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
+                if (formSignUp) formSignUp.classList.add('hidden');
+                if (formLogIn) formLogIn.classList.remove('hidden');
+                if (modalSub) modalSub.innerText = "Enter your registered email to view order history.";
+            }
+        }
+
+        async function registerNewCustomer() {
+            const nameInput = document.getElementById('signup-name-input');
+            const emailInput = document.getElementById('signup-email-input');
+            const phoneInput = document.getElementById('signup-phone-input');
+
+            const name = nameInput ? nameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+
+            if (!name || !email || !phone) {
+                triggerToast('Please complete all fields (Name, Email, and Phone)', 'error');
+                return;
+            }
+
+            const cleanEmail = email.toLowerCase();
+
+            if (window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    const docSnap = await window.firebaseFns.getDoc(custRef);
+                    if (docSnap.exists()) {
+                        triggerToast('An account already exists with this email. Please Log In.', 'error');
+                        setAuthMode('login');
+                        const authEmailInput = document.getElementById('auth-email-input');
+                        if (authEmailInput) authEmailInput.value = cleanEmail;
+                        return;
+                    }
+                } catch(e) {}
+            }
+
+            const newCustomer = { name, email: cleanEmail, phone, registeredAt: Date.now() };
+
+            if (window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    await window.firebaseFns.setDoc(custRef, newCustomer);
+                } catch(e) {}
+            }
+
+            loggedInCustomer = newCustomer;
+            updateHeaderUserBadge();
+            closeAuthModal();
+            triggerToast(`Welcome ${name}! Account created and signed in.`, 'success');
+
+            const activeTab = document.getElementById('customer-history');
+            if (activeTab && !activeTab.classList.contains('hidden')) {
+                renderCustomerOrderHistory();
+            }
+        }
+
+        async function saveCustomerLogin() {
+            const emailInput = document.getElementById('auth-email-input');
+            const email = emailInput ? emailInput.value.trim() : '';
+            if (!email) {
+                triggerToast('Please enter a valid email address', 'error');
+                return;
+            }
+
+            const cleanEmail = email.toLowerCase();
+
+            if (window.firebaseFns && window.getCustomerDocRef) {
+                try {
+                    const custRef = window.getCustomerDocRef(cleanEmail);
+                    const docSnap = await window.firebaseFns.getDoc(custRef);
+
+                    if (docSnap.exists()) {
+                        const customerData = docSnap.data();
+                        loggedInCustomer = {
+                            name: customerData.name || cleanEmail.split('@')[0],
+                            email: customerData.email || cleanEmail,
+                            phone: customerData.phone || ''
+                        };
+                        updateHeaderUserBadge();
+                        closeAuthModal();
+                        triggerToast(`Welcome back, ${loggedInCustomer.name}!`, 'success');
+
+                        const activeTab = document.getElementById('customer-history');
+                        if (activeTab && !activeTab.classList.contains('hidden')) {
+                            renderCustomerOrderHistory();
+                        }
+                    } else {
+                        triggerToast('No account found for this email. Please Sign Up first.', 'error');
+                    }
+                } catch(e) {
+                    triggerToast('Unable to verify account. Please check network connection.', 'error');
+                }
+            } else {
+                triggerToast('Database offline. Unable to verify customer account.', 'error');
+            }
+        }
+
+        function updateHeaderUserBadge() {
+            const desktopLabel = document.getElementById('header-user-status');
+            const mobileLabel = document.getElementById('header-user-status-mobile');
+            if (loggedInCustomer && loggedInCustomer.name) {
+                if (desktopLabel) desktopLabel.innerText = loggedInCustomer.name;
+                if (mobileLabel) mobileLabel.innerText = loggedInCustomer.name;
+            } else {
+                if (desktopLabel) desktopLabel.innerText = 'Customer Sign In';
+                if (mobileLabel) mobileLabel.innerText = 'Guest';
+            }
+        }
+
+        function handleCustomerOrdersTabClick() {
+            switchView('customer-history');
+        }
+
+        function startFirestoreSync() {
+            if (!window.firebaseFns || !window.getOrdersColRef) return;
+
+            // Live Orders Sync
             try {
-                window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
+                const ordersCol = window.getOrdersColRef();
+                window.firebaseFns.onSnapshot(ordersCol, (snapshot) => {
                     const orders = [];
                     snapshot.forEach(doc => {
                         orders.push({ ...doc.data(), id: doc.id });
                     });
-                    
-                    if (orders.length > 0) {
-                        const newPendingCount = orders.filter(o => !o.archived && o.status === 'pending').length;
-                        if (newPendingCount > previousPendingCount && isKitchenUnlocked) {
-                            playNotificationSound();
-                            triggerToast('🔔 New incoming picnic order received!', 'success');
-                        }
-                        previousPendingCount = newPendingCount;
 
-                        allOrdersList = orders;
-                        saveLocalOrders(allOrdersList);
-                        if (isKitchenUnlocked) renderKitchenDashboard();
+                    const localOrders = loadLocalOrders();
+                    const map = new Map();
+                    localOrders.forEach(o => map.set(o.id, o));
+                    orders.forEach(o => map.set(o.id, o));
+
+                    const mergedOrders = Array.from(map.values());
+                    mergedOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+                    if (activeOrder) {
+                        const updatedActive = mergedOrders.find(o => o.id === activeOrder.id);
+                        if (updatedActive && updatedActive.status !== activeOrder.status) {
+                            let msg = '';
+                            if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
+                            if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection at 24 West St!';
+                            if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
+                            if (updatedActive.status === 'returned') msg = '💰 Order Update: Cool box returned! £20 deposit refunded.';
+                            
+                            if (msg) {
+                                triggerToast(msg, 'success');
+                                playNotificationSound();
+                                hasUnreadTrackerUpdate = true;
+                                const trackerBadge = document.getElementById('tracker-badge');
+                                if (trackerBadge) trackerBadge.classList.remove('hidden');
+                            }
+                            
+                            if (updatedActive.status === 'returned') {
+                                activeOrder = null;
+                                const navTracker = document.getElementById('nav-tracker');
+                                if (navTracker) navTracker.classList.add('hidden');
+                            } else {
+                                activeOrder = updatedActive;
+                            }
+                        } else if (!updatedActive) {
+                            activeOrder = null;
+                        } else {
+                            activeOrder = updatedActive;
+                        }
                     }
+
+                    allOrdersList = mergedOrders;
+                    renderCustomerOrderHistory();
+                    if (!document.getElementById('order-tracker').classList.contains('hidden')) renderLiveTrackerContent();
+                    
                 }, (error) => {
-                    console.warn("Firestore sync query warning:", error);
+                    console.warn("Orders live sync error:", error);
                 });
-            } catch(e) {
-                console.warn("Firestore listener init warning:", e);
+            } catch(e) {}
+
+            // Live Hampers Menu Catalog Sync
+            if (window.getHampersColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const hampers = [];
+                            snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
+                            if (hampers.length > 0) {
+                                picnicPackages = hampers;
+                                saveLocalCatalog();
+                                renderPicnicPackages();
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
+            }
+
+            // Live BYO Extras Catalog Sync
+            if (window.getExtrasColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getExtrasColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const extras = [];
+                            snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
+                            if (extras.length > 0) {
+                                byoAvailableItems = extras;
+                                saveLocalCatalog();
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
+            }
+
+            // Live Custom Fields & Drink Upgrades Sync
+            if (window.getCustomFieldsColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getCustomFieldsColRef(), (snapshot) => {
+                        if (!snapshot.empty) {
+                            const fields = [];
+                            snapshot.forEach(doc => fields.push({ ...doc.data(), id: doc.id }));
+                            if (fields.length > 0) {
+                                customFieldsList = fields;
+                                saveLocalCatalog();
+                            }
+                        }
+                    }, (e) => {});
+                } catch(e) {}
             }
         }
 
+        window.addEventListener('storage', () => {
+            loadLocalCatalog();
+            allOrdersList = loadLocalOrders();
+            renderPicnicPackages();
+            renderCustomerOrderHistory();
+            if (!document.getElementById('order-tracker').classList.contains('hidden')) renderLiveTrackerContent();
+        });
+
         window.addEventListener('firebase-ready', () => {
+            loadLocalCatalog();
             allOrdersList = loadLocalOrders();
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
+            loadLocalCatalog();
             allOrdersList = loadLocalOrders();
-
-            // Bind ENTER key to PIN input field
-            const pinInput = document.getElementById('staff-pin-input');
-            if (pinInput) {
-                pinInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        unlockKitchenPortal();
-                    }
-                });
-            }
-
+            renderPicnicPackages();
+            updateBasketSummary();
+            updateHeaderUserBadge();
             safeCreateIcons();
         });
     </script>
