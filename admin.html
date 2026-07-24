@@ -323,7 +323,7 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Add/Edit Extra Delicacy Modal -->
+    <!-- MODAL 2: Add/Edit Extra Delicacy Modal with Emojipedia Search -->
     <div id="extra-modal" onclick="if(event.target === this) closeExtraModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-md border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeExtraModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -348,8 +348,19 @@
                         <input type="number" step="0.50" id="extra-form-price" required placeholder="14.00" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none font-bold">
                     </div>
                     <div>
-                        <label class="block font-bold text-coastal-800 mb-1">Icon / Emoji</label>
-                        <input type="text" id="extra-form-icon" placeholder="🦀" maxlength="4" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none text-center">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block font-bold text-coastal-800">Icon / Emoji</label>
+                            <a href="https://emojipedia.org" target="_blank" rel="noopener noreferrer" class="text-[10px] text-crab-600 hover:underline font-semibold inline-flex items-center space-x-0.5" title="Open Emojipedia search">
+                                <span>Emojipedia</span>
+                                <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                            </a>
+                        </div>
+                        <div class="flex space-x-1.5">
+                            <input type="text" id="extra-form-icon" placeholder="🦀" maxlength="4" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none text-center">
+                            <button type="button" onclick="searchEmojipedia()" class="touch-target px-3 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 rounded-xl font-bold border border-coastal-200 transition-all shrink-0 flex items-center justify-center space-x-1 text-xs" title="Search Emojipedia for this item">
+                                <i data-lucide="search" class="w-3.5 h-3.5 text-coastal-700"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -439,7 +450,7 @@
             window.appId = appId;
             window.currentUser = null;
 
-            /* STRICT FIX: Collections explicitly use /artifacts/{appId}/public/data/ path to match Rule #13 */
+            /* STRICT FIX: Collections explicitly use /artifacts/{appId}/public/data/ path */
             window.getHampersColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'hampers');
             window.getHamperDocRef = (id) => doc(db, 'artifacts', appId, 'public', 'data', 'hampers', id);
 
@@ -563,6 +574,17 @@
             { id: 'byo-apple-juice', title: 'Chilled Norfolk Apple Juice', price: 3.50, icon: '🧃' },
             { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
+
+        function searchEmojipedia() {
+            const titleInput = document.getElementById('extra-form-title');
+            const itemTitle = titleInput ? titleInput.value.trim() : '';
+            
+            if (itemTitle) {
+                window.open(`https://emojipedia.org/search?q=${encodeURIComponent(itemTitle)}`, '_blank');
+            } else {
+                window.open('https://emojipedia.org/', '_blank');
+            }
+        }
 
         // Default Custom Fields & Upgrade Fields State
         let customFieldsList = [
