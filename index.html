@@ -121,7 +121,6 @@
                         <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative">
                             <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 animate-pulse shrink-0"></i>
                             <span>Live Tracker</span>
-                            <!-- Animated Notification Badge -->
                             <span id="tracker-badge" class="hidden flex h-2.5 w-2.5 relative ml-0.5">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crab-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-crab-500"></span>
@@ -343,25 +342,8 @@
 
             <!-- Standard Customisation View -->
             <div id="standard-custom-options" class="space-y-3 text-xs">
-                <label class="block font-bold text-coastal-800">Dietary Requirement Options</label>
-                <select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
-                    <option value="Gluten-Free Swap">Gluten-Free Bread & Crackers Swap</option>
-                    <option value="Dairy-Free Swap">Dairy-Free Alternative Cheese/Spread</option>
-                    <option value="Vegetarian Swap">Vegetarian Alternative</option>
-                </select>
-
-                <label class="block font-bold text-coastal-800">Norfolk Drinks Upgrade</label>
-                <div class="space-y-2">
-                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
-                        <input type="checkbox" id="custom-drink-1" value="Norfolk Apple Juice" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">Add Chilled Norfolk Apple Juice (+£3.50)</span>
-                    </label>
-                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
-                        <input type="checkbox" id="custom-drink-2" value="Local Ginger Beer" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">Add Artisan Ginger Beer (+£3.50)</span>
-                    </label>
-                </div>
+                <div id="dietary-options-container"></div>
+                <div id="drinks-options-container"></div>
             </div>
 
             <!-- Build Your Own (BYO) Pick & Mix Section -->
@@ -684,6 +666,15 @@
             { id: 'byo-apple-juice', title: 'Chilled Norfolk Apple Juice', price: 3.50, icon: '🧃' },
             { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
+
+        // Dynamic Custom Upgrade Fields array synchronized with Admin
+        let customFieldsList = [
+            { id: 'fld-1', title: 'Norfolk Apple Juice', price: 3.50, type: 'drink' },
+            { id: 'fld-2', title: 'Artisan Ginger Beer', price: 3.50, type: 'drink' },
+            { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
+            { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' },
+            { id: 'fld-5', title: 'Vegetarian Alternative', price: 0.00, type: 'dietary' }
+        ];
         
         // Dynamic Hamper Packages list synchronized with Admin
         let picnicPackages = [
@@ -759,6 +750,8 @@
             try {
                 const storedHampers = localStorage.getItem('wh_admin_hampers');
                 const storedExtras = localStorage.getItem('wh_admin_extras');
+                const storedFields = localStorage.getItem('wh_admin_fields');
+
                 if (storedHampers) {
                     const parsed = JSON.parse(storedHampers);
                     if (Array.isArray(parsed) && parsed.length > 0) {
@@ -769,6 +762,12 @@
                     const parsedExtras = JSON.parse(storedExtras);
                     if (Array.isArray(parsedExtras) && parsedExtras.length > 0) {
                         byoAvailableItems = parsedExtras;
+                    }
+                }
+                if (storedFields) {
+                    const parsedFields = JSON.parse(storedFields);
+                    if (Array.isArray(parsedFields) && parsedFields.length > 0) {
+                        customFieldsList = parsedFields;
                     }
                 }
             } catch(e) {
@@ -894,7 +893,6 @@
                 const isOutOfStock = pkg.available === false;
                 const card = document.createElement('div');
                 
-                // Out-of-stock items get greyed out with opacity and grayscale styling
                 card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm transition-all flex flex-col justify-between ${isOutOfStock ? 'opacity-60 bg-gray-50/80 grayscale-[25%]' : 'hover:shadow-md'}`;
                 
                 card.innerHTML = `
@@ -1119,6 +1117,7 @@
         }
 
         function openCustomizeModal(pkgId) {
+            loadLocalCatalog();
             const pkg = picnicPackages.find(p => p.id === pkgId);
             if (!pkg || pkg.available === false) return;
             activeCustomizingPkg = pkg;
@@ -1140,9 +1139,7 @@
                 if (byoOptions) byoOptions.classList.add('hidden');
                 if (stdOptions) {
                     stdOptions.classList.remove('hidden');
-                    document.getElementById('custom-diet-select').value = "Standard Recipe";
-                    document.getElementById('custom-drink-1').checked = false;
-                    document.getElementById('custom-drink-2').checked = false;
+                    renderStandardCustomOptions();
                 }
             }
 
@@ -1150,7 +1147,47 @@
             safeCreateIcons();
         }
 
+        function renderStandardCustomOptions() {
+            const dietContainer = document.getElementById('dietary-options-container');
+            const drinksContainer = document.getElementById('drinks-options-container');
+
+            const dietaryFields = customFieldsList.filter(f => f.type === 'dietary');
+            const drinkFields = customFieldsList.filter(f => f.type === 'drink' || f.type === 'extra');
+
+            if (dietContainer) {
+                let dietHtml = `<label class="block font-bold text-coastal-800 mb-1">Dietary Requirement Options</label>`;
+                dietHtml += `<select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">`;
+                dietHtml += `<option value="Standard Recipe">Standard Recipe (Chef Special)</option>`;
+                dietaryFields.forEach(f => {
+                    const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : '';
+                    dietHtml += `<option value="${f.title}">${f.title}${extraTag}</option>`;
+                });
+                dietHtml += `</select>`;
+                dietContainer.innerHTML = dietHtml;
+            }
+
+            if (drinksContainer) {
+                if (drinkFields.length > 0) {
+                    let drinksHtml = `<label class="block font-bold text-coastal-800 mb-1">Norfolk Drinks & Custom Upgrades</label><div class="space-y-2">`;
+                    drinkFields.forEach(f => {
+                        const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : ' (Free Upgrade)';
+                        drinksHtml += `
+                            <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
+                                <input type="checkbox" data-price="${f.price}" value="${f.title}" class="custom-upgrade-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                                <span class="text-coastal-800 font-medium">Add ${f.title}${extraTag}</span>
+                            </label>
+                        `;
+                    });
+                    drinksHtml += `</div>`;
+                    drinksContainer.innerHTML = drinksHtml;
+                } else {
+                    drinksContainer.innerHTML = '';
+                }
+            }
+        }
+
         function renderByoChecklist() {
+            loadLocalCatalog();
             const container = document.getElementById('byo-items-checklist');
             if (!container) return;
             container.innerHTML = '';
@@ -1217,14 +1254,21 @@
 
                 addToBasket(activeCustomizingPkg.id, customOpts);
             } else {
-                const diet = document.getElementById('custom-diet-select').value;
-                const drink1 = document.getElementById('custom-drink-1').checked;
-                const drink2 = document.getElementById('custom-drink-2').checked;
+                const dietSelect = document.getElementById('custom-diet-select');
+                const diet = dietSelect ? dietSelect.value : 'Standard Recipe';
 
-                let extraPrice = 0;
+                const selectedDietField = customFieldsList.find(f => f.title === diet);
+                let extraPrice = selectedDietField && selectedDietField.price ? Number(selectedDietField.price) : 0;
+
                 const drinksList = [];
-                if (drink1) { extraPrice += 3.50; drinksList.push('Norfolk Apple Juice'); }
-                if (drink2) { extraPrice += 3.50; drinksList.push('Artisan Ginger Beer'); }
+                const drinkCheckboxes = document.querySelectorAll('.custom-upgrade-checkbox');
+                drinkCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        drinksList.push(cb.value);
+                        const itemPrice = parseFloat(cb.getAttribute('data-price')) || 0;
+                        extraPrice += itemPrice;
+                    }
+                });
 
                 const customOpts = {
                     diet: diet,
@@ -1899,18 +1943,42 @@
                             if (extras.length > 0) {
                                 byoAvailableItems = extras;
                                 try { localStorage.setItem('wh_admin_extras', JSON.stringify(extras)); } catch(e){}
+                                if (activeCustomizingPkg && activeCustomizingPkg.id === 'build-your-own') {
+                                    renderByoChecklist();
+                                }
                             }
                         }
                     }, (err) => console.warn("Extras catalog sync warning:", err));
+
+                    const fieldsColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'custom_fields');
+                    window.firebaseFns.onSnapshot(fieldsColRef, (snapshot) => {
+                        if (!snapshot.empty) {
+                            const fields = [];
+                            snapshot.forEach(doc => {
+                                fields.push({ ...doc.data(), id: doc.id });
+                            });
+                            if (fields.length > 0) {
+                                customFieldsList = fields;
+                                try { localStorage.setItem('wh_admin_fields', JSON.stringify(fields)); } catch(e){}
+                                if (activeCustomizingPkg && activeCustomizingPkg.id !== 'build-your-own') {
+                                    renderStandardCustomOptions();
+                                }
+                            }
+                        }
+                    }, (err) => console.warn("Custom fields sync warning:", err));
                 }
             } catch(e) {}
         }
 
         // Cross-tab LocalStorage listener for immediate sync across tabs
         window.addEventListener('storage', (event) => {
-            if (event.key === 'wh_admin_hampers' || event.key === 'wh_admin_extras') {
+            if (event.key === 'wh_admin_hampers' || event.key === 'wh_admin_extras' || event.key === 'wh_admin_fields') {
                 loadLocalCatalog();
                 renderPicnicPackages();
+                if (activeCustomizingPkg) {
+                    if (activeCustomizingPkg.id === 'build-your-own') renderByoChecklist();
+                    else renderStandardCustomOptions();
+                }
             }
         });
 
