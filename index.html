@@ -81,7 +81,6 @@
 </head>
 <body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-20 md:pb-0">
 
-    <!-- Navigation Header -->
     <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-coastal-100/80 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
@@ -194,7 +193,7 @@
                         <h3 class="font-serif text-xl font-bold text-coastal-900 flex items-center space-x-2">
                             <span>Select Picnic Packages</span>
                         </h3>
-                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">6 Hampers Available</span>
+                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">Loading Hampers...</span>
                     </div>
 
                     <div id="picnic-packages-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -491,7 +490,7 @@
                     <span class="bg-crab-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Payment Action Required</span>
                     <h4 class="font-serif font-bold text-xl text-coastal-900">Order Received!</h4>
                     <p class="text-xs sm:text-sm text-coastal-700 max-w-md mx-auto leading-relaxed">
-                        Opps it appears our online payment system is down. We have received your order and begin putting together your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold text-crab-600 underline">01263 512275</a> to make payment now.
+                        Opps it appears our online payment system is down. We have received your order and begin putting togwther your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold text-crab-600 underline">01263 512275</a> to make payment now.
                     </p>
                 </div>
                 <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-200 text-xs space-y-1 text-coastal-800">
@@ -577,7 +576,6 @@
         </div>
     </div>
 
-    <!-- Firebase Imports & Initialization -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -658,7 +656,6 @@
         }
     </script>
 
-    <!-- Application Logic Script -->
     <script>
         // Global State Variables
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
@@ -671,8 +668,8 @@
         let basket = {};
         let allOrdersList = [];
 
-        // Pick & Mix items available for "Build Your Own" Hamper
-        const byoAvailableItems = [
+        // Dynamic BYO Items array loaded from Admin
+        let byoAvailableItems = [
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
             { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
@@ -688,7 +685,8 @@
             { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
         
-        const picnicPackages = [
+        // Dynamic Hamper Packages list synchronized with Admin
+        let picnicPackages = [
             {
                 id: 'build-your-own',
                 title: 'Build Your Own Coastal Hamper',
@@ -756,6 +754,27 @@
                 available: true
             }
         ];
+
+        function loadLocalCatalog() {
+            try {
+                const storedHampers = localStorage.getItem('wh_admin_hampers');
+                const storedExtras = localStorage.getItem('wh_admin_extras');
+                if (storedHampers) {
+                    const parsed = JSON.parse(storedHampers);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        picnicPackages = parsed;
+                    }
+                }
+                if (storedExtras) {
+                    const parsedExtras = JSON.parse(storedExtras);
+                    if (Array.isArray(parsedExtras) && parsedExtras.length > 0) {
+                        byoAvailableItems = parsedExtras;
+                    }
+                }
+            } catch(e) {
+                console.warn("Local catalog load warning:", e);
+            }
+        }
 
         function safeCreateIcons() {
             try {
@@ -865,24 +884,32 @@
             if (!container) return;
             container.innerHTML = '';
 
+            const badgeCount = document.getElementById('package-count-badge');
+            if (badgeCount) {
+                const availableCount = picnicPackages.filter(p => p.available !== false).length;
+                badgeCount.innerText = `${picnicPackages.length} Hampers (${availableCount} Available)`;
+            }
+
             picnicPackages.forEach(pkg => {
                 const isOutOfStock = pkg.available === false;
                 const card = document.createElement('div');
+                
+                // Out-of-stock items get greyed out with opacity and grayscale styling
                 card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm transition-all flex flex-col justify-between ${isOutOfStock ? 'opacity-60 bg-gray-50/80 grayscale-[25%]' : 'hover:shadow-md'}`;
                 
                 card.innerHTML = `
                     <div>
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-coastal-100">
                             <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 ${isOutOfStock ? '' : 'hover:scale-105'}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
-                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor}">
-                                ${pkg.badge}
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
+                                ${pkg.badge || 'Hamper'}
                             </span>
                             ${isOutOfStock ? '<span class="absolute top-3 right-3 bg-crab-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow">Out of Stock</span>' : ''}
                         </div>
                         <div class="p-5 space-y-2">
                             <div class="flex justify-between items-start">
                                 <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
-                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${pkg.price.toFixed(2)}</span>
+                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${Number(pkg.price).toFixed(2)}</span>
                             </div>
                             <p class="text-xs text-coastal-600 font-medium leading-relaxed">${pkg.desc}</p>
                         </div>
@@ -929,8 +956,8 @@
                 basket[newKey] = {
                     id: packageId,
                     title: pkg.title,
-                    basePrice: pkg.price,
-                    price: pkg.price + (customOpts ? customOpts.extraPrice : 0),
+                    basePrice: Number(pkg.price),
+                    price: Number(pkg.price) + (customOpts ? customOpts.extraPrice : 0),
                     qty: 1,
                     custom: customOpts
                 };
@@ -1096,7 +1123,7 @@
             if (!pkg || pkg.available === false) return;
             activeCustomizingPkg = pkg;
 
-            document.getElementById('custom-pkg-tag').innerText = pkg.badge;
+            document.getElementById('custom-pkg-tag').innerText = pkg.badge || 'Signature';
             document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
             document.getElementById('custom-pkg-desc').innerText = pkg.desc;
 
@@ -1134,9 +1161,9 @@
                 label.innerHTML = `
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">${item.icon} ${item.title}</span>
+                        <span class="text-coastal-800 font-medium">${item.icon || '🥪'} ${item.title}</span>
                     </div>
-                    <span class="font-bold text-crab-600">+£${item.price.toFixed(2)}</span>
+                    <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
                 `;
                 container.appendChild(label);
             });
@@ -1150,7 +1177,7 @@
             checkboxes.forEach(cb => {
                 if (cb.checked) {
                     const found = byoAvailableItems.find(i => i.id === cb.value);
-                    if (found) total += found.price;
+                    if (found) total += Number(found.price);
                 }
             });
 
@@ -1171,7 +1198,7 @@
                         const item = byoAvailableItems.find(i => i.id === cb.value);
                         if (item) {
                             selectedItems.push(item.title);
-                            extraItemsTotal += item.price;
+                            extraItemsTotal += Number(item.price);
                         }
                     }
                 });
@@ -1798,6 +1825,7 @@
         function startFirestoreSync() {
             if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
 
+            // 1. Sync Live Customer Orders
             try {
                 window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
                     const orders = [];
@@ -1809,6 +1837,7 @@
                         const updatedActive = orders.find(o => o.id === activeOrder.id);
                         if (updatedActive && updatedActive.status !== activeOrder.status) {
                             let msg = '';
+                            if (updatedActive.status === 'pending') msg = '💳 Payment Update: Phone payment received! Your hamper is pending prep.';
                             if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
                             if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection!';
                             if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
@@ -1842,33 +1871,59 @@
                 }, (error) => console.warn("Orders sync warning:", error));
             } catch(e) {}
 
-            // Synchronize out-of-stock status changes from Admin Portal
+            // 2. Synchronize Hamper Package Changes & Stock Status from Admin Portal
             try {
                 if (window.firebaseFns.collection && window.firebaseDb) {
                     const hampersColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'hampers');
                     window.firebaseFns.onSnapshot(hampersColRef, (snapshot) => {
                         if (!snapshot.empty) {
+                            const hampers = [];
                             snapshot.forEach(doc => {
-                                const data = doc.data();
-                                const pkg = picnicPackages.find(p => p.id === doc.id || p.id === data.id);
-                                if (pkg) {
-                                    pkg.available = data.available !== false;
-                                }
+                                hampers.push({ ...doc.data(), id: doc.id });
                             });
-                            renderPicnicPackages();
+                            if (hampers.length > 0) {
+                                picnicPackages = hampers;
+                                try { localStorage.setItem('wh_admin_hampers', JSON.stringify(hampers)); } catch(e){}
+                                renderPicnicPackages();
+                            }
                         }
-                    }, () => {});
+                    }, (err) => console.warn("Hampers catalog sync warning:", err));
+
+                    const extrasColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'extras');
+                    window.firebaseFns.onSnapshot(extrasColRef, (snapshot) => {
+                        if (!snapshot.empty) {
+                            const extras = [];
+                            snapshot.forEach(doc => {
+                                extras.push({ ...doc.data(), id: doc.id });
+                            });
+                            if (extras.length > 0) {
+                                byoAvailableItems = extras;
+                                try { localStorage.setItem('wh_admin_extras', JSON.stringify(extras)); } catch(e){}
+                            }
+                        }
+                    }, (err) => console.warn("Extras catalog sync warning:", err));
                 }
             } catch(e) {}
         }
 
+        // Cross-tab LocalStorage listener for immediate sync across tabs
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'wh_admin_hampers' || event.key === 'wh_admin_extras') {
+                loadLocalCatalog();
+                renderPicnicPackages();
+            }
+        });
+
         window.addEventListener('firebase-ready', () => {
             allOrdersList = loadLocalOrders();
+            loadLocalCatalog();
+            renderPicnicPackages();
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
             allOrdersList = loadLocalOrders();
+            loadLocalCatalog();
             renderPicnicPackages();
             updateBasketSummary();
             updateHeaderUserBadge();
