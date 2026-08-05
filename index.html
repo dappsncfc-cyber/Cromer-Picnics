@@ -274,6 +274,33 @@
 
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-coastal-900 text-white border-t border-coastal-800 mt-12 py-8 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <div class="flex items-center space-x-3 text-center md:text-left">
+                <div class="w-8 h-8 bg-coastal-800 rounded-xl flex items-center justify-center text-sand-200 font-serif font-bold text-sm border border-sand-300/30 shrink-0">
+                    WH
+                </div>
+                <div>
+                    <p class="font-serif font-bold text-sand-100">The White Horse • Cromer Picnics</p>
+                    <p class="text-coastal-300 text-[11px]">24 West Street, Cromer, Norfolk, NR27 9DX</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-4 text-coastal-300 font-medium">
+                <button onclick="openPrivacyModal()" class="hover:text-sand-100 underline decoration-coastal-600 underline-offset-4 transition-colors">
+                    Privacy Policy & Data Protection
+                </button>
+                <span>•</span>
+                <span class="text-coastal-400">Cool Box Deposit (£20) Terms Apply</span>
+            </div>
+
+            <div class="text-coastal-400 text-[11px] text-center md:text-right">
+                © 2026 The White Horse, Cromer. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
     <!-- Mobile Bottom Floating Basket Bar -->
     <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="openMobileBasketModal()">
@@ -487,6 +514,73 @@
         </div>
     </div>
 
+    <!-- MODAL: Privacy Policy & UK GDPR Pop-up Card -->
+    <div id="privacy-modal" onclick="if(event.target === this) closePrivacyModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+        <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 sm:p-8 relative space-y-4 max-h-[85vh] flex flex-col">
+            <button onclick="closePrivacyModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close Privacy Policy">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="border-b border-coastal-100 pb-3 flex items-center space-x-3">
+                <div class="w-10 h-10 bg-coastal-800 text-sand-200 rounded-2xl flex items-center justify-center shadow-sm shrink-0">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-crab-400"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif text-lg sm:text-xl font-bold text-coastal-900">Privacy Policy</h3>
+                    <p class="text-xs text-coastal-500">The White Horse • Cromer Picnics Data Protection</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-2 text-xs text-coastal-700 leading-relaxed flex-1">
+                <p>At <strong>The White Horse (24 West Street, Cromer, NR27 9DX)</strong>, we are committed to protecting your privacy and complying with the UK General Data Protection Regulation (UK GDPR) and Data Protection Act 2018.</p>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="database" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>1. Information We Collect</span>
+                    </h4>
+                    <p class="text-[11px]">When you place an order for a coastal picnic hamper or register an account, we collect:</p>
+                    <ul class="list-disc list-inside text-[11px] space-y-0.5 text-coastal-600 pl-1">
+                        <li>Your full name</li>
+                        <li>Contact email address and phone number</li>
+                        <li>Collection date, time, and dietary requirements</li>
+                        <li>Cool box deposit tracking records (£20.00 deposit per box)</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>2. How We Use Your Personal Data</span>
+                    </h4>
+                    <p class="text-[11px]">Your data is used solely to fulfill picnic orders, manage insulated cool box deposit refunds, send live collection updates, and maintain order history records.</p>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>3. Data Storage & Security</span>
+                    </h4>
+                    <p class="text-[11px]">All personal data is processed securely under strict access controls. We do not sell or share customer personal information with third parties for marketing purposes.</p>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="user-check" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>4. Your Rights under UK GDPR</span>
+                    </h4>
+                    <p class="text-[11px]">You have the right to request access to, rectification of, or erasure of your personal data held by us. To exercise your rights, contact us in person at <strong>24 West Street, Cromer</strong> or via your registered order email.</p>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-coastal-100">
+                <button onclick="closePrivacyModal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-1">
+                    <span>Close Privacy Policy</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL 3: Glassmorphic Auth Email Login & Sign Up Modal -->
     <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
@@ -649,6 +743,20 @@
         let hasUnreadTrackerUpdate = false;
         let basket = {};
         let allOrdersList = [];
+
+        // Privacy Policy Modal handlers
+        function openPrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                safeCreateIcons();
+            }
+        }
+
+        function closePrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) modal.classList.add('hidden');
+        }
 
         // Dynamic BYO Items array loaded from Admin
         let byoAvailableItems = [
@@ -1536,7 +1644,7 @@
                         <i data-lucide="phone-call" class="w-5 h-5 text-crab-600 shrink-0 mt-0.5"></i>
                         <div>
                             <strong class="block font-bold">Action Required: Phone Payment Needed</strong>
-                            <p class="mt-0.5">Opps it appears our online payment system is down. We have received your order and begin putting togwther your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold underline text-crab-700">01263 512275</a> to make payment now.</p>
+                            <p class="mt-0.5">Oops it appears our online payment system is down. We have received your order and will begin putting together your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold underline text-crab-700">01263 512275</a> to make payment now.</p>
                         </div>
                     </div>
                 ` : ''}
@@ -1557,20 +1665,81 @@
                     }).join('')}
                 </div>
 
-                <!-- Order Content Breakdown -->
-                <div class="bg-coastal-50/80 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
-                    <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
-                    <ul class="space-y-1 text-coastal-700">
-                        ${(activeOrder.items || []).map(i => `
-                            <li class="flex justify-between">
-                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet || 'Standard'})` : ''}</span>
-                                <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div class="pt-2 border-t border-coastal-200 flex justify-between font-bold text-coastal-900">
-                        <span>Refundable Cool Box Deposit Held:</span>
-                        <span class="text-emerald-700">£${(activeOrder.deposit || 20.00).toFixed(2)}</span>
+                <!-- Order Content Breakdown with Customisation Prices -->
+                <div class="bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 space-y-3 text-xs">
+                    <div class="flex justify-between items-center border-b border-coastal-200 pb-2">
+                        <h4 class="font-bold text-coastal-900 text-sm">Hamper Items & Customisations:</h4>
+                        <span class="text-[10px] bg-coastal-200 text-coastal-800 px-2 py-0.5 rounded font-bold uppercase">${(activeOrder.status || 'pending').replace('_', ' ')}</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        ${(activeOrder.items || []).map(i => {
+                            let customMarkup = '';
+                            if (i.custom) {
+                                const details = [];
+                                if (i.custom.diet && i.custom.diet !== 'Standard Recipe' && i.custom.diet !== 'Bespoke Selection') {
+                                    details.push(`
+                                        <div class="flex justify-between text-coastal-600 text-[11px] pl-3">
+                                            <span>• Dietary Option: ${i.custom.diet}</span>
+                                            <span class="font-medium text-coastal-500">Included</span>
+                                        </div>
+                                    `);
+                                }
+                                if (i.custom.drinks && i.custom.drinks.length > 0) {
+                                    i.custom.drinks.forEach(dName => {
+                                        const match = customFieldsList.find(f => f.title === dName);
+                                        const priceTag = match && match.price > 0 ? `+£${Number(match.price).toFixed(2)}` : '+£3.50';
+                                        details.push(`
+                                            <div class="flex justify-between text-coastal-600 text-[11px] pl-3">
+                                                <span>• Drink Upgrade: ${dName}</span>
+                                                <span class="font-semibold text-crab-600">${priceTag}</span>
+                                            </div>
+                                        `);
+                                    });
+                                }
+                                if (i.custom.byoItems && i.custom.byoItems.length > 0) {
+                                    i.custom.byoItems.forEach(itemTitle => {
+                                        const match = byoAvailableItems.find(b => b.title === itemTitle);
+                                        const priceStr = match ? `+£${Number(match.price).toFixed(2)}` : 'Extra';
+                                        const icon = match ? match.icon : '🦀';
+                                        details.push(`
+                                            <div class="flex justify-between text-coastal-700 text-[11px] pl-3">
+                                                <span>${icon} ${itemTitle}</span>
+                                                <span class="font-semibold text-crab-600">${priceStr}</span>
+                                            </div>
+                                        `);
+                                    });
+                                }
+                                if (details.length > 0) {
+                                    customMarkup = `<div class="space-y-1 mt-1.5 bg-white/70 p-2.5 rounded-xl border border-coastal-100">${details.join('')}</div>`;
+                                }
+                            }
+
+                            return `
+                                <div class="border-b border-coastal-100/80 pb-2.5 last:border-b-0">
+                                    <div class="flex justify-between font-bold text-coastal-900 text-xs">
+                                        <span>${i.qty}x ${i.title}</span>
+                                        <span class="font-serif">£${(i.price * i.qty).toFixed(2)}</span>
+                                    </div>
+                                    ${customMarkup}
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="pt-2 border-t border-coastal-200 space-y-1.5 text-xs">
+                        <div class="flex justify-between text-coastal-600">
+                            <span>Hampers & Extras Subtotal:</span>
+                            <span class="font-semibold">£${(activeOrder.subtotal || activeOrder.items.reduce((acc, x) => acc + (x.price * x.qty), 0)).toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between text-emerald-700 font-medium">
+                            <span>Refundable Cool Box Deposit (£20/box):</span>
+                            <span class="font-bold">£${(activeOrder.deposit || 20.00).toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between font-extrabold text-coastal-900 text-sm border-t border-coastal-200 pt-1.5 mt-1">
+                            <span>Total Payable:</span>
+                            <span class="font-serif text-crab-600 text-base">£${(activeOrder.grandTotal || 0).toFixed(2)}</span>
+                        </div>
                     </div>
                 </div>
 
