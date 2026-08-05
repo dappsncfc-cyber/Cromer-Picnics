@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kitchen Orders Portal | The White Horse, Cromer</title>
+    <title>Kitchen Orders Portal | T<!--  -->he White Horse, Cromer</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -133,16 +133,12 @@
             
             <div class="space-y-3 pt-2">
                 <div>
-                    <input type="password" id="staff-pin-input" placeholder="PIN (Default: 1884)" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
+                    <input type="password" id="staff-pin-input" placeholder="Enter Kitchen PIN" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
                     <p id="pin-error-text" class="text-xs text-crab-600 font-bold mt-1.5 hidden"></p>
                 </div>
                 <button id="btn-unlock" onclick="unlockKitchenPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-2">
                     <i data-lucide="key" class="w-4 h-4 text-sand-200"></i>
                     <span>Unlock Kitchen Dashboard</span>
-                </button>
-                <button id="btn-demo-unlock" onclick="demoUnlockKitchen()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 active:scale-[0.98] text-white font-bold py-2.5 rounded-2xl text-xs transition-all flex items-center justify-center space-x-1.5 shadow-sm">
-                    <i data-lucide="key-round" class="w-4 h-4"></i>
-                    <span>Quick Access (Demo PIN 1884)</span>
                 </button>
             </div>
         </div>
@@ -215,7 +211,6 @@
 
     </main>
 
-    <!-- Demo Test Order Modal -->
     <div id="demo-order-modal" class="fixed inset-0 bg-coastal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-coastal-200 space-y-4">
             <div class="flex justify-between items-center border-b border-coastal-100 pb-3">
@@ -345,7 +340,6 @@
         }
     </script>
 
-    <!-- Kitchen Portal Application Logic -->
     <script>
         let isKitchenUnlocked = false;
         let allOrdersList = [];
@@ -433,14 +427,14 @@
 
             if (errText) errText.classList.add('hidden');
 
-            if (pin === '1884' || pin === '0000') {
+            if (pin === '1884') {
                 demoUnlockKitchen();
             } else {
                 if (errText) {
-                    errText.innerText = 'Incorrect Staff PIN. Use default: 1884';
+                    errText.innerText = 'Incorrect Staff PIN.';
                     errText.classList.remove('hidden');
                 }
-                triggerToast('Incorrect Staff PIN (Default: 1884)', 'error');
+                triggerToast('Incorrect Staff PIN', 'error');
             }
         }
 
@@ -970,3 +964,9 @@
     </script>
 </body>
 </html>
+```
+
+### Summary of Changes Made to `kitchen.html`:
+1. **Removed Quick Access Button**: Completely removed the `#btn-demo-unlock` button from the PIN login card.
+2. **Set Unlock PIN to 1884**: Strict check for `pin === '1884'` in `unlockKitchenPortal()`.
+3. **Hidden PIN References**: Changed the input placeholder to `"Enter Kitchen PIN"` and updated all error text and toast messages to remove any mention of default passcode values.
