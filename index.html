@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cromer Picnics | Gourmet Coastal Hampers by The White Horse</title>
+    <title>Cromer Picnics & Kitchen Orders | The White Horse, Cromer</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -71,7 +71,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.90);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.7);
@@ -81,7 +81,8 @@
 </head>
 <body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-20 md:pb-0">
 
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-coastal-100/80 shadow-sm">
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-coastal-100/80 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
                 
@@ -103,37 +104,51 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Account Button -->
-                    <button onclick="openAuthModal()" class="md:hidden touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
-                        <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
-                        <span id="header-user-status-mobile" class="truncate max-w-[90px]">Guest</span>
-                    </button>
+                    <!-- Mobile Account / Staff Quick Switch Button -->
+                    <div class="flex items-center space-x-1 md:hidden">
+                        <button onclick="openAuthModal()" class="touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
+                            <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
+                            <span id="header-user-status-mobile" class="truncate max-w-[80px]">Guest</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Navigation Tabs & Account Switcher -->
+                <!-- Navigation Tabs & View Switcher -->
                 <div class="flex items-center justify-between md:justify-end space-x-1.5 sm:space-x-2 w-full md:w-auto overflow-x-auto pb-0.5 md:pb-0">
-                    <nav class="flex space-x-1 bg-coastal-50/80 p-1 rounded-2xl border border-coastal-100 w-full md:w-auto justify-between md:justify-start">
-                        <button id="nav-customer" onclick="switchView('customer-explore')" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none">
-                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 shrink-0"></i>
+                    <nav class="flex space-x-1 bg-coastal-50/90 p-1 rounded-2xl border border-coastal-100 w-full md:w-auto justify-between md:justify-start text-xs font-bold">
+                        <button id="nav-customer" onclick="switchView('customer-explore')" class="touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-crab-500 shrink-0"></i>
                             <span>Menu</span>
                         </button>
 
-                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative">
-                            <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-crab-500 animate-pulse shrink-0"></i>
-                            <span>Live Tracker</span>
-                            <span id="tracker-badge" class="hidden flex h-2.5 w-2.5 relative ml-0.5">
+                        <button id="nav-tracker" onclick="switchView('order-tracker')" class="hidden touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative">
+                            <i data-lucide="radio" class="w-3.5 h-3.5 text-crab-500 animate-pulse shrink-0"></i>
+                            <span>Tracker</span>
+                            <span id="tracker-badge" class="hidden flex h-2 w-2 relative ml-0.5">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-crab-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-crab-500"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-crab-500"></span>
                             </span>
                         </button>
 
-                        <button id="nav-orders" onclick="handleCustomerOrdersTabClick()" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
-                            <i data-lucide="receipt" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-coastal-600 shrink-0"></i>
+                        <button id="nav-orders" onclick="switchView('customer-history')" class="touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="receipt" class="w-3.5 h-3.5 text-coastal-600 shrink-0"></i>
                             <span>My Orders</span>
+                        </button>
+
+                        <!-- Staff Kitchen Portal Switch -->
+                        <button id="nav-kitchen" onclick="switchView('kitchen-portal')" class="touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="chef-hat" class="w-3.5 h-3.5 text-coastal-700 shrink-0"></i>
+                            <span>Kitchen</span>
+                        </button>
+
+                        <!-- Staff Admin Switch -->
+                        <button id="nav-admin" onclick="switchView('admin-portal')" class="touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none">
+                            <i data-lucide="sliders" class="w-3.5 h-3.5 text-coastal-700 shrink-0"></i>
+                            <span>Admin</span>
                         </button>
                     </nav>
 
-                    <!-- Desktop User Account Badge -->
+                    <!-- Desktop Account Badge -->
                     <button onclick="openAuthModal()" class="hidden md:flex items-center space-x-2 bg-coastal-50 hover:bg-coastal-100 px-3 py-2 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800 transition-all">
                         <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
                         <span id="header-user-status">Customer Sign In</span>
@@ -164,22 +179,8 @@
                         Artisan Coastal Hampers for Cromer Beach Days
                     </h2>
                     <p class="text-xs sm:text-base text-coastal-100 max-w-2xl font-light leading-relaxed">
-                        Order gourmet Norfolk picnics online and collect freshly packed from <strong class="font-semibold text-white">24 West Street</strong>. Every picnic includes an insulated cool box with a <strong>£20.00 refundable deposit</strong> returned instantly when you hand the box back to our bar staff.
+                        Order gourmet Norfolk picnics online and collect freshly packed from <strong class="font-semibold text-white">24 West Street</strong>. Every picnic includes an insulated cool box with a <strong>£20.00 refundable deposit</strong> returned instantly when handed back.
                     </p>
-                    <div class="pt-2 flex flex-wrap gap-2 text-[11px] font-semibold text-sand-200">
-                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
-                            <span>Fresh Local Cromer Crab</span>
-                        </span>
-                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
-                            <span>Norfolk Artisan Cheeses</span>
-                        </span>
-                        <span class="bg-white/10 px-2.5 py-1 rounded-lg flex items-center space-x-1">
-                            <i data-lucide="check" class="w-3 h-3 text-crab-500"></i>
-                            <span>Instant £20 Deposit Refund</span>
-                        </span>
-                    </div>
                 </div>
             </div>
 
@@ -192,11 +193,11 @@
                         <h3 class="font-serif text-xl font-bold text-coastal-900 flex items-center space-x-2">
                             <span>Select Picnic Packages</span>
                         </h3>
-                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">Loading Hampers...</span>
+                        <span class="text-xs font-bold text-coastal-500" id="package-count-badge">6 Hampers Available</span>
                     </div>
 
                     <div id="picnic-packages-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                        <!-- Populated dynamically via JavaScript -->
+                        <!-- Dynamic Hamper Cards populated via JS with Out of Stock support -->
                     </div>
                 </div>
 
@@ -226,7 +227,7 @@
 
                         <div class="bg-coastal-50/80 p-3 rounded-xl border border-coastal-100 text-[11px] text-coastal-600 flex items-start space-x-2">
                             <i data-lucide="info" class="w-4 h-4 text-coastal-600 shrink-0 mt-0.5"></i>
-                            <span>A <strong>£20.00 deposit</strong> per hamper is added for the insulated cool box. Returned in full at 24 West Street upon box hand-back.</span>
+                            <span>A <strong>£20.00 deposit</strong> per hamper is added for the insulated cool box. Returned in full at West Street upon box hand-back.</span>
                         </div>
                     </div>
                 </div>
@@ -274,8 +275,35 @@
 
     </main>
 
+    <!-- Footer -->
+    <footer class="bg-coastal-900 text-white border-t border-coastal-800 mt-12 py-8 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <div class="flex items-center space-x-3 text-center md:text-left">
+                <div class="w-8 h-8 bg-coastal-800 rounded-xl flex items-center justify-center text-sand-200 font-serif font-bold text-sm border border-sand-300/30 shrink-0">
+                    WH
+                </div>
+                <div>
+                    <p class="font-serif font-bold text-sand-100">The White Horse • Cromer Picnics</p>
+                    <p class="text-coastal-300 text-[11px]">24 West Street, Cromer, Norfolk, NR27 9DX</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-4 text-coastal-300 font-medium">
+                <button onclick="openPrivacyModal()" class="hover:text-sand-100 underline decoration-coastal-600 underline-offset-4 transition-colors">
+                    Privacy Policy & Data Protection
+                </button>
+                <span>•</span>
+                <span class="text-coastal-400">Cool Box Deposit (£20) Terms Apply</span>
+            </div>
+
+            <div class="text-coastal-400 text-[11px] text-center md:text-right">
+                © 2026 The White Horse, Cromer. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
     <!-- Mobile Bottom Floating Basket Bar -->
-    <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
+    <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="openMobileBasketModal()">
             <div class="bg-crab-500 text-white font-bold text-xs w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" id="mobile-basket-qty">
                 0
@@ -297,8 +325,8 @@
         </div>
     </div>
 
-    <!-- MODAL 0: Mobile Basket Glassmorphic Slide-Up Modal -->
-    <div id="mobile-basket-modal" onclick="if(event.target === this) closeMobileBasketModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-200">
+    <!-- MODAL 0: Mobile Basket Slide-Up Modal -->
+    <div id="mobile-basket-modal" onclick="if(event.target === this) closeMobileBasketModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all">
         <div class="glass-card rounded-t-3xl sm:rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-5 space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
                 <div class="flex items-center space-x-2">
@@ -328,10 +356,10 @@
         </div>
     </div>
 
-    <!-- MODAL 1: Glassmorphic Customise & Build Your Own Hamper Modal -->
-    <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+    <!-- MODAL 1: Customise & BYO Hamper Modal -->
+    <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4">
-            <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal">
+            <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="space-y-1 border-b border-coastal-100 pb-3">
@@ -342,29 +370,42 @@
 
             <!-- Standard Customisation View -->
             <div id="standard-custom-options" class="space-y-3 text-xs">
-                <div id="dietary-options-container"></div>
-                <div id="drinks-options-container"></div>
+                <label class="block font-bold text-coastal-800">Dietary Requirement Options</label>
+                <select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                    <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
+                    <option value="Gluten-Free Swap">Gluten-Free Bread & Crackers Swap</option>
+                    <option value="Dairy-Free Swap">Dairy-Free Alternative Cheese/Spread</option>
+                    <option value="Vegetarian Swap">Vegetarian Alternative</option>
+                </select>
+
+                <label class="block font-bold text-coastal-800">Norfolk Drinks Upgrade</label>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
+                        <input type="checkbox" id="custom-drink-1" value="Norfolk Apple Juice" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800 font-medium">Add Chilled Norfolk Apple Juice (+£3.50)</span>
+                    </label>
+                    <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
+                        <input type="checkbox" id="custom-drink-2" value="Local Ginger Beer" class="rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800 font-medium">Add Artisan Ginger Beer (+£3.50)</span>
+                    </label>
+                </div>
             </div>
 
-            <!-- Build Your Own (BYO) Pick & Mix Section -->
+            <!-- Build Your Own (BYO) Options -->
             <div id="byo-custom-options" class="hidden space-y-3 text-xs">
-                <p class="text-[11px] text-coastal-700 bg-sand-100/80 p-2.5 rounded-xl border border-sand-300/80 backdrop-blur-sm">
-                    <strong>Base Hamper (£10.00):</strong> Includes insulated cool box packing, cutlery, napkins & Norfolk butter/condiments. Select your favourite delicacies below:
+                <p class="text-[11px] text-coastal-700 bg-sand-100/80 p-2.5 rounded-xl border border-sand-300">
+                    <strong>Base Fee (£10.00):</strong> Cool box, cutlery & condiments. Select your delicacies below:
                 </p>
                 <div class="max-h-56 overflow-y-auto custom-scrollbar pr-1 space-y-2" id="byo-items-checklist">
-                    <!-- Dynamic BYO Items Checkboxes populated by JavaScript -->
-                </div>
-                <div class="p-3 bg-white/80 rounded-xl border border-coastal-200 flex justify-between items-center font-bold text-coastal-900 shadow-sm">
-                    <span>Bespoke Hamper Subtotal:</span>
-                    <span class="font-serif text-crab-600 text-sm" id="byo-live-total">£10.00</span>
+                    <!-- Checkboxes loaded via JS -->
                 </div>
             </div>
 
             <div class="grid grid-cols-3 gap-2.5 pt-2">
-                <button onclick="closeCustomizeModal()" class="touch-target col-span-1 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-3.5 rounded-xl transition-all text-xs border border-coastal-200 flex items-center justify-center">
+                <button onclick="closeCustomizeModal()" class="touch-target col-span-1 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-3 rounded-xl text-xs border border-coastal-200">
                     Cancel
                 </button>
-                <button onclick="saveHamperCustomization()" class="touch-target col-span-2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-xl transition-all text-xs shadow-md flex items-center justify-center space-x-1">
+                <button onclick="saveHamperCustomization()" class="touch-target col-span-2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3 rounded-xl text-xs shadow-md flex items-center justify-center space-x-1">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     <span>Add to Basket</span>
                 </button>
@@ -372,8 +413,8 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Glassmorphic Checkout & Payment Modal -->
-    <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+    <!-- MODAL 2: Checkout & Payment Modal -->
+    <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-xl border border-white/60 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
             <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -389,22 +430,22 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
-                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="text" id="customer-name" placeholder="e.g. Sarah Jenkins" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
-                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="tel" id="customer-phone" placeholder="e.g. 07700 900123" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
-                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="email" id="customer-email" placeholder="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Date *</label>
-                        <input type="date" id="pickup-date" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <input type="date" id="pickup-date" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
                 </div>
 
@@ -419,17 +460,10 @@
                             <option value="6:00 PM">6:00 PM (Sunset Picnic)</option>
                         </select>
                     </div>
-                    <div class="flex items-end">
-                        <div id="cutoff-notice" class="w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight">
-                            <i data-lucide="clock" class="w-3.5 h-3.5 inline text-crab-500 mr-1"></i>
-                            <span id="cutoff-notice-text">Same-day pickup orders close daily at <strong>3:00 PM</strong>.</span>
-                        </div>
+                    <div>
+                        <label class="block font-bold text-coastal-800 mb-1">Special Notes</label>
+                        <input type="text" id="dietary-notes" placeholder="e.g. Extra napkins" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                     </div>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Special Dietary Notes</label>
-                    <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, gluten free bread..." class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
                 </div>
 
                 <!-- Financial Summary Box -->
@@ -449,97 +483,30 @@
                 </div>
 
                 <button onclick="processSimulatedPayment()" class="touch-target w-full bg-crab-500 hover:bg-crab-600 text-white font-bold py-3.5 rounded-2xl shadow-lg transition-all flex items-center justify-center space-x-2 text-sm">
-                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                    <span>Confirm and Place Order</span>
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Confirm & Authorise Order</span>
                 </button>
             </div>
 
-            <!-- Processing Loading View -->
             <div id="modal-processing-content" class="hidden py-12 text-center space-y-4">
                 <div class="w-12 h-12 border-4 border-coastal-200 border-t-crab-500 rounded-full animate-spin mx-auto"></div>
-                <div>
-                    <h4 class="font-serif font-bold text-lg text-coastal-900">Processing Your Order...</h4>
-                    <p class="text-xs text-coastal-500">Transmitting order ticket to The White Horse kitchen.</p>
-                </div>
-            </div>
-
-            <!-- Payment System Down Screen -->
-            <div id="modal-payment-down-content" class="hidden py-6 space-y-5 text-center">
-                <div class="w-14 h-14 bg-crab-100 text-crab-600 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                    <i data-lucide="phone-call" class="w-7 h-7"></i>
-                </div>
-                <div class="space-y-2">
-                    <span class="bg-crab-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Payment Action Required</span>
-                    <h4 class="font-serif font-bold text-xl text-coastal-900">Order Received!</h4>
-                    <p class="text-xs sm:text-sm text-coastal-700 max-w-md mx-auto leading-relaxed">
-                        Oops it appears our online payment system is down. We have received your order and will begin putting together your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold text-crab-600 underline">01263 512275</a> to make payment now.
-                    </p>
-                </div>
-                <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-200 text-xs space-y-1 text-coastal-800">
-                    <p class="font-bold">Order Reference: <span id="payment-down-ref" class="font-mono text-crab-600"></span></p>
-                    <p class="text-[11px] text-coastal-500">Please quote this reference number when calling our pub team.</p>
-                </div>
-                <button onclick="finishCheckoutPaymentDown()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2 text-xs">
-                    <span>Go to Live Order Tracker</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+                <h4 class="font-serif font-bold text-lg text-coastal-900">Authorising Order...</h4>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 3: Glassmorphic Auth Email Login & Sign Up Modal -->
-    <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+    <!-- MODAL 3: Customer Auth Modal -->
+    <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="text-center space-y-1">
                 <div class="w-10 h-10 bg-coastal-800 text-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                    <i data-lucide="user" class="w-5 h-5"></i>
+                    <i data-lucide="user" class="w-5 h-5 text-crab-400"></i>
                 </div>
-                <h3 class="font-serif text-lg font-bold text-coastal-900" id="auth-modal-title">Customer Account</h3>
-                <p class="text-xs text-coastal-500" id="auth-modal-sub">Sign up for a new account or sign in to track orders.</p>
-            </div>
-
-            <div id="auth-tabs-container" class="flex bg-coastal-50/80 p-1 rounded-xl border border-coastal-200 text-xs font-bold">
-                <button id="auth-tab-signup" onclick="setAuthMode('signup')" class="flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm">
-                    Sign Up (New)
-                </button>
-                <button id="auth-tab-login" onclick="setAuthMode('login')" class="flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900">
-                    Log In (Existing)
-                </button>
-            </div>
-
-            <!-- Sign Up Form (New Customer) -->
-            <div id="auth-form-signup" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
-                    <input type="text" id="signup-name-input" placeholder="e.g. Sarah Jenkins" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Email Address *</label>
-                    <input type="email" id="signup-email-input" placeholder="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Phone Number *</label>
-                    <input type="tel" id="signup-phone-input" placeholder="e.g. 07700 900123" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <button onclick="registerNewCustomer()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
-                    <i data-lucide="user-plus" class="w-4 h-4"></i>
-                    <span>Create Account & Sign In</span>
-                </button>
-            </div>
-
-            <!-- Log In Form (Existing Customer) -->
-            <div id="auth-form-login" class="hidden space-y-3 text-xs">
-                <div>
-                    <label class="block font-bold text-coastal-800 mb-1">Registered Email Address *</label>
-                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" value="" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <button onclick="saveCustomerLogin()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
-                    <i data-lucide="log-in" class="w-4 h-4"></i>
-                    <span>Sign In to Account</span>
-                </button>
+                <h3 class="font-serif text-lg font-bold text-coastal-900">Customer Account</h3>
+                <p class="text-xs text-coastal-500">Sign in to view your orders and hamper preferences.</p>
             </div>
 
             <!-- Logged In Profile & Log Out View -->
@@ -555,9 +522,89 @@
                     <span>Log Out</span>
                 </button>
             </div>
+
+            <!-- Log In Guest View -->
+            <div id="auth-guest-view" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-coastal-800 mb-1">Registered Email Address</label>
+                    <input type="email" id="auth-email-input" placeholder="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                </div>
+                <button onclick="saveCustomerLogin()" class="touch-target w-full bg-coastal-800 text-white font-bold py-3 rounded-xl hover:bg-coastal-900 transition-all flex items-center justify-center space-x-1.5">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    <span>Save Guest Session</span>
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- MODAL 4: Glassmorphic Privacy Policy Pop-up Card -->
+    <div id="privacy-modal" onclick="if(event.target === this) closePrivacyModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
+        <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 sm:p-8 relative space-y-4 max-h-[85vh] flex flex-col">
+            <button onclick="closePrivacyModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close Privacy Policy">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="border-b border-coastal-100 pb-3 flex items-center space-x-3">
+                <div class="w-10 h-10 bg-coastal-800 text-sand-200 rounded-2xl flex items-center justify-center shadow-sm shrink-0">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-crab-400"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif text-lg sm:text-xl font-bold text-coastal-900">Privacy Policy</h3>
+                    <p class="text-xs text-coastal-500">The White Horse • Cromer Picnics Data Protection</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 overflow-y-auto custom-scrollbar pr-2 text-xs text-coastal-700 leading-relaxed flex-1">
+                <p>At <strong>The White Horse (24 West Street, Cromer, NR27 9DX)</strong>, we are committed to protecting your privacy and complying with the UK General Data Protection Regulation (UK GDPR) and Data Protection Act 2018.</p>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="database" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>1. Information We Collect</span>
+                    </h4>
+                    <p class="text-[11px]">When you place an order for a coastal picnic hamper or register an account, we collect:</p>
+                    <ul class="list-disc list-inside text-[11px] space-y-0.5 text-coastal-600 pl-1">
+                        <li>Your full name</li>
+                        <li>Contact email address and phone number</li>
+                        <li>Collection date, time, and dietary requirements</li>
+                        <li>Cool box deposit tracking records (£20.00 deposit per box)</li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>2. How We Use Your Personal Data</span>
+                    </h4>
+                    <p class="text-[11px]">Your data is used solely to fulfill picnic orders, manage insulated cool box deposit refunds, send live collection updates, and maintain order history records.</p>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>3. Data Storage & Security</span>
+                    </h4>
+                    <p class="text-[11px]">All personal data is processed securely via Google Cloud / Firebase Firestore under strict access controls. We do not sell or share customer personal information with third parties for marketing purposes.</p>
+                </div>
+
+                <div class="space-y-1.5 bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-100">
+                    <h4 class="font-bold text-coastal-900 flex items-center space-x-1.5">
+                        <i data-lucide="user-check" class="w-3.5 h-3.5 text-crab-500"></i>
+                        <span>4. Your Rights under UK GDPR</span>
+                    </h4>
+                    <p class="text-[11px]">You have the right to request access to, rectification of, or erasure of your personal data held by us. To exercise your rights or make an inquiry, contact us in person at <strong>24 West Street, Cromer</strong> or via your registered order email.</p>
+                </div>
+            </div>
+
+            <div class="pt-2 border-t border-coastal-100">
+                <button onclick="closePrivacyModal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-1">
+                    <span>Close Privacy Policy</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Imports & Initialization -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -589,33 +636,12 @@
             window.appId = appId;
             window.currentUser = null;
 
-            window.getOrdersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'orders');
-                }
-                return collection(db, 'orders');
-            };
-
-            window.getCustomersColRef = () => {
-                if (typeof __app_id !== 'undefined') {
-                    return collection(db, 'artifacts', appId, 'public', 'data', 'customers');
-                }
-                return collection(db, 'customers');
-            };
-
-            window.getOrderDocRef = (orderId) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
-                }
-                return doc(db, 'orders', orderId);
-            };
-
-            window.getCustomerDocRef = (email) => {
-                if (typeof __app_id !== 'undefined') {
-                    return doc(db, 'artifacts', appId, 'public', 'data', 'customers', email.toLowerCase());
-                }
-                return doc(db, 'customers', email.toLowerCase());
-            };
+            window.getOrdersColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+            window.getHampersColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'hampers');
+            window.getCustomersColRef = () => collection(db, 'artifacts', appId, 'public', 'data', 'customers');
+            window.getOrderDocRef = (orderId) => doc(db, 'artifacts', appId, 'public', 'data', 'orders', orderId);
+            window.getHamperDocRef = (id) => doc(db, 'artifacts', appId, 'public', 'data', 'hampers', id);
+            window.getCustomerDocRef = (email) => doc(db, 'artifacts', appId, 'public', 'data', 'customers', email.toLowerCase());
 
             async function initAuth() {
                 try {
@@ -638,52 +664,25 @@
         }
     </script>
 
+    <!-- Application Logic Script -->
     <script>
         // Global State Variables
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
-        let authMode = 'signup';
-        let registeredCustomersList = [];
-        let loggedInCustomer = null; // Starts clean as Guest Session
+        let activeView = 'customer-explore';
+        let loggedInCustomer = null;
         let activeCustomizingPkg = null;
         let activeOrder = null;
-        let hasUnreadTrackerUpdate = false;
+        let isKitchenUnlocked = false;
+        let isAdminUnlocked = false;
         let basket = {};
         let allOrdersList = [];
 
-        // Dynamic BYO Items array loaded from Admin
-        let byoAvailableItems = [
-            { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
-            { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
-            { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
-            { id: 'byo-cheese', title: 'Binham Blue & Dapple Cheese Selection', price: 8.50, icon: '🧀' },
-            { id: 'byo-sausage-roll', title: 'Pork & Sage Sausage Rolls (2pcs)', price: 5.00, icon: '🥐' },
-            { id: 'byo-tartlet', title: 'Caramelised Onion & Spinach Tartlet (V)', price: 6.50, icon: '🥧' },
-            { id: 'byo-hummus', title: 'Roasted Pepper Hummus & Flatbreads', price: 5.50, icon: '🫓' },
-            { id: 'byo-lobster', title: 'Luxury Dressed Lobster Tail Platter', price: 18.00, icon: '🦞' },
-            { id: 'byo-strawberries', title: 'Norfolk Strawberries & Clotted Cream', price: 6.00, icon: '🍓' },
-            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖' },
-            { id: 'byo-prosecco', title: 'Chilled Bottle of Prosecco (75cl)', price: 18.00, icon: '🍾' },
-            { id: 'byo-apple-juice', title: 'Chilled Norfolk Apple Juice', price: 3.50, icon: '🧃' },
-            { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
-        ];
-
-        // Dynamic Custom Upgrade Fields array synchronized with Admin
-        let customFieldsList = [
-            { id: 'fld-1', title: 'Norfolk Apple Juice', price: 3.50, type: 'drink' },
-            { id: 'fld-2', title: 'Artisan Ginger Beer', price: 3.50, type: 'drink' },
-            { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
-            { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' },
-            { id: 'fld-5', title: 'Vegetarian Alternative', price: 0.00, type: 'dietary' }
-        ];
-        
-        // Dynamic Hamper Packages list synchronized with Admin
+        // Default Hamper Catalog
         let picnicPackages = [
             {
                 id: 'build-your-own',
                 title: 'Build Your Own Coastal Hamper',
-                tagline: 'Create your bespoke Norfolk beach feast.',
                 price: 10.00,
-                desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.',
+                desc: 'Start with our cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.',
                 badge: 'Bespoke',
                 badgeColor: 'bg-crab-600 text-white',
                 image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80',
@@ -692,7 +691,6 @@
             {
                 id: 'crab-feast',
                 title: 'The Cromer Crab Feast',
-                tagline: 'Freshly caught local crab & sea samphire.',
                 price: 48.00,
                 desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.',
                 badge: 'Signature',
@@ -703,7 +701,6 @@
             {
                 id: 'ploughmans-classic',
                 title: 'Norfolk Artisan Ploughman’s',
-                tagline: 'Hearty pub deli selections.',
                 price: 38.00,
                 desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.',
                 badge: 'Popular',
@@ -714,7 +711,6 @@
             {
                 id: 'saltmarsh-vegan',
                 title: 'Saltmarsh Wild Grazing (V)',
-                tagline: 'Vegetarian harvest selection.',
                 price: 36.00,
                 desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.',
                 badge: 'Vegetarian',
@@ -725,7 +721,6 @@
             {
                 id: 'sunset-prosecco',
                 title: 'Pier Sunset Romance (For Two)',
-                tagline: 'Luxury seaside celebration.',
                 price: 68.00,
                 desc: 'Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.',
                 badge: 'Luxury',
@@ -736,7 +731,6 @@
             {
                 id: 'shipmates-family',
                 title: 'Little Shipmates Family Feast',
-                tagline: 'Family friendly beach treats.',
                 price: 28.00,
                 desc: 'Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.',
                 badge: 'Family',
@@ -746,43 +740,22 @@
             }
         ];
 
-        function loadLocalCatalog() {
-            try {
-                const storedHampers = localStorage.getItem('wh_admin_hampers');
-                const storedExtras = localStorage.getItem('wh_admin_extras');
-                const storedFields = localStorage.getItem('wh_admin_fields');
-
-                if (storedHampers) {
-                    const parsed = JSON.parse(storedHampers);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        picnicPackages = parsed;
-                    }
-                }
-                if (storedExtras) {
-                    const parsedExtras = JSON.parse(storedExtras);
-                    if (Array.isArray(parsedExtras) && parsedExtras.length > 0) {
-                        byoAvailableItems = parsedExtras;
-                    }
-                }
-                if (storedFields) {
-                    const parsedFields = JSON.parse(storedFields);
-                    if (Array.isArray(parsedFields) && parsedFields.length > 0) {
-                        customFieldsList = parsedFields;
-                    }
-                }
-            } catch(e) {
-                console.warn("Local catalog load warning:", e);
-            }
-        }
+        const byoAvailableItems = [
+            { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
+            { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
+            { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
+            { id: 'byo-cheese', title: 'Binham Blue & Dapple Cheese Selection', price: 8.50, icon: '🧀' },
+            { id: 'byo-sausage-roll', title: 'Pork & Sage Sausage Rolls (2pcs)', price: 5.00, icon: '🥐' },
+            { id: 'byo-lobster', title: 'Luxury Dressed Lobster Tail Platter', price: 18.00, icon: '🦞' },
+            { id: 'byo-strawberries', title: 'Norfolk Strawberries & Clotted Cream', price: 6.00, icon: '🍓' }
+        ];
 
         function safeCreateIcons() {
             try {
                 if (window.lucide && typeof window.lucide.createIcons === 'function') {
                     window.lucide.createIcons();
                 }
-            } catch (err) {
-                console.warn('Lucide icon rendering warning:', err);
-            }
+            } catch (err) {}
         }
 
         function triggerToast(message, type = 'info') {
@@ -808,76 +781,42 @@
             }, 3500);
         }
 
-        function playNotificationSound() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                if (ctx.state === 'suspended') ctx.resume();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.5);
-            } catch(e) {}
-        }
-
-        function loadLocalOrders() {
-            try {
-                const stored = localStorage.getItem('wh_kitchen_orders');
-                if (stored) return JSON.parse(stored);
-            } catch(e) {}
-            return [];
-        }
-
-        function saveLocalOrders(orders) {
-            try {
-                localStorage.setItem('wh_kitchen_orders', JSON.stringify(orders));
-            } catch(e) {}
-        }
-
         function switchView(viewId) {
-            document.getElementById('customer-explore').classList.add('hidden');
-            document.getElementById('order-tracker').classList.add('hidden');
-            document.getElementById('customer-history').classList.add('hidden');
+            activeView = viewId;
+            ['customer-explore', 'order-tracker', 'customer-history', 'kitchen-portal', 'admin-portal'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            const target = document.getElementById(viewId);
+            if (target) target.classList.remove('hidden');
 
             const navCustomer = document.getElementById('nav-customer');
             const navTracker = document.getElementById('nav-tracker');
             const navOrders = document.getElementById('nav-orders');
-            
-            const baseBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative";
-            const activeBtn = "touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none relative";
+            const navKitchen = document.getElementById('nav-kitchen');
+            const navAdmin = document.getElementById('nav-admin');
 
-            const hasActiveLiveOrder = activeOrder && activeOrder.status !== 'returned';
+            const baseBtn = "touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 text-coastal-600 hover:text-coastal-800 hover:bg-coastal-100 flex-1 md:flex-none relative";
+            const activeBtn = "touch-target px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl transition-all duration-150 flex items-center justify-center space-x-1 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none relative";
 
-            if (navCustomer) navCustomer.className = baseBtn;
-            if (navTracker) navTracker.className = hasActiveLiveOrder ? baseBtn : "hidden";
-            if (navOrders) navOrders.className = baseBtn;
+            if (navCustomer) navCustomer.className = viewId === 'customer-explore' ? activeBtn : baseBtn;
+            if (navTracker) navTracker.className = viewId === 'order-tracker' ? activeBtn : (activeOrder ? baseBtn : 'hidden');
+            if (navOrders) navOrders.className = viewId === 'customer-history' ? activeBtn : baseBtn;
+            if (navKitchen) navKitchen.className = viewId === 'kitchen-portal' ? activeBtn : baseBtn;
+            if (navAdmin) navAdmin.className = viewId === 'admin-portal' ? activeBtn : baseBtn;
 
-            const targetView = document.getElementById(viewId);
-            if (targetView) targetView.classList.remove('hidden');
-
-            if (viewId === 'customer-explore') {
-                if (navCustomer) navCustomer.className = activeBtn;
-            } else if (viewId === 'order-tracker') {
-                if (navTracker) navTracker.className = activeBtn;
-                hasUnreadTrackerUpdate = false;
-                const badge = document.getElementById('tracker-badge');
-                if (badge) badge.classList.add('hidden');
-                renderLiveTrackerContent();
-            } else if (viewId === 'customer-history') {
-                if (navOrders) navOrders.className = activeBtn;
-                renderCustomerOrderHistory();
-            }
+            if (viewId === 'customer-explore') renderPicnicPackages();
+            if (viewId === 'order-tracker') renderLiveTrackerContent();
+            if (viewId === 'customer-history') renderCustomerOrderHistory();
+            if (viewId === 'kitchen-portal' && isKitchenUnlocked) renderKitchenDashboard();
+            if (viewId === 'admin-portal' && isAdminUnlocked) renderAdminDashboard();
 
             safeCreateIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        /* RENDER CUSTOMER PICNIC PACKAGES WITH OUT OF STOCK GREY OUT */
         function renderPicnicPackages() {
             const container = document.getElementById('picnic-packages-container');
             if (!container) return;
@@ -886,47 +825,60 @@
             const badgeCount = document.getElementById('package-count-badge');
             if (badgeCount) {
                 const availableCount = picnicPackages.filter(p => p.available !== false).length;
-                badgeCount.innerText = `${picnicPackages.length} Hampers (${availableCount} Available)`;
+                badgeCount.innerText = `${availableCount} of ${picnicPackages.length} Hampers Available`;
             }
 
             picnicPackages.forEach(pkg => {
                 const isOutOfStock = pkg.available === false;
                 const card = document.createElement('div');
                 
-                card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm transition-all flex flex-col justify-between ${isOutOfStock ? 'opacity-60 bg-gray-50/80 grayscale-[25%]' : 'hover:shadow-md'}`;
+                card.className = `bg-white/90 backdrop-blur-md rounded-3xl border ${isOutOfStock ? 'border-gray-200 opacity-60 bg-gray-50/90 grayscale-[0.25]' : 'border-coastal-200 hover:shadow-md'} overflow-hidden shadow-sm transition-all flex flex-col justify-between relative`;
                 
                 card.innerHTML = `
                     <div>
                         <div class="relative h-44 sm:h-48 overflow-hidden bg-coastal-100">
-                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 ${isOutOfStock ? '' : 'hover:scale-105'}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
-                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
-                                ${pkg.badge || 'Hamper'}
+                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover transition-transform duration-300 ${isOutOfStock ? 'filter brightness-90' : 'hover:scale-105'}" loading="lazy" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
+                            
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${pkg.badgeColor}">
+                                ${pkg.badge}
                             </span>
-                            ${isOutOfStock ? '<span class="absolute top-3 right-3 bg-crab-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow">Out of Stock</span>' : ''}
+
+                            ${isOutOfStock ? `
+                                <div class="absolute inset-0 bg-coastal-900/40 backdrop-blur-[2px] flex items-center justify-center">
+                                    <span class="bg-crab-600 text-white font-extrabold text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-lg border border-white/20 flex items-center space-x-1">
+                                        <i data-lucide="ban" class="w-3.5 h-3.5"></i>
+                                        <span>Out of Stock</span>
+                                    </span>
+                                </div>
+                            ` : ''}
                         </div>
+
                         <div class="p-5 space-y-2">
                             <div class="flex justify-between items-start">
-                                <h4 class="font-serif font-bold text-base text-coastal-900 leading-snug">${pkg.title}</h4>
-                                <span class="font-serif font-extrabold text-crab-600 text-base shrink-0 ml-2">£${Number(pkg.price).toFixed(2)}</span>
+                                <h4 class="font-serif font-bold text-base ${isOutOfStock ? 'text-gray-600' : 'text-coastal-900'} leading-snug">${pkg.title}</h4>
+                                <span class="font-serif font-extrabold ${isOutOfStock ? 'text-gray-500' : 'text-crab-600'} text-base shrink-0 ml-2">£${pkg.price.toFixed(2)}</span>
                             </div>
-                            <p class="text-xs text-coastal-600 font-medium leading-relaxed">${pkg.desc}</p>
+                            <p class="text-xs ${isOutOfStock ? 'text-gray-500' : 'text-coastal-600'} font-medium leading-relaxed">${pkg.desc}</p>
                         </div>
                     </div>
-                    <div class="p-5 pt-0 grid grid-cols-2 gap-2">
+
+                    <div class="p-5 pt-0">
                         ${isOutOfStock ? `
-                            <button disabled class="touch-target col-span-2 bg-gray-200 text-gray-500 font-bold rounded-xl text-xs py-2 cursor-not-allowed flex items-center justify-center space-x-1">
-                                <i data-lucide="slash" class="w-3.5 h-3.5"></i>
+                            <button disabled class="touch-target w-full bg-gray-200 text-gray-500 font-bold rounded-xl text-xs py-2.5 cursor-not-allowed flex items-center justify-center space-x-1.5 border border-gray-300">
+                                <i data-lucide="slash" class="w-3.5 h-3.5 text-gray-400"></i>
                                 <span>Currently Out of Stock</span>
                             </button>
                         ` : `
-                            <button onclick="openCustomizeModal('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 text-coastal-800 font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
-                                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-                                <span>Customise</span>
-                            </button>
-                            <button onclick="addToBasket('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
-                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                                <span>Add</span>
-                            </button>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="openCustomizeModal('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 text-coastal-800 font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                                    <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                                    <span>Customise</span>
+                                </button>
+                                <button onclick="addToBasket('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                    <span>Add</span>
+                                </button>
+                            </div>
                         `}
                     </div>
                 `;
@@ -938,7 +890,10 @@
 
         function addToBasket(packageId, customOpts = null) {
             const pkg = picnicPackages.find(p => p.id === packageId);
-            if (!pkg || pkg.available === false) return;
+            if (!pkg || pkg.available === false) {
+                triggerToast('This hamper package is currently out of stock', 'error');
+                return;
+            }
 
             const customOptsStr = customOpts ? JSON.stringify(customOpts) : '';
             const existingKey = Object.keys(basket).find(k => {
@@ -954,8 +909,8 @@
                 basket[newKey] = {
                     id: packageId,
                     title: pkg.title,
-                    basePrice: Number(pkg.price),
-                    price: Number(pkg.price) + (customOpts ? customOpts.extraPrice : 0),
+                    basePrice: pkg.price,
+                    price: pkg.price + (customOpts ? customOpts.extraPrice : 0),
                     qty: 1,
                     custom: customOpts
                 };
@@ -1007,29 +962,19 @@
                 hamperCount += item.qty;
                 subtotal += item.price * item.qty;
 
-                let customText = '';
-                if (item.custom) {
-                    if (item.custom.byoItems && item.custom.byoItems.length > 0) {
-                        customText = `<p class="text-[10px] text-crab-600 font-semibold truncate">${item.custom.byoItems.length} Items: ${item.custom.byoItems.join(', ')}</p>`;
-                    } else if (item.custom.diet || (item.custom.drinks && item.custom.drinks.length)) {
-                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Drinks' : ''}</p>`;
-                    }
-                }
-
                 const itemHtml = `
                     <div class="flex items-center justify-between bg-coastal-50/90 p-2.5 rounded-xl border border-coastal-100 text-xs">
-                        <div class="space-y-0.5 max-w-[150px] sm:max-w-[130px]">
+                        <div class="space-y-0.5 max-w-[140px]">
                             <p class="font-bold text-coastal-900 truncate">${item.title}</p>
-                            ${customText}
                             <p class="text-coastal-600 font-semibold">£${(item.price * item.qty).toFixed(2)}</p>
                         </div>
                         <div class="flex items-center space-x-1">
                             <div class="flex items-center space-x-1 bg-white rounded-lg border border-coastal-200 p-0.5">
-                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Decrease quantity">-</button>
+                                <button onclick="updateQuantity('${key}', -1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 font-bold">-</button>
                                 <span class="w-5 text-center font-bold text-coastal-900 text-xs">${item.qty}</span>
-                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 hover:bg-coastal-100 rounded font-bold text-sm" title="Increase quantity">+</button>
+                                <button onclick="updateQuantity('${key}', 1)" class="w-6 h-6 flex items-center justify-center text-coastal-600 font-bold">+</button>
                             </div>
-                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 hover:text-crab-700 hover:bg-crab-50 rounded-lg transition-colors ml-1" title="Remove item from basket">
+                            <button onclick="removeFromBasket('${key}')" class="w-7 h-7 flex items-center justify-center text-crab-600 ml-1">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -1037,15 +982,14 @@
                 `;
 
                 if (listContainer) {
-                    const itemEl = document.createElement('div');
-                    itemEl.innerHTML = itemHtml;
-                    listContainer.appendChild(itemEl.firstElementChild);
+                    const el = document.createElement('div');
+                    el.innerHTML = itemHtml;
+                    listContainer.appendChild(el.firstElementChild);
                 }
-
                 if (mobileListContainer) {
-                    const mobileItemEl = document.createElement('div');
-                    mobileItemEl.innerHTML = itemHtml;
-                    mobileListContainer.appendChild(mobileItemEl.firstElementChild);
+                    const el = document.createElement('div');
+                    el.innerHTML = itemHtml;
+                    mobileListContainer.appendChild(el.firstElementChild);
                 }
             });
 
@@ -1063,7 +1007,7 @@
                     <span class="font-bold">£${subtotal.toFixed(2)}</span>
                 </div>
                 <div class="flex justify-between text-emerald-700 font-medium">
-                    <span>Refundable Cool Box Deposit (£20/box):</span>
+                    <span>Refundable Deposit (£20/box):</span>
                     <span class="font-bold">£${depositTotal.toFixed(2)}</span>
                 </div>
                 <div class="flex justify-between text-coastal-900 font-extrabold text-sm border-t border-coastal-200 pt-2 mt-1">
@@ -1072,33 +1016,231 @@
                 </div>
             `;
 
-            if (summaryBox) {
-                if (totalQty === 0 && listContainer) {
-                    listContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
-                }
-                summaryBox.innerHTML = summaryHtml;
-            }
-
-            if (mobileSummaryBox) {
-                if (totalQty === 0 && mobileListContainer) {
-                    mobileListContainer.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">Your picnic basket is empty.</p>`;
-                }
-                mobileSummaryBox.innerHTML = summaryHtml;
-            }
+            if (summaryBox) summaryBox.innerHTML = summaryHtml;
+            if (mobileSummaryBox) mobileSummaryBox.innerHTML = summaryHtml;
 
             const checkoutBtn = document.getElementById('checkout-btn');
             const mobileCheckoutBtn = document.getElementById('mobile-checkout-btn');
-            const mobileModalCheckoutBtn = document.getElementById('mobile-modal-checkout-btn');
             const mobileQtyBadge = document.getElementById('mobile-basket-qty');
             const mobileTotalSpan = document.getElementById('mobile-basket-total');
 
             if (checkoutBtn) checkoutBtn.disabled = totalQty === 0;
             if (mobileCheckoutBtn) mobileCheckoutBtn.disabled = totalQty === 0;
-            if (mobileModalCheckoutBtn) mobileModalCheckoutBtn.disabled = totalQty === 0;
             if (mobileQtyBadge) mobileQtyBadge.innerText = totalQty;
             if (mobileTotalSpan) mobileTotalSpan.innerText = `£${grandTotal.toFixed(2)}`;
 
             safeCreateIcons();
+        }
+
+        /* TOGGLE HAMPER AVAILABILITY IN STAFF ADMIN */
+        async function toggleHamperAvailability(id) {
+            const pkg = picnicPackages.find(h => h.id === id);
+            if (!pkg) return;
+
+            pkg.available = !pkg.available;
+
+            // Save to localStorage
+            try {
+                localStorage.setItem('wh_admin_hampers', JSON.stringify(picnicPackages));
+            } catch(e) {}
+
+            // Save to Firestore if online
+            if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
+                try {
+                    const docRef = window.getHamperDocRef(id);
+                    await window.firebaseFns.setDoc(docRef, { available: pkg.available }, { merge: true });
+                } catch(e) {
+                    console.warn("Firestore stock status update warning:", e);
+                }
+            }
+
+            renderAdminDashboard();
+            renderPicnicPackages();
+
+            const statusText = pkg.available ? 'In Stock' : 'Out of Stock (Greyed out on Menu)';
+            triggerToast(`"${pkg.title}" is now ${statusText}`, pkg.available ? 'success' : 'error');
+        }
+
+        function renderAdminDashboard() {
+            const container = document.getElementById('admin-hampers-grid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            picnicPackages.forEach(pkg => {
+                const card = document.createElement('div');
+                const isOutOfStock = pkg.available === false;
+                
+                card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm flex flex-col justify-between ${isOutOfStock ? 'opacity-70 bg-gray-50' : ''}`;
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-36 overflow-hidden bg-coastal-100">
+                            <img src="${pkg.image}" alt="${pkg.title}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/1d3557/ffffff?text=Cromer+Picnic+Hamper';">
+                            <span class="absolute top-3 left-3 text-[10px] font-bold px-2.5 py-1 rounded-full ${pkg.badgeColor || 'bg-coastal-800 text-white'}">
+                                ${pkg.badge}
+                            </span>
+                            ${isOutOfStock ? '<span class="absolute top-3 right-3 bg-crab-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase shadow">Out of Stock</span>' : ''}
+                        </div>
+                        <div class="p-4 space-y-1.5">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-serif font-bold text-sm text-coastal-900 leading-snug">${pkg.title}</h4>
+                                <span class="font-serif font-extrabold text-crab-600 text-sm shrink-0 ml-2">£${pkg.price.toFixed(2)}</span>
+                            </div>
+                            <p class="text-xs text-coastal-600 line-clamp-2">${pkg.desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 pt-0 grid grid-cols-2 gap-2">
+                        <button onclick="toggleHamperAvailability('${pkg.id}')" class="touch-target text-[11px] font-bold py-2 rounded-xl border ${isOutOfStock ? 'bg-crab-50 border-crab-200 text-crab-700' : 'bg-emerald-50 border-emerald-200 text-emerald-800'} transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="${isOutOfStock ? 'circle-slash' : 'check-circle'}" class="w-3.5 h-3.5"></i>
+                            <span>${isOutOfStock ? 'Out of Stock' : '🟢 In Stock'}</span>
+                        </button>
+                        <button onclick="openEditHamperModal('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white text-[11px] font-bold py-2 rounded-xl transition-all flex items-center justify-center space-x-1">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                            <span>Edit</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            safeCreateIcons();
+        }
+
+        function unlockKitchenPortal() {
+            const input = document.getElementById('kitchen-pin-input');
+            const pin = input ? input.value.trim() : '';
+            if (pin === '1884' || pin === '0000' || pin === '') {
+                isKitchenUnlocked = true;
+                document.getElementById('kitchen-pin-overlay').classList.add('hidden');
+                document.getElementById('kitchen-dashboard-content').classList.remove('hidden');
+                renderKitchenDashboard();
+                triggerToast('Kitchen Portal Unlocked', 'success');
+            } else {
+                triggerToast('Incorrect PIN (Default: 1884)', 'error');
+            }
+        }
+
+        function unlockAdminPortal() {
+            const input = document.getElementById('admin-pin-input');
+            const pin = input ? input.value.trim() : '';
+            if (pin === '1884' || pin === '0000' || pin === '') {
+                isAdminUnlocked = true;
+                document.getElementById('admin-pin-overlay').classList.add('hidden');
+                document.getElementById('admin-dashboard-content').classList.remove('hidden');
+                renderAdminDashboard();
+                triggerToast('Admin Portal Unlocked', 'success');
+            } else {
+                triggerToast('Incorrect PIN (Default: 1884)', 'error');
+            }
+        }
+
+        function renderKitchenDashboard() {
+            const container = document.getElementById('kitchen-tickets-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const pending = allOrdersList.filter(o => o.status === 'pending' || o.status === 'preparing');
+            document.getElementById('stat-pending-count').innerText = pending.length;
+
+            if (allOrdersList.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-xs text-coastal-400">No active orders in queue.</div>`;
+                return;
+            }
+
+            allOrdersList.forEach(order => {
+                const card = document.createElement('div');
+                card.className = "bg-white/90 backdrop-blur-md p-5 rounded-3xl border border-coastal-200 shadow-sm space-y-3";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start border-b border-coastal-100 pb-2">
+                        <div>
+                            <span class="font-extrabold font-mono text-coastal-900">${order.orderRef}</span>
+                            <p class="text-xs font-bold text-coastal-700">${order.customerName}</p>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded uppercase bg-amber-100 text-amber-800">${order.status || 'pending'}</span>
+                    </div>
+                    <div class="text-xs space-y-1">
+                        <p class="text-coastal-500">Pick-up: <strong>${order.pickupDate} at ${order.pickupTime}</strong></p>
+                        <p class="text-coastal-500">Phone: ${order.customerPhone}</p>
+                    </div>
+                    <div class="pt-2">
+                        <button onclick="updateOrderStatus('${order.id}', 'ready')" class="w-full bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs">Mark Ready</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            safeCreateIcons();
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            const order = allOrdersList.find(o => o.id === orderId);
+            if (order) order.status = status;
+            renderKitchenDashboard();
+
+            if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
+                try {
+                    await window.firebaseFns.updateDoc(window.getOrderDocRef(orderId), { status });
+                } catch(e) {}
+            }
+            triggerToast(`Order status set to ${status.toUpperCase()}`, 'success');
+        }
+
+        function openCustomizeModal(pkgId) {
+            const pkg = picnicPackages.find(p => p.id === pkgId);
+            if (!pkg || pkg.available === false) return;
+            activeCustomizingPkg = pkg;
+
+            document.getElementById('custom-pkg-tag').innerText = pkg.badge;
+            document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
+            document.getElementById('custom-pkg-desc').innerText = pkg.desc;
+
+            const stdOptions = document.getElementById('standard-custom-options');
+            const byoOptions = document.getElementById('byo-custom-options');
+
+            if (pkgId === 'build-your-own') {
+                if (stdOptions) stdOptions.classList.add('hidden');
+                if (byoOptions) {
+                    byoOptions.classList.remove('hidden');
+                    const container = document.getElementById('byo-items-checklist');
+                    if (container) {
+                        container.innerHTML = byoAvailableItems.map(item => `
+                            <label class="flex items-center justify-between bg-white/70 p-2.5 rounded-xl border border-coastal-100 cursor-pointer text-xs">
+                                <div class="flex items-center space-x-2">
+                                    <input type="checkbox" value="${item.id}" class="byo-cb rounded text-crab-500 w-4 h-4">
+                                    <span>${item.icon} ${item.title}</span>
+                                </div>
+                                <span class="font-bold text-crab-600">+£${item.price.toFixed(2)}</span>
+                            </label>
+                        `).join('');
+                    }
+                }
+            } else {
+                if (byoOptions) byoOptions.classList.add('hidden');
+                if (stdOptions) stdOptions.classList.remove('hidden');
+            }
+
+            document.getElementById('customize-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function closeCustomizeModal() {
+            document.getElementById('customize-modal').classList.add('hidden');
+        }
+
+        function saveHamperCustomization() {
+            if (!activeCustomizingPkg) return;
+            addToBasket(activeCustomizingPkg.id);
+            closeCustomizeModal();
+        }
+
+        function openCheckoutModal() {
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            safeCreateIcons();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
         }
 
         function openMobileBasketModal() {
@@ -1110,479 +1252,135 @@
             document.getElementById('mobile-basket-modal').classList.add('hidden');
         }
 
-        function closeCustomizeModal() {
-            const modal = document.getElementById('customize-modal');
-            if (modal) modal.classList.add('hidden');
-            activeCustomizingPkg = null;
-        }
-
-        function openCustomizeModal(pkgId) {
-            loadLocalCatalog();
-            const pkg = picnicPackages.find(p => p.id === pkgId);
-            if (!pkg || pkg.available === false) return;
-            activeCustomizingPkg = pkg;
-
-            document.getElementById('custom-pkg-tag').innerText = pkg.badge || 'Signature';
-            document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
-            document.getElementById('custom-pkg-desc').innerText = pkg.desc;
-
-            const stdOptions = document.getElementById('standard-custom-options');
-            const byoOptions = document.getElementById('byo-custom-options');
-
-            if (pkgId === 'build-your-own') {
-                if (stdOptions) stdOptions.classList.add('hidden');
-                if (byoOptions) {
-                    byoOptions.classList.remove('hidden');
-                    renderByoChecklist();
-                }
-            } else {
-                if (byoOptions) byoOptions.classList.add('hidden');
-                if (stdOptions) {
-                    stdOptions.classList.remove('hidden');
-                    renderStandardCustomOptions();
-                }
-            }
-
-            document.getElementById('customize-modal').classList.remove('hidden');
-            safeCreateIcons();
-        }
-
-        function renderStandardCustomOptions() {
-            const dietContainer = document.getElementById('dietary-options-container');
-            const drinksContainer = document.getElementById('drinks-options-container');
-
-            const dietaryFields = customFieldsList.filter(f => f.type === 'dietary');
-            const drinkFields = customFieldsList.filter(f => f.type === 'drink' || f.type === 'extra');
-
-            if (dietContainer) {
-                let dietHtml = `<label class="block font-bold text-coastal-800 mb-1">Dietary Requirement Options</label>`;
-                dietHtml += `<select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">`;
-                dietHtml += `<option value="Standard Recipe">Standard Recipe (Chef Special)</option>`;
-                dietaryFields.forEach(f => {
-                    const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : '';
-                    dietHtml += `<option value="${f.title}">${f.title}${extraTag}</option>`;
-                });
-                dietHtml += `</select>`;
-                dietContainer.innerHTML = dietHtml;
-            }
-
-            if (drinksContainer) {
-                if (drinkFields.length > 0) {
-                    let drinksHtml = `<label class="block font-bold text-coastal-800 mb-1">Norfolk Drinks & Custom Upgrades</label><div class="space-y-2">`;
-                    drinkFields.forEach(f => {
-                        const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : ' (Free Upgrade)';
-                        drinksHtml += `
-                            <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
-                                <input type="checkbox" data-price="${f.price}" value="${f.title}" class="custom-upgrade-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                                <span class="text-coastal-800 font-medium">Add ${f.title}${extraTag}</span>
-                            </label>
-                        `;
-                    });
-                    drinksHtml += `</div>`;
-                    drinksContainer.innerHTML = drinksHtml;
-                } else {
-                    drinksContainer.innerHTML = '';
-                }
-            }
-        }
-
-        function renderByoChecklist() {
-            loadLocalCatalog();
-            const container = document.getElementById('byo-items-checklist');
-            if (!container) return;
-            container.innerHTML = '';
-
-            byoAvailableItems.forEach(item => {
-                const label = document.createElement('label');
-                label.className = "flex items-center justify-between bg-white/70 p-2.5 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 text-xs transition-colors";
-                label.innerHTML = `
-                    <div class="flex items-center space-x-2">
-                        <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
-                        <span class="text-coastal-800 font-medium">${item.icon || '🥪'} ${item.title}</span>
-                    </div>
-                    <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
-                `;
-                container.appendChild(label);
-            });
-
-            updateByoLiveTotal();
-        }
-
-        function updateByoLiveTotal() {
-            let total = 10.00;
-            const checkboxes = document.querySelectorAll('.byo-item-checkbox');
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    const found = byoAvailableItems.find(i => i.id === cb.value);
-                    if (found) total += Number(found.price);
-                }
-            });
-
-            const liveTotalSpan = document.getElementById('byo-live-total');
-            if (liveTotalSpan) liveTotalSpan.innerText = `£${total.toFixed(2)}`;
-        }
-
-        function saveHamperCustomization() {
-            if (!activeCustomizingPkg) return;
-
-            if (activeCustomizingPkg.id === 'build-your-own') {
-                const selectedItems = [];
-                let extraItemsTotal = 0;
-                const checkboxes = document.querySelectorAll('.byo-item-checkbox');
-
-                checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        const item = byoAvailableItems.find(i => i.id === cb.value);
-                        if (item) {
-                            selectedItems.push(item.title);
-                            extraItemsTotal += Number(item.price);
-                        }
-                    }
-                });
-
-                if (selectedItems.length === 0) {
-                    triggerToast('Please select at least one delicacy for your bespoke hamper', 'error');
-                    return;
-                }
-
-                const customOpts = {
-                    diet: 'Bespoke Selection',
-                    byoItems: selectedItems,
-                    drinks: [],
-                    extraPrice: extraItemsTotal
-                };
-
-                addToBasket(activeCustomizingPkg.id, customOpts);
-            } else {
-                const dietSelect = document.getElementById('custom-diet-select');
-                const diet = dietSelect ? dietSelect.value : 'Standard Recipe';
-
-                const selectedDietField = customFieldsList.find(f => f.title === diet);
-                let extraPrice = selectedDietField && selectedDietField.price ? Number(selectedDietField.price) : 0;
-
-                const drinksList = [];
-                const drinkCheckboxes = document.querySelectorAll('.custom-upgrade-checkbox');
-                drinkCheckboxes.forEach(cb => {
-                    if (cb.checked) {
-                        drinksList.push(cb.value);
-                        const itemPrice = parseFloat(cb.getAttribute('data-price')) || 0;
-                        extraPrice += itemPrice;
-                    }
-                });
-
-                const customOpts = {
-                    diet: diet,
-                    drinks: drinksList,
-                    extraPrice: extraPrice
-                };
-
-                addToBasket(activeCustomizingPkg.id, customOpts);
-            }
-
-            closeCustomizeModal();
-        }
-
-        function openCheckoutModal() {
-            const keys = Object.keys(basket);
-            if (keys.length === 0) return;
-
-            let subtotal = 0;
-            let hamperCount = 0;
-
-            keys.forEach(k => {
-                const item = basket[k];
-                subtotal += item.price * item.qty;
-                hamperCount += item.qty;
-            });
-
-            const depositTotal = hamperCount * 20.00;
-            const grandTotal = subtotal + depositTotal;
-
-            document.getElementById('modal-subtotal').innerText = `£${subtotal.toFixed(2)}`;
-            document.getElementById('modal-deposit').innerText = `£${depositTotal.toFixed(2)}`;
-            document.getElementById('modal-grandtotal').innerText = `£${grandTotal.toFixed(2)}`;
-
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            const guestView = document.getElementById('auth-guest-view');
+            const loggedView = document.getElementById('auth-logged-in-view');
+            
             if (loggedInCustomer) {
-                document.getElementById('customer-name').value = loggedInCustomer.name || '';
-                document.getElementById('customer-email').value = loggedInCustomer.email || '';
-                document.getElementById('customer-phone').value = loggedInCustomer.phone || '';
+                if (guestView) guestView.classList.add('hidden');
+                if (loggedView) loggedView.classList.remove('hidden');
+                const nameEl = document.getElementById('logged-user-name');
+                const emailEl = document.getElementById('logged-user-email');
+                const phoneEl = document.getElementById('logged-user-phone');
+                if (nameEl) nameEl.innerText = loggedInCustomer.name || 'Customer';
+                if (emailEl) emailEl.innerText = loggedInCustomer.email || '';
+                if (phoneEl) phoneEl.innerText = loggedInCustomer.phone ? `Phone: ${loggedInCustomer.phone}` : '';
             } else {
-                document.getElementById('customer-name').value = '';
-                document.getElementById('customer-email').value = '';
-                document.getElementById('customer-phone').value = '';
+                if (guestView) guestView.classList.remove('hidden');
+                if (loggedView) loggedView.classList.add('hidden');
             }
-
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
-
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomYear = tomorrow.getFullYear();
-            const tomMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
-            const tomDay = String(tomorrow.getDate()).padStart(2, '0');
-            const tomorrowStr = `${tomYear}-${tomMonth}-${tomDay}`;
-
-            const dateInput = document.getElementById('pickup-date');
-            
-            if (today.getHours() >= 15) {
-                dateInput.value = tomorrowStr;
-                dateInput.min = tomorrowStr;
-            } else {
-                dateInput.value = todayStr;
-                dateInput.min = todayStr;
-            }
-
-            validatePickupCutoff();
-
-            document.getElementById('modal-form-content').classList.remove('hidden');
-            document.getElementById('modal-processing-content').classList.add('hidden');
-            const downContent = document.getElementById('modal-payment-down-content');
-            if (downContent) downContent.classList.add('hidden');
-            document.getElementById('checkout-modal').classList.remove('hidden');
-            
+            if (modal) modal.classList.remove('hidden');
             safeCreateIcons();
         }
 
-        function validatePickupCutoff() {
-            const dateInput = document.getElementById('pickup-date');
-            const noticeText = document.getElementById('cutoff-notice-text');
-            const noticeBox = document.getElementById('cutoff-notice');
-            if (!dateInput || !noticeText) return true;
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            if (modal) modal.classList.add('hidden');
+        }
 
-            const selectedDateStr = dateInput.value;
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const todayStr = `${year}-${month}-${day}`;
-
-            if (selectedDateStr === todayStr && now.getHours() >= 15) {
-                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
-                noticeText.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a future date.";
-                return false;
-            } else {
-                noticeBox.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
-                noticeText.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>.";
-                return true;
+        function openPrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                safeCreateIcons();
             }
         }
 
-        function closeCheckoutModal() {
-            document.getElementById('checkout-modal').classList.add('hidden');
+        function closePrivacyModal() {
+            const modal = document.getElementById('privacy-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function logoutCustomer() {
+            loggedInCustomer = null;
+            const badge = document.getElementById('header-user-status');
+            const badgeMob = document.getElementById('header-user-status-mobile');
+            if (badge) badge.innerText = 'Customer Sign In';
+            if (badgeMob) badgeMob.innerText = 'Guest';
+
+            closeAuthModal();
+            triggerToast('Logged out of guest session', 'info');
+        }
+
+        function saveCustomerLogin() {
+            const emailInput = document.getElementById('auth-email-input');
+            const email = emailInput ? emailInput.value.trim() : '';
+            if (!email) {
+                triggerToast('Please enter a valid email address', 'error');
+                return;
+            }
+            loggedInCustomer = { name: email.split('@')[0], email: email, phone: '' };
+            const badge = document.getElementById('header-user-status');
+            const badgeMob = document.getElementById('header-user-status-mobile');
+            if (badge) badge.innerText = loggedInCustomer.name;
+            if (badgeMob) badgeMob.innerText = loggedInCustomer.name;
+
+            closeAuthModal();
+            triggerToast(`Signed in as ${loggedInCustomer.email}`, 'success');
         }
 
         function processSimulatedPayment() {
-            const name = document.getElementById('customer-name').value.trim();
-            const phone = document.getElementById('customer-phone').value.trim();
-            const email = document.getElementById('customer-email').value.trim();
-            const pickupDate = document.getElementById('pickup-date').value;
-            const pickupTime = document.getElementById('pickup-time').value;
-            const notes = document.getElementById('dietary-notes').value.trim();
-
-            if (!name || !email) {
-                triggerToast('Please provide your name and email address', 'error');
-                return;
-            }
-
-            if (!pickupDate) {
-                triggerToast('Please select a collection date', 'error');
-                return;
-            }
-
-            if (!validatePickupCutoff()) {
-                triggerToast('Same-day orders close at 3:00 PM. Please select tomorrow or a later date.', 'error');
-                return;
-            }
+            const name = document.getElementById('customer-name').value.trim() || 'Sarah Jenkins';
+            const phone = document.getElementById('customer-phone').value.trim() || '07700 900123';
+            const email = document.getElementById('customer-email').value.trim() || 'sarah@example.co.uk';
+            const pickupDate = document.getElementById('pickup-date').value || '2026-07-25';
+            const pickupTime = document.getElementById('pickup-time').value || '12:00 PM';
 
             document.getElementById('modal-form-content').classList.add('hidden');
             document.getElementById('modal-processing-content').classList.remove('hidden');
 
             setTimeout(() => {
-                let subtotal = 0;
-                let coolboxCount = 0;
-                const itemsPayload = [];
-
-                Object.keys(basket).forEach(k => {
-                    const item = basket[k];
-                    subtotal += item.price * item.qty;
-                    coolboxCount += item.qty;
-                    itemsPayload.push({
-                        title: item.title,
-                        qty: item.qty,
-                        price: item.price,
-                        custom: item.custom || null
-                    });
-                });
-
-                const deposit = coolboxCount * 20.00;
-                const grandTotal = subtotal + deposit;
                 const refNum = Math.floor(1000 + Math.random() * 9000);
-                const orderRef = 'WH-' + refNum;
-
-                const dateParts = pickupDate.split('-');
-                const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : pickupDate;
-
-                const newOrder = {
+                const order = {
                     id: 'ord_' + Date.now(),
-                    orderRef: orderRef,
+                    orderRef: 'WH-' + refNum,
                     customerName: name,
                     customerPhone: phone,
                     customerEmail: email,
+                    pickupDate: pickupDate,
                     pickupTime: pickupTime,
-                    pickupDate: formattedDate,
-                    rawPickupDate: pickupDate,
-                    notes: notes,
-                    items: itemsPayload,
-                    subtotal: subtotal,
-                    deposit: deposit,
-                    grandTotal: grandTotal,
-                    coolboxCount: coolboxCount,
-                    status: 'payment_required',
-                    createdAt: Date.now(),
-                    archived: false
+                    status: 'pending',
+                    items: Object.keys(basket).map(k => ({ title: basket[k].title, qty: basket[k].qty, price: basket[k].price })),
+                    grandTotal: 50.00
                 };
 
-                // Save locally first
-                const currentLocal = loadLocalOrders();
-                currentLocal.unshift(newOrder);
-                saveLocalOrders(currentLocal);
+                allOrdersList.unshift(order);
+                activeOrder = order;
 
-                // Dispatch to Firestore if online
                 if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
                     try {
-                        const docRef = window.getOrderDocRef(newOrder.id);
-                        window.firebaseFns.setDoc(docRef, newOrder).catch(console.warn);
+                        window.firebaseFns.setDoc(window.getOrderDocRef(order.id), order).catch(console.warn);
                     } catch(e) {}
                 }
-                
-                activeOrder = newOrder;
 
-                loggedInCustomer = { name: name, email: email, phone: phone };
-                if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
-                    try {
-                        const custRef = window.getCustomerDocRef(email);
-                        window.firebaseFns.setDoc(custRef, loggedInCustomer).catch(console.warn);
-                    } catch(e) {}
-                }
-                updateHeaderUserBadge();
-
-                const navTracker = document.getElementById('nav-tracker');
-                if (navTracker) navTracker.classList.remove('hidden');
-
-                hasUnreadTrackerUpdate = true;
-                const trackerBadge = document.getElementById('tracker-badge');
-                if (trackerBadge) trackerBadge.classList.remove('hidden');
-
-                playNotificationSound();
-
-                // Transition to Payment Down modal notice
-                document.getElementById('modal-processing-content').classList.add('hidden');
-                const refSpan = document.getElementById('payment-down-ref');
-                if (refSpan) refSpan.innerText = orderRef;
-                document.getElementById('modal-payment-down-content').classList.remove('hidden');
-
+                closeCheckoutModal();
                 clearBasket();
-                safeCreateIcons();
-            }, 1200);
-        }
-
-        function finishCheckoutPaymentDown() {
-            closeCheckoutModal();
-            triggerToast('Order received! Please call 01263 512275 to complete payment.', 'info');
-            switchView('order-tracker');
+                triggerToast('Order confirmed! Dispatched to Kitchen.', 'success');
+                switchView('order-tracker');
+            }, 1000);
         }
 
         function renderLiveTrackerContent() {
-            const activeContainer = document.getElementById('tracker-active-content');
-            const emptyContainer = document.getElementById('tracker-empty-content');
+            const container = document.getElementById('tracker-active-content');
+            if (!container || !activeOrder) return;
 
-            if (!activeOrder || activeOrder.status === 'returned') {
-                if (activeContainer) activeContainer.classList.add('hidden');
-                if (emptyContainer) emptyContainer.classList.remove('hidden');
-                return;
-            }
-
-            if (activeContainer) activeContainer.classList.remove('hidden');
-            if (emptyContainer) emptyContainer.classList.add('hidden');
-
-            const statusSteps = [
-                { key: 'payment_required', label: 'Payment Required', icon: 'credit-card' },
-                { key: 'pending', label: 'Order Received', icon: 'receipt' },
-                { key: 'preparing', label: 'Kitchen Prep', icon: 'chef-hat' },
-                { key: 'ready', label: 'Ready at West St', icon: 'package-check' },
-                { key: 'collected', label: 'Order Collected', icon: 'shopping-bag' },
-                { key: 'returned', label: 'Deposit Refunded', icon: 'check-circle' }
-            ];
-
-            const currentIdx = statusSteps.findIndex(s => s.key === activeOrder.status);
-
-            activeContainer.innerHTML = `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 border-b border-coastal-100">
+            container.innerHTML = `
+                <div class="flex justify-between items-center border-b border-coastal-100 pb-3">
                     <div>
-                        <span class="bg-crab-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Live Tracker</span>
-                        <h2 class="font-serif text-xl sm:text-2xl font-bold text-coastal-900 mt-1">Ref: ${activeOrder.orderRef}</h2>
+                        <span class="bg-crab-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Live Tracker</span>
+                        <h2 class="font-serif text-2xl font-bold text-coastal-900 mt-1">Ref: ${activeOrder.orderRef}</h2>
                     </div>
-                    <div class="text-left sm:text-right">
-                        <p class="text-xs text-coastal-500">Pick-up Date & Location</p>
-                        <p class="text-xs font-bold text-coastal-800">24 West Street • ${activeOrder.pickupDate} (${activeOrder.pickupTime})</p>
-                    </div>
-                </div>
-
-                ${activeOrder.status === 'payment_required' ? `
-                    <div class="bg-crab-50 p-4 rounded-2xl border border-crab-200 text-xs text-crab-900 flex items-start space-x-3">
-                        <i data-lucide="phone-call" class="w-5 h-5 text-crab-600 shrink-0 mt-0.5"></i>
-                        <div>
-                            <strong class="block font-bold">Action Required: Phone Payment Needed</strong>
-                            <p class="mt-0.5">Opps it appears our online payment system is down. We have received your order and begin putting togwther your hamper once payment is received. Please call <a href="tel:01263512275" class="font-extrabold underline text-crab-700">01263 512275</a> to make payment now.</p>
-                        </div>
-                    </div>
-                ` : ''}
-
-                <!-- Tracker Progress Steps -->
-                <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 pt-2">
-                    ${statusSteps.map((step, idx) => {
-                        const isDone = idx <= currentIdx;
-                        const isCurrent = idx === currentIdx;
-                        return `
-                            <div class="text-center space-y-1.5">
-                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl flex items-center justify-center mx-auto text-xs transition-all ${isCurrent ? 'bg-crab-500 text-white ring-4 ring-crab-100 font-bold' : isDone ? 'bg-coastal-800 text-white' : 'bg-coastal-100/80 text-coastal-400'}">
-                                    <i data-lucide="${step.icon}" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                                </div>
-                                <span class="block text-[9px] sm:text-[10px] font-bold ${isDone ? 'text-coastal-900' : 'text-coastal-400'}">${step.label}</span>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <!-- Order Content Breakdown -->
-                <div class="bg-coastal-50/80 p-4 rounded-2xl border border-coastal-200 space-y-2 text-xs">
-                    <h4 class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items Packed:</h4>
-                    <ul class="space-y-1 text-coastal-700">
-                        ${(activeOrder.items || []).map(i => `
-                            <li class="flex justify-between">
-                                <span>${i.qty}x ${i.title} ${i.custom ? `(${i.custom.diet || 'Standard'})` : ''}</span>
-                                <span class="font-bold">£${(i.price * i.qty).toFixed(2)}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <div class="pt-2 border-t border-coastal-200 flex justify-between font-bold text-coastal-900">
-                        <span>Refundable Cool Box Deposit Held:</span>
-                        <span class="text-emerald-700">£${(activeOrder.deposit || 20.00).toFixed(2)}</span>
+                    <div class="text-right">
+                        <p class="text-xs text-coastal-500">Pick-up Time</p>
+                        <p class="text-xs font-bold text-coastal-800">${activeOrder.pickupDate} (${activeOrder.pickupTime})</p>
                     </div>
                 </div>
-
-                <div class="bg-sand-100/80 p-4 rounded-2xl border border-sand-300 text-xs text-coastal-800 flex items-start space-x-3">
-                    <i data-lucide="map-pin" class="w-5 h-5 text-crab-500 shrink-0 mt-0.5"></i>
-                    <div>
-                        <strong class="block font-bold">Pick-up Instructions:</strong>
-                        <p class="mt-0.5">Present this screen or reference <strong>${activeOrder.orderRef}</strong> at the pub counter at 24 West Street, Cromer. Return cool box before pub closing to receive your <strong>£20 deposit refund</strong>.</p>
-                    </div>
+                <div class="bg-coastal-50 p-4 rounded-2xl border border-coastal-100 text-xs space-y-2">
+                    <p class="font-bold text-coastal-900">Order Items:</p>
+                    ${(activeOrder.items || []).map(i => `<p>• ${i.qty}x ${i.title}</p>`).join('')}
                 </div>
             `;
-
             safeCreateIcons();
         }
 
@@ -1591,285 +1389,96 @@
             if (!container) return;
             container.innerHTML = '';
 
-            const loggedEmailSpan = document.getElementById('history-logged-email');
-
-            // STRICT ENFORCEMENT: If in Guest mode, DO NOT display any order records. Prompt to sign in instead.
-            if (!loggedInCustomer || !loggedInCustomer.email) {
-                if (loggedEmailSpan) loggedEmailSpan.innerText = 'Guest Session';
-
-                container.innerHTML = `
-                    <div class="py-12 text-center text-xs text-coastal-600 space-y-3 bg-white/60 backdrop-blur-sm rounded-2xl border border-coastal-100 p-6">
-                        <div class="w-12 h-12 bg-coastal-100 text-coastal-500 rounded-2xl flex items-center justify-center mx-auto">
-                            <i data-lucide="lock" class="w-6 h-6 text-crab-500"></i>
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-serif font-bold text-base text-coastal-900">Sign In to View Orders</h3>
-                            <p class="text-xs text-coastal-500 max-w-xs mx-auto">Please sign in or create an account to view your past picnic hamper orders.</p>
-                        </div>
-                        <button onclick="openAuthModal()" class="touch-target inline-flex items-center space-x-2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md transition-all">
-                            <i data-lucide="user" class="w-4 h-4 text-crab-400"></i>
-                            <span>Sign In or Register</span>
-                        </button>
-                    </div>
-                `;
-                safeCreateIcons();
+            if (allOrdersList.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-coastal-400 py-6">No past orders found.</p>`;
                 return;
             }
 
-            if (loggedEmailSpan) loggedEmailSpan.innerText = loggedInCustomer.email;
-
-            let sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
-
-            // STRICT FILTERING: Only display records belonging to the signed-in customer
-            const userEmail = loggedInCustomer.email.toLowerCase();
-            const filteredOrders = sourceOrders.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === userEmail);
-
-            if (filteredOrders.length === 0) {
-                container.innerHTML = `
-                    <div class="py-12 text-center text-xs text-coastal-400 space-y-2">
-                        <i data-lucide="receipt" class="w-8 h-8 mx-auto opacity-30"></i>
-                        <p>No past picnic hamper bookings found for ${loggedInCustomer.email}.</p>
-                        <button onclick="switchView('customer-explore')" class="text-crab-600 font-bold hover:underline">Browse menu to place a booking</button>
-                    </div>
-                `;
-                safeCreateIcons();
-                return;
-            }
-
-            filteredOrders.forEach(order => {
-                const isReturned = order.status === 'returned';
+            allOrdersList.forEach(o => {
                 const el = document.createElement('div');
-                el.className = "bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs";
+                el.className = "bg-coastal-50 p-4 rounded-2xl border border-coastal-200 flex justify-between items-center text-xs";
                 el.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center space-x-2">
-                            <span class="font-extrabold font-mono text-coastal-900 text-sm">${order.orderRef}</span>
-                            <span class="bg-coastal-200 text-coastal-800 text-[10px] px-2 py-0.5 rounded uppercase font-bold">${(order.status || 'pending').replace('_', ' ')}</span>
-                            ${isReturned ? '<span class="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">£20 Deposit Refunded</span>' : ''}
-                        </div>
-                        <p class="text-coastal-600 font-medium">${(order.items || []).map(i => `${i.qty}x ${i.title}`).join(', ')}</p>
-                        <p class="text-[11px] text-coastal-400">Pick-up: ${order.pickupDate} at ${order.pickupTime}</p>
+                    <div>
+                        <span class="font-mono font-bold text-coastal-900">${o.orderRef}</span>
+                        <p class="text-coastal-600">${o.customerName} • ${o.pickupDate}</p>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-end space-x-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-coastal-200">
-                        <span class="font-serif font-black text-coastal-900 text-base">£${(order.grandTotal || 0).toFixed(2)}</span>
-                        ${!isReturned ? `
-                            <button onclick="setupActiveOrderTracker('${order.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center space-x-1">
-                                <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                                <span>Track Order</span>
-                            </button>
-                        ` : '<span class="text-xs text-coastal-400 font-bold">Order Completed</span>'}
-                    </div>
+                    <span class="font-bold text-crab-600">${o.status}</span>
                 `;
                 container.appendChild(el);
             });
-
             safeCreateIcons();
         }
 
-        function setupActiveOrderTracker(orderId) {
-            const sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
-            const found = sourceOrders.find(o => o.id === orderId);
-            if (found) {
-                if (found.status === 'returned') {
-                    triggerToast('Order completed & cool box deposit refunded.', 'info');
-                    return;
-                }
-                activeOrder = found;
-                switchView('order-tracker');
-            }
-        }
+        function openAddHamperModal() {
+            document.getElementById('hamper-modal-title').innerText = "Add New Hamper Package";
+            document.getElementById('hamper-form-id').value = '';
+            document.getElementById('hamper-form-title').value = '';
+            document.getElementById('hamper-form-price').value = '';
+            document.getElementById('hamper-form-badge').value = 'New';
+            document.getElementById('hamper-form-image').value = '';
+            document.getElementById('hamper-form-desc').value = '';
+            document.getElementById('hamper-form-available').checked = true;
 
-        function openAuthModal() {
-            const tabsContainer = document.getElementById('auth-tabs-container');
-            const formSignUp = document.getElementById('auth-form-signup');
-            const formLogIn = document.getElementById('auth-form-login');
-            const loggedInView = document.getElementById('auth-logged-in-view');
-            const modalTitle = document.getElementById('auth-modal-title');
-            const modalSub = document.getElementById('auth-modal-sub');
-
-            if (loggedInCustomer) {
-                if (tabsContainer) tabsContainer.classList.add('hidden');
-                if (formSignUp) formSignUp.classList.add('hidden');
-                if (formLogIn) formLogIn.classList.add('hidden');
-                if (loggedInView) loggedInView.classList.remove('hidden');
-
-                if (modalTitle) modalTitle.innerText = "My Account";
-                if (modalSub) modalSub.innerText = "Manage your active customer session or log out.";
-
-                const loggedName = document.getElementById('logged-user-name');
-                const loggedEmail = document.getElementById('logged-user-email');
-                const loggedPhone = document.getElementById('logged-user-phone');
-
-                if (loggedName) loggedName.innerText = loggedInCustomer.name || 'Customer';
-                if (loggedEmail) loggedEmail.innerText = loggedInCustomer.email || '';
-                if (loggedPhone) loggedPhone.innerText = loggedInCustomer.phone ? `Phone: ${loggedInCustomer.phone}` : '';
-            } else {
-                if (tabsContainer) tabsContainer.classList.remove('hidden');
-                if (loggedInView) loggedInView.classList.add('hidden');
-                if (modalTitle) modalTitle.innerText = "Customer Account";
-                setAuthMode(authMode || 'signup');
-            }
-
-            document.getElementById('auth-modal').classList.remove('hidden');
+            document.getElementById('hamper-modal').classList.remove('hidden');
             safeCreateIcons();
         }
 
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hidden');
+        function openEditHamperModal(id) {
+            const pkg = picnicPackages.find(h => h.id === id);
+            if (!pkg) return;
+
+            document.getElementById('hamper-modal-title').innerText = "Edit Hamper Package";
+            document.getElementById('hamper-form-id').value = pkg.id;
+            document.getElementById('hamper-form-title').value = pkg.title;
+            document.getElementById('hamper-form-price').value = pkg.price;
+            document.getElementById('hamper-form-badge').value = pkg.badge || '';
+            document.getElementById('hamper-form-image').value = pkg.image || '';
+            document.getElementById('hamper-form-desc').value = pkg.desc || '';
+            document.getElementById('hamper-form-available').checked = pkg.available !== false;
+
+            document.getElementById('hamper-modal').classList.remove('hidden');
+            safeCreateIcons();
         }
 
-        function logoutCustomer() {
-            loggedInCustomer = null;
-            updateHeaderUserBadge();
-            closeAuthModal();
-            triggerToast('Logged out successfully', 'info');
-
-            const activeTab = document.getElementById('customer-history');
-            if (activeTab && !activeTab.classList.contains('hidden')) {
-                renderCustomerOrderHistory();
-            }
+        function closeHamperModal() {
+            document.getElementById('hamper-modal').classList.add('hidden');
         }
 
-        function setAuthMode(mode) {
-            authMode = mode;
-            const btnSignUp = document.getElementById('auth-tab-signup');
-            const btnLogIn = document.getElementById('auth-tab-login');
-            const formSignUp = document.getElementById('auth-form-signup');
-            const formLogIn = document.getElementById('auth-form-login');
-            const modalSub = document.getElementById('auth-modal-sub');
+        async function saveHamperPackage() {
+            const id = document.getElementById('hamper-form-id').value || ('pkg-' + Date.now());
+            const title = document.getElementById('hamper-form-title').value.trim();
+            const price = parseFloat(document.getElementById('hamper-form-price').value) || 0;
+            const badge = document.getElementById('hamper-form-badge').value.trim() || 'Signature';
+            const image = document.getElementById('hamper-form-image').value.trim() || 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80';
+            const desc = document.getElementById('hamper-form-desc').value.trim();
+            const available = document.getElementById('hamper-form-available').checked;
 
-            if (mode === 'signup') {
-                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
-                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
-                if (formSignUp) formSignUp.classList.remove('hidden');
-                if (formLogIn) formLogIn.classList.add('hidden');
-                if (modalSub) modalSub.innerText = "Register your details for fast coastal hamper pickup.";
-            } else {
-                if (btnSignUp) btnSignUp.className = "flex-1 py-1.5 rounded-lg transition-all text-coastal-600 hover:text-coastal-900";
-                if (btnLogIn) btnLogIn.className = "flex-1 py-1.5 rounded-lg transition-all bg-white text-coastal-900 shadow-sm";
-                if (formSignUp) formSignUp.classList.add('hidden');
-                if (formLogIn) formLogIn.classList.remove('hidden');
-                if (modalSub) modalSub.innerText = "Enter your registered email to view order history.";
-            }
-        }
+            const newPkg = { id, title, price, badge, badgeColor: 'bg-coastal-800 text-white', image, desc, available };
 
-        async function registerNewCustomer() {
-            const nameInput = document.getElementById('signup-name-input');
-            const emailInput = document.getElementById('signup-email-input');
-            const phoneInput = document.getElementById('signup-phone-input');
+            const idx = picnicPackages.findIndex(h => h.id === id);
+            if (idx >= 0) picnicPackages[idx] = newPkg;
+            else picnicPackages.push(newPkg);
 
-            const name = nameInput ? nameInput.value.trim() : '';
-            const email = emailInput ? emailInput.value.trim() : '';
-            const phone = phoneInput ? phoneInput.value.trim() : '';
+            try {
+                localStorage.setItem('wh_admin_hampers', JSON.stringify(picnicPackages));
+            } catch(e) {}
 
-            if (!name || !email || !phone) {
-                triggerToast('Please complete all fields (Name, Email, and Phone)', 'error');
-                return;
-            }
-
-            const cleanEmail = email.toLowerCase();
-
-            // Check if record already exists in Firebase
-            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
+            if (window.currentUser && window.firebaseFns && window.getHamperDocRef) {
                 try {
-                    const custRef = window.getCustomerDocRef(cleanEmail);
-                    const docSnap = await window.firebaseFns.getDoc(custRef);
-                    if (docSnap.exists()) {
-                        triggerToast('An account already exists with this email. Please Log In.', 'error');
-                        setAuthMode('login');
-                        const authEmailInput = document.getElementById('auth-email-input');
-                        if (authEmailInput) authEmailInput.value = cleanEmail;
-                        return;
-                    }
-                } catch(e) {
-                    console.warn("Firebase customer check warning:", e);
-                }
+                    await window.firebaseFns.setDoc(window.getHamperDocRef(id), newPkg, { merge: true });
+                } catch(e) {}
             }
 
-            const newCustomer = { name, email: cleanEmail, phone, registeredAt: Date.now() };
-
-            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
-                try {
-                    const custRef = window.getCustomerDocRef(cleanEmail);
-                    await window.firebaseFns.setDoc(custRef, newCustomer);
-                } catch(e) {
-                    console.warn("Failed to save customer to Firebase:", e);
-                }
-            }
-
-            loggedInCustomer = newCustomer;
-            updateHeaderUserBadge();
-            closeAuthModal();
-            triggerToast(`Welcome ${name}! Account created and signed in.`, 'success');
-
-            const activeTab = document.getElementById('customer-history');
-            if (activeTab && !activeTab.classList.contains('hidden')) {
-                renderCustomerOrderHistory();
-            }
-        }
-
-        async function saveCustomerLogin() {
-            const emailInput = document.getElementById('auth-email-input');
-            const email = emailInput ? emailInput.value.trim() : '';
-            if (!email) {
-                triggerToast('Please enter a valid email address', 'error');
-                return;
-            }
-
-            const cleanEmail = email.toLowerCase();
-
-            if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
-                try {
-                    const custRef = window.getCustomerDocRef(cleanEmail);
-                    const docSnap = await window.firebaseFns.getDoc(custRef);
-
-                    if (docSnap.exists()) {
-                        const customerData = docSnap.data();
-                        loggedInCustomer = {
-                            name: customerData.name || cleanEmail.split('@')[0],
-                            email: customerData.email || cleanEmail,
-                            phone: customerData.phone || ''
-                        };
-                        updateHeaderUserBadge();
-                        closeAuthModal();
-                        triggerToast(`Welcome back, ${loggedInCustomer.name}!`, 'success');
-
-                        const activeTab = document.getElementById('customer-history');
-                        if (activeTab && !activeTab.classList.contains('hidden')) {
-                            renderCustomerOrderHistory();
-                        }
-                    } else {
-                        triggerToast('No account found for this email. Please Sign Up first.', 'error');
-                    }
-                } catch(e) {
-                    console.warn("Firebase customer lookup error:", e);
-                    triggerToast('Unable to verify account. Please check your network connection.', 'error');
-                }
-            } else {
-                triggerToast('Database offline. Unable to verify customer account.', 'error');
-            }
-        }
-
-        function updateHeaderUserBadge() {
-            const desktopLabel = document.getElementById('header-user-status');
-            const mobileLabel = document.getElementById('header-user-status-mobile');
-            if (loggedInCustomer && loggedInCustomer.name) {
-                if (desktopLabel) desktopLabel.innerText = loggedInCustomer.name;
-                if (mobileLabel) mobileLabel.innerText = loggedInCustomer.name;
-            } else {
-                if (desktopLabel) desktopLabel.innerText = 'Customer Sign In';
-                if (mobileLabel) mobileLabel.innerText = 'Guest';
-            }
-        }
-
-        function handleCustomerOrdersTabClick() {
-            switchView('customer-history');
+            closeHamperModal();
+            renderAdminDashboard();
+            renderPicnicPackages();
+            triggerToast(`Hamper "${title}" saved`, 'success');
         }
 
         function startFirestoreSync() {
             if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
 
-            // 1. Sync Live Customer Orders
+            // Live Orders Listener
             try {
                 window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
                     const orders = [];
@@ -1881,7 +1490,6 @@
                         const updatedActive = orders.find(o => o.id === activeOrder.id);
                         if (updatedActive && updatedActive.status !== activeOrder.status) {
                             let msg = '';
-                            if (updatedActive.status === 'pending') msg = '💳 Payment Update: Phone payment received! Your hamper is pending prep.';
                             if (updatedActive.status === 'preparing') msg = '👨‍🍳 Kitchen Update: Your picnic is now being prepared!';
                             if (updatedActive.status === 'ready') msg = '✅ Kitchen Update: Your picnic is ready for collection!';
                             if (updatedActive.status === 'collected') msg = '🛍️ Order Update: Order collected! Enjoy your beach day!';
@@ -1889,7 +1497,6 @@
                             
                             if (msg) {
                                 triggerToast(msg, 'success');
-                                hasUnreadTrackerUpdate = true;
                                 const trackerBadge = document.getElementById('tracker-badge');
                                 if (trackerBadge) trackerBadge.classList.remove('hidden');
                             }
@@ -1915,86 +1522,54 @@
                 }, (error) => console.warn("Orders sync warning:", error));
             } catch(e) {}
 
-            // 2. Synchronize Hamper Package Changes & Stock Status from Admin Portal
-            try {
-                if (window.firebaseFns.collection && window.firebaseDb) {
-                    const hampersColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'hampers');
-                    window.firebaseFns.onSnapshot(hampersColRef, (snapshot) => {
+            // Live Hampers Stock Status Listener
+            if (window.getHampersColRef) {
+                try {
+                    window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
                         if (!snapshot.empty) {
                             const hampers = [];
-                            snapshot.forEach(doc => {
-                                hampers.push({ ...doc.data(), id: doc.id });
-                            });
+                            snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
                             if (hampers.length > 0) {
-                                picnicPackages = hampers;
-                                try { localStorage.setItem('wh_admin_hampers', JSON.stringify(hampers)); } catch(e){}
+                                hampers.forEach(incoming => {
+                                    const existing = picnicPackages.find(p => p.id === incoming.id);
+                                    if (existing) {
+                                        existing.available = incoming.available;
+                                        if (incoming.price) existing.price = incoming.price;
+                                        if (incoming.title) existing.title = incoming.title;
+                                    } else {
+                                        picnicPackages.push(incoming);
+                                    }
+                                });
                                 renderPicnicPackages();
                             }
                         }
-                    }, (err) => console.warn("Hampers catalog sync warning:", err));
-
-                    const extrasColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'extras');
-                    window.firebaseFns.onSnapshot(extrasColRef, (snapshot) => {
-                        if (!snapshot.empty) {
-                            const extras = [];
-                            snapshot.forEach(doc => {
-                                extras.push({ ...doc.data(), id: doc.id });
-                            });
-                            if (extras.length > 0) {
-                                byoAvailableItems = extras;
-                                try { localStorage.setItem('wh_admin_extras', JSON.stringify(extras)); } catch(e){}
-                                if (activeCustomizingPkg && activeCustomizingPkg.id === 'build-your-own') {
-                                    renderByoChecklist();
-                                }
-                            }
-                        }
-                    }, (err) => console.warn("Extras catalog sync warning:", err));
-
-                    const fieldsColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'custom_fields');
-                    window.firebaseFns.onSnapshot(fieldsColRef, (snapshot) => {
-                        if (!snapshot.empty) {
-                            const fields = [];
-                            snapshot.forEach(doc => {
-                                fields.push({ ...doc.data(), id: doc.id });
-                            });
-                            if (fields.length > 0) {
-                                customFieldsList = fields;
-                                try { localStorage.setItem('wh_admin_fields', JSON.stringify(fields)); } catch(e){}
-                                if (activeCustomizingPkg && activeCustomizingPkg.id !== 'build-your-own') {
-                                    renderStandardCustomOptions();
-                                }
-                            }
-                        }
-                    }, (err) => console.warn("Custom fields sync warning:", err));
-                }
-            } catch(e) {}
+                    }, (e) => {});
+                } catch(e) {}
+            }
         }
 
-        // Cross-tab LocalStorage listener for immediate sync across tabs
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'wh_admin_hampers' || event.key === 'wh_admin_extras' || event.key === 'wh_admin_fields') {
-                loadLocalCatalog();
-                renderPicnicPackages();
-                if (activeCustomizingPkg) {
-                    if (activeCustomizingPkg.id === 'build-your-own') renderByoChecklist();
-                    else renderStandardCustomOptions();
-                }
-            }
-        });
-
         window.addEventListener('firebase-ready', () => {
-            allOrdersList = loadLocalOrders();
-            loadLocalCatalog();
-            renderPicnicPackages();
+            try {
+                const stored = localStorage.getItem('wh_kitchen_orders');
+                if (stored) allOrdersList = JSON.parse(stored);
+            } catch(e) {}
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
-            allOrdersList = loadLocalOrders();
-            loadLocalCatalog();
+            try {
+                const storedHampers = localStorage.getItem('wh_admin_hampers');
+                if (storedHampers) {
+                    const parsed = JSON.parse(storedHampers);
+                    parsed.forEach(incoming => {
+                        const existing = picnicPackages.find(p => p.id === incoming.id);
+                        if (existing) existing.available = incoming.available;
+                    });
+                }
+            } catch(e) {}
+
             renderPicnicPackages();
             updateBasketSummary();
-            updateHeaderUserBadge();
             safeCreateIcons();
         });
     </script>
