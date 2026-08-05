@@ -1671,6 +1671,12 @@
                         <h4 class="font-bold text-coastal-900 text-sm">Hamper Items & Customisations:</h4>
                         <span class="text-[10px] bg-coastal-200 text-coastal-800 px-2 py-0.5 rounded font-bold uppercase">${(activeOrder.status || 'pending').replace('_', ' ')}</span>
                     </div>
+                <!-- Order Content Breakdown -->
+                <div class="bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 space-y-3 text-xs">
+                    <div class="flex justify-between items-center border-b border-coastal-200 pb-2">
+                        <h4 class="font-bold text-coastal-900 text-sm">Hamper Items & Customisations:</h4>
+                        <span class="text-[10px] bg-coastal-200 text-coastal-800 px-2 py-0.5 rounded font-bold uppercase">${(activeOrder.status || 'pending').replace('_', ' ')}</span>
+                    </div>
 
                     <div class="space-y-3">
                         ${(activeOrder.items || []).map(i => {
@@ -1679,20 +1685,16 @@
                                 const details = [];
                                 if (i.custom.diet && i.custom.diet !== 'Standard Recipe' && i.custom.diet !== 'Bespoke Selection') {
                                     details.push(`
-                                        <div class="flex justify-between text-coastal-600 text-[11px] pl-3">
-                                            <span>• Dietary Option: ${i.custom.diet}</span>
-                                            <span class="font-medium text-coastal-500">Included</span>
+                                        <div class="text-coastal-600 text-[11px] pl-3">
+                                            • Dietary Option: ${i.custom.diet}
                                         </div>
                                     `);
                                 }
                                 if (i.custom.drinks && i.custom.drinks.length > 0) {
                                     i.custom.drinks.forEach(dName => {
-                                        const match = customFieldsList.find(f => f.title === dName);
-                                        const priceTag = match && match.price > 0 ? `+£${Number(match.price).toFixed(2)}` : '+£3.50';
                                         details.push(`
-                                            <div class="flex justify-between text-coastal-600 text-[11px] pl-3">
-                                                <span>• Drink Upgrade: ${dName}</span>
-                                                <span class="font-semibold text-crab-600">${priceTag}</span>
+                                            <div class="text-coastal-600 text-[11px] pl-3">
+                                                • Drink Upgrade: ${dName}
                                             </div>
                                         `);
                                     });
@@ -1700,12 +1702,10 @@
                                 if (i.custom.byoItems && i.custom.byoItems.length > 0) {
                                     i.custom.byoItems.forEach(itemTitle => {
                                         const match = byoAvailableItems.find(b => b.title === itemTitle);
-                                        const priceStr = match ? `+£${Number(match.price).toFixed(2)}` : 'Extra';
                                         const icon = match ? match.icon : '🦀';
                                         details.push(`
-                                            <div class="flex justify-between text-coastal-700 text-[11px] pl-3">
-                                                <span>${icon} ${itemTitle}</span>
-                                                <span class="font-semibold text-crab-600">${priceStr}</span>
+                                            <div class="text-coastal-700 text-[11px] pl-3">
+                                                ${icon} ${itemTitle}
                                             </div>
                                         `);
                                     });
@@ -1729,7 +1729,7 @@
 
                     <div class="pt-2 border-t border-coastal-200 space-y-1.5 text-xs">
                         <div class="flex justify-between text-coastal-600">
-                            <span>Hampers & Extras Subtotal:</span>
+                            <span>Hampers Subtotal:</span>
                             <span class="font-semibold">£${(activeOrder.subtotal || activeOrder.items.reduce((acc, x) => acc + (x.price * x.qty), 0)).toFixed(2)}</span>
                         </div>
                         <div class="flex justify-between text-emerald-700 font-medium">
