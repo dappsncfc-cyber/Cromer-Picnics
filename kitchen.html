@@ -107,16 +107,14 @@
                         <i data-lucide="lock" class="w-4 h-4 text-crab-400"></i>
                         <span>Lock Dashboard</span>
                     </button>
-                    <button id="btn-open-demo-modal" onclick="openDemoModal()" class="hidden touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center space-x-1.5 transition-all shadow-sm active:scale-95">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                        <span>+ Test Order</span>
-                    </button>
+                    <!-- Quick Access Test Order Button removed as requested -->
                 </div>
 
             </div>
         </div>
     </header>
 
+    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
@@ -132,7 +130,8 @@
             
             <div class="space-y-3 pt-2">
                 <div>
-                    <input type="password" id="staff-pin-input" placeholder="Enter Kitchen PIN" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
+                    <!-- PIN logic updated to 1884 as requested -->
+                    <input type="password" id="staff-pin-input" placeholder="Enter Staff PIN" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
                     <p id="pin-error-text" class="text-xs text-crab-600 font-bold mt-1.5 hidden"></p>
                 </div>
                 <button id="btn-unlock" onclick="unlockKitchenPortal()" class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 active:scale-[0.98] text-white font-bold py-3.5 rounded-2xl text-xs transition-all shadow-md flex items-center justify-center space-x-2">
@@ -144,6 +143,7 @@
 
         <div id="kitchen-dashboard-content" class="hidden space-y-6">
             
+            <!-- Staff Metrics Bar -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div class="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Pending Orders</p>
@@ -164,6 +164,7 @@
                 </div>
             </div>
 
+            <!-- Kitchen Controls & Sub-Tabs -->
             <div class="glass-card p-4 sm:p-6 rounded-3xl border border-coastal-200 shadow-sm space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div class="flex items-center space-x-3">
@@ -205,70 +206,6 @@
         </div>
 
     </main>
-
-    <div id="demo-order-modal" class="fixed inset-0 bg-coastal-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-coastal-200 space-y-4">
-            <div class="flex justify-between items-center border-b border-coastal-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <i data-lucide="plus-circle" class="w-5 h-5 text-crab-600"></i>
-                    <h3 class="font-serif font-bold text-coastal-900 text-base">Generate Test Kitchen Ticket</h3>
-                </div>
-                <button onclick="closeDemoModal()" class="text-coastal-400 hover:text-coastal-700 p-1">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <form id="demo-order-form" onsubmit="handleDemoOrderSubmit(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Customer Name</label>
-                    <input type="text" id="demo-cust-name" required value="Sarah Jenkins" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Phone</label>
-                        <input type="text" id="demo-cust-phone" required value="07700 900123" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Email</label>
-                        <input type="email" id="demo-cust-email" required value="sarah.jenkins@example.com" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Pickup Date</label>
-                        <input type="date" id="demo-pickup-date" required class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-coastal-700 mb-1">Pickup Time</label>
-                        <select id="demo-pickup-time" required class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                            <option value="12:00 PM">12:00 PM</option>
-                            <option value="12:30 PM">12:30 PM</option>
-                            <option value="1:00 PM">01:00 PM</option>
-                            <option value="1:30 PM" selected>01:30 PM</option>
-                            <option value="2:00 PM">02:00 PM</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Hamper Selection</label>
-                    <select id="demo-item-preset" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                        <option value="crab">Cromer Crab Feast (£48.00)</option>
-                        <option value="classic">Norfolk Artisan Ploughman's (£38.00)</option>
-                        <option value="veggie">Saltmarsh Wild Grazing (£36.00)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block font-bold text-coastal-700 mb-1">Special Notes</label>
-                    <input type="text" id="demo-notes" placeholder="e.g. Extra napkins, gluten free bread" class="w-full bg-coastal-50 border border-coastal-200 rounded-xl px-3 py-2 text-coastal-900 focus:outline-none focus:ring-2 focus:ring-coastal-600">
-                </div>
-
-                <div class="pt-3 flex space-x-2">
-                    <button type="button" onclick="closeDemoModal()" class="w-1/2 bg-coastal-100 hover:bg-coastal-200 text-coastal-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-                    <button type="submit" class="w-1/2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add Ticket</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -357,9 +294,7 @@
                 if (window.lucide && typeof window.lucide.createIcons === 'function') {
                     window.lucide.createIcons();
                 }
-            } catch (err) {
-                console.warn('Lucide icon rendering error:', err);
-            }
+            } catch (err) {}
         }
 
         function triggerToast(message, type = 'info') {
@@ -400,21 +335,18 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
                 gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.5);
-                triggerToast('🔊 Audio alert chime tested', 'info');
-            } catch(e) {
-                console.warn('Audio playback restricted:', e);
-                triggerToast('Audio chime ready (Click page first)', 'info');
-            }
+            } catch(e) {}
         }
 
+        // Pin correctly updated to 1884
         function unlockKitchenPortal() {
             const pinInput = document.getElementById('staff-pin-input');
             const errText = document.getElementById('pin-error-text');
@@ -438,15 +370,13 @@
             const overlay = document.getElementById('kitchen-pin-overlay');
             const content = document.getElementById('kitchen-dashboard-content');
             const lockBtn = document.getElementById('lock-btn');
-            const demoBtn = document.getElementById('btn-open-demo-modal');
 
             if (overlay) overlay.classList.add('hidden');
             if (content) content.classList.remove('hidden');
             if (lockBtn) lockBtn.classList.remove('hidden');
-            if (demoBtn) demoBtn.classList.remove('hidden');
 
             renderKitchenDashboard();
-            triggerToast('Kitchen Portal Unlocked Successfully', 'success');
+            triggerToast('Kitchen Portal Unlocked', 'success');
         }
 
         function lockKitchenPortal() {
@@ -454,13 +384,11 @@
             const overlay = document.getElementById('kitchen-pin-overlay');
             const content = document.getElementById('kitchen-dashboard-content');
             const lockBtn = document.getElementById('lock-btn');
-            const demoBtn = document.getElementById('btn-open-demo-modal');
             const pinInput = document.getElementById('staff-pin-input');
 
             if (overlay) overlay.classList.remove('hidden');
             if (content) content.classList.add('hidden');
             if (lockBtn) lockBtn.classList.add('hidden');
-            if (demoBtn) demoBtn.classList.add('hidden');
             if (pinInput) pinInput.value = '';
 
             triggerToast('Kitchen Dashboard Locked', 'info');
@@ -469,9 +397,7 @@
         function loadLocalOrders() {
             try {
                 const stored = localStorage.getItem('wh_kitchen_orders');
-                if (stored) {
-                    return JSON.parse(stored);
-                }
+                if (stored) return JSON.parse(stored);
             } catch(e) {}
             return [];
         }
@@ -544,7 +470,7 @@
                         details.push(`     Dietary Option: ${i.custom.diet}`);
                     }
                     if (i.custom.drinks && i.custom.drinks.length > 0) {
-                        details.push(`     Drinks / Upgrades: ${i.custom.drinks.join(', ')}`);
+                        details.push(`     Included Extras: ${i.custom.drinks.join(', ')}`);
                     }
                     if (i.custom.byoItems && i.custom.byoItems.length > 0) {
                         details.push(`     Box Delicacies: ${i.custom.byoItems.join(', ')}`);
@@ -592,82 +518,6 @@
             const input = document.getElementById('kitchen-archive-date-input');
             if (input) input.value = '';
             renderKitchenDashboard();
-        }
-
-        function openDemoModal() {
-            const modal = document.getElementById('demo-order-modal');
-            const dateInput = document.getElementById('demo-pickup-date');
-            if (dateInput) dateInput.value = getTodayFormatted('iso');
-            if (modal) modal.classList.remove('hidden');
-        }
-
-        function closeDemoModal() {
-            const modal = document.getElementById('demo-order-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function handleDemoOrderSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('demo-cust-name').value;
-            const phone = document.getElementById('demo-cust-phone').value;
-            const email = document.getElementById('demo-cust-email').value;
-            const rawDate = document.getElementById('demo-pickup-date').value;
-            const time = document.getElementById('demo-pickup-time').value;
-            const preset = document.getElementById('demo-item-preset').value;
-            const notes = document.getElementById('demo-notes').value;
-
-            const ukDate = rawDate.split('-').reverse().join('/');
-            const refNum = Math.floor(1000 + Math.random() * 9000);
-
-            let itemTitle = 'Cromer Crab Feast Hamper';
-            let price = 48.00;
-            if (preset === 'classic') { itemTitle = 'Norfolk Artisan Ploughman\'s'; price = 38.00; }
-            if (preset === 'veggie') { itemTitle = 'Saltmarsh Wild Grazing'; price = 36.00; }
-
-            const newOrder = {
-                id: 'ord_' + Date.now(),
-                orderRef: `WH-${refNum}`,
-                customerName: name,
-                customerPhone: phone,
-                customerEmail: email,
-                pickupDate: ukDate,
-                rawPickupDate: rawDate,
-                pickupTime: time,
-                status: 'payment_required',
-                archived: false,
-                notes: notes,
-                coolboxCount: 1,
-                deposit: 20.00,
-                grandTotal: price + 20.00,
-                createdAt: Date.now(),
-                items: [
-                    {
-                        title: itemTitle,
-                        qty: 1,
-                        price: price,
-                        custom: {
-                            diet: 'Freshly Prepared',
-                            drinks: ['Norfolk Apple Juice'],
-                            byoItems: []
-                        }
-                    }
-                ]
-            };
-
-            allOrdersList.unshift(newOrder);
-            saveLocalOrders(allOrdersList);
-            
-            if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
-                try {
-                    const docRef = window.getOrderDocRef(newOrder.id);
-                    window.firebaseFns.setDoc(docRef, newOrder).catch(console.warn);
-                } catch(err) {}
-            }
-
-            closeDemoModal();
-            if (isKitchenUnlocked) renderKitchenDashboard();
-            playNotificationSound();
-            triggerToast(`New test ticket ${newOrder.orderRef} created!`, 'success');
         }
 
         function renderKitchenDashboard() {
@@ -766,12 +616,6 @@
                     <div class="col-span-full py-12 text-center text-xs text-coastal-400 space-y-3 bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200">
                         <i data-lucide="${isArchiveMode ? 'archive' : 'check-circle-2'}" class="w-8 h-8 mx-auto text-coastal-400"></i>
                         <p class="font-medium">${emptyMsg}</p>
-                        ${!isArchiveMode ? `
-                            <button onclick="openDemoModal()" class="inline-flex items-center space-x-1.5 bg-coastal-800 text-white font-bold px-3.5 py-2 rounded-xl text-xs hover:bg-coastal-900 transition-all shadow-sm">
-                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                                <span>Create Demo Kitchen Ticket</span>
-                            </button>
-                        ` : ''}
                         ${isArchiveMode && kitchenArchiveDateFilter ? `
                             <button onclick="clearKitchenArchiveDateFilter()" class="text-crab-600 font-bold hover:underline block mx-auto mt-1">Clear Date Filter</button>
                         ` : ''}
@@ -831,21 +675,50 @@
 
                         <div class="bg-coastal-50/80 p-3 rounded-2xl border border-coastal-100 text-xs space-y-2">
                             <p class="font-bold text-coastal-800 border-b border-coastal-200 pb-1">Hamper Items & Customisations:</p>
-                            ${(order.items || []).map(i => `
-                                <div class="text-coastal-700 space-y-1 border-b border-coastal-100/50 pb-2 last:border-b-0">
-                                    <div class="flex justify-between font-bold text-coastal-900">
-                                        <span>${i.qty}x ${i.title}</span>
-                                        <span>£${(i.price * i.qty).toFixed(2)}</span>
-                                    </div>
-                                    ${i.custom ? `
-                                        <div class="pl-2 space-y-0.5 text-[11px]">
-                                            ${i.custom.diet ? `<p class="text-coastal-600"><strong>Dietary Swap:</strong> ${i.custom.diet}</p>` : ''}
-                                            ${i.custom.drinks && i.custom.drinks.length ? `<p class="text-coastal-600"><strong>Drinks Added:</strong> ${i.custom.drinks.join(', ')}</p>` : ''}
-                                            ${i.custom.byoItems && i.custom.byoItems.length ? `<p class="text-crab-700 font-semibold"><strong>Box Delicacies:</strong> ${i.custom.byoItems.join(', ')}</p>` : ''}
+                            ${(order.items || []).map(i => {
+                                let customMarkup = '';
+                                if (i.custom) {
+                                    const details = [];
+                                    if (i.custom.diet && i.custom.diet !== 'Standard Recipe' && i.custom.diet !== 'Bespoke Selection') {
+                                        details.push(`
+                                            <div class="text-coastal-600 text-[11px] pl-3">
+                                                • Dietary Option: ${i.custom.diet}
+                                            </div>
+                                        `);
+                                    }
+                                    if (i.custom.drinks && i.custom.drinks.length > 0) {
+                                        i.custom.drinks.forEach(dName => {
+                                            details.push(`
+                                                <div class="text-coastal-600 text-[11px] pl-3">
+                                                    • Included Extras: ${dName}
+                                                </div>
+                                            `);
+                                        });
+                                    }
+                                    if (i.custom.byoItems && i.custom.byoItems.length > 0) {
+                                        i.custom.byoItems.forEach(itemTitle => {
+                                            details.push(`
+                                                <div class="text-coastal-700 text-[11px] pl-3">
+                                                    • Box Delicacy: ${itemTitle}
+                                                </div>
+                                            `);
+                                        });
+                                    }
+                                    if (details.length > 0) {
+                                        customMarkup = `<div class="space-y-1 mt-1.5 bg-white/70 p-2.5 rounded-xl border border-coastal-100">${details.join('')}</div>`;
+                                    }
+                                }
+
+                                return `
+                                    <div class="border-b border-coastal-100/80 pb-2.5 last:border-b-0">
+                                        <div class="flex justify-between font-bold text-coastal-900 text-xs">
+                                            <span>${i.qty}x ${i.title}</span>
+                                            <span class="font-serif">£${(i.price * i.qty).toFixed(2)}</span>
                                         </div>
-                                    ` : ''}
-                                </div>
-                            `).join('')}
+                                        ${customMarkup}
+                                    </div>
+                                `;
+                            }).join('')}
                             <div class="pt-1.5 border-t border-coastal-200 flex justify-between font-extrabold text-coastal-900 mt-1">
                                 <span>Total Payable:</span>
                                 <span>£${totalVal.toFixed(2)}</span>
