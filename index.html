@@ -77,10 +77,6 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 20px 40px -15px rgba(15, 32, 56, 0.12);
         }
-
-        /* Custom styles for accordion icon transitions */
-        details > summary { list-style: none; }
-        details > summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 <body class="bg-coastal-50 text-coastal-900 font-sans antialiased min-h-screen flex flex-col selection:bg-crab-500 selection:text-white pb-20 md:pb-0">
@@ -89,6 +85,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-4">
                 
+                <!-- Brand & Pub Address Details -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('customer-explore')">
                         <div class="w-10 h-10 sm:w-11 sm:h-11 bg-coastal-800 rounded-2xl flex items-center justify-center text-sand-200 font-serif font-bold text-lg shadow-md border border-sand-300 shrink-0">
@@ -106,12 +103,14 @@
                         </div>
                     </div>
 
+                    <!-- Mobile Account Button -->
                     <button onclick="openAuthModal()" class="md:hidden touch-target flex items-center space-x-1 bg-coastal-50 px-2.5 py-1.5 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800">
                         <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
                         <span id="header-user-status-mobile" class="truncate max-w-[90px]">Guest</span>
                     </button>
                 </div>
 
+                <!-- Navigation Tabs & Account Switcher -->
                 <div class="flex items-center justify-between md:justify-end space-x-1.5 sm:space-x-2 w-full md:w-auto overflow-x-auto pb-0.5 md:pb-0">
                     <nav class="flex space-x-1 bg-coastal-50/80 p-1 rounded-2xl border border-coastal-100 w-full md:w-auto justify-between md:justify-start">
                         <button id="nav-customer" onclick="switchView('customer-explore')" class="touch-target px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center space-x-1 sm:space-x-1.5 bg-white text-coastal-800 shadow-sm border border-coastal-100 flex-1 md:flex-none">
@@ -134,6 +133,7 @@
                         </button>
                     </nav>
 
+                    <!-- Desktop User Account Badge -->
                     <button onclick="openAuthModal()" class="hidden md:flex items-center space-x-2 bg-coastal-50 hover:bg-coastal-100 px-3 py-2 rounded-xl border border-coastal-200 text-xs font-bold text-coastal-800 transition-all">
                         <i data-lucide="user" class="w-4 h-4 text-crab-500"></i>
                         <span id="header-user-status">Customer Sign In</span>
@@ -144,12 +144,15 @@
         </div>
     </header>
 
+    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-20 md:bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-8">
 
+        <!-- ==================== VIEW 1: CUSTOMER MENU & EXPLORE ==================== -->
         <section id="customer-explore" class="space-y-6">
             
+            <!-- Hero Banner -->
             <div class="relative rounded-3xl overflow-hidden bg-coastal-900 text-white shadow-xl border border-coastal-800">
                 <div class="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80');"></div>
                 <div class="relative z-10 p-6 sm:p-10 max-w-3xl space-y-3">
@@ -180,8 +183,10 @@
                 </div>
             </div>
 
+            <!-- Menu Grid & Basket Sidebar Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                 
+                <!-- Package Cards Column -->
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex items-center justify-between pb-2 border-b border-coastal-200">
                         <h3 class="font-serif text-xl font-bold text-coastal-900 flex items-center space-x-2">
@@ -195,6 +200,7 @@
                     </div>
                 </div>
 
+                <!-- Basket Sidebar (Desktop) -->
                 <div class="hidden lg:block lg:col-span-1 sticky top-24 space-y-4">
                     <div class="glass-card rounded-3xl p-6 border border-coastal-200 shadow-md space-y-4">
                         <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
@@ -228,6 +234,7 @@
             </div>
         </section>
 
+        <!-- ==================== VIEW 2: LIVE ORDER TRACKER ==================== -->
         <section id="order-tracker" class="hidden max-w-3xl mx-auto space-y-6">
             <div id="tracker-active-content" class="glass-card rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-xl space-y-6">
                 <!-- Tracker populated dynamically -->
@@ -245,6 +252,7 @@
             </div>
         </section>
 
+        <!-- ==================== VIEW 3: CUSTOMER ORDER HISTORY ==================== -->
         <section id="customer-history" class="hidden max-w-4xl mx-auto space-y-6">
             <div class="glass-card rounded-3xl p-6 sm:p-8 border border-coastal-200 shadow-md space-y-6">
                 <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 pb-4 border-b border-coastal-100">
@@ -266,6 +274,7 @@
 
     </main>
 
+    <!-- Footer -->
     <footer class="bg-coastal-900 text-white border-t border-coastal-800 mt-12 py-8 px-4 sm:px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
             <div class="flex items-center space-x-3 text-center md:text-left">
@@ -292,6 +301,7 @@
         </div>
     </footer>
 
+    <!-- Mobile Bottom Floating Basket Bar -->
     <div id="mobile-basket-bar" class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-coastal-200 p-3 shadow-2xl flex items-center justify-between">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="openMobileBasketModal()">
             <div class="bg-crab-500 text-white font-bold text-xs w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" id="mobile-basket-qty">
@@ -314,6 +324,7 @@
         </div>
     </div>
 
+    <!-- MODAL 0: Mobile Basket Glassmorphic Slide-Up Modal -->
     <div id="mobile-basket-modal" onclick="if(event.target === this) closeMobileBasketModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-200">
         <div class="glass-card rounded-t-3xl sm:rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-5 space-y-4 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between border-b border-coastal-100 pb-3">
@@ -329,9 +340,13 @@
                 </div>
             </div>
 
-            <div id="mobile-basket-items-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-[100px]"></div>
+            <div id="mobile-basket-items-list" class="space-y-3 overflow-y-auto custom-scrollbar pr-1 flex-1 min-h-[100px]">
+                <!-- Populated dynamically via JS -->
+            </div>
 
-            <div id="mobile-basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs"></div>
+            <div id="mobile-basket-summary-box" class="space-y-2 pt-3 border-t border-coastal-100 text-xs">
+                <!-- Summary populated dynamically -->
+            </div>
 
             <button id="mobile-modal-checkout-btn" onclick="closeMobileBasketModal(); openCheckoutModal();" disabled class="touch-target w-full bg-coastal-800 hover:bg-coastal-900 disabled:bg-coastal-200 disabled:text-coastal-400 text-white font-bold py-3 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2">
                 <span>Proceed to Pickup Details</span>
@@ -342,44 +357,44 @@
 
     <!-- MODAL 1: Glassmorphic Customise & Build Your Own Hamper Modal -->
     <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
-        <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4 max-h-[90vh] flex flex-col">
+        <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4">
             <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="space-y-1 border-b border-coastal-100 pb-3 shrink-0">
+            <div class="space-y-1 border-b border-coastal-100 pb-3">
                 <span class="text-[10px] font-bold text-crab-600 uppercase tracking-widest" id="custom-pkg-tag">Signature</span>
                 <h3 class="font-serif text-xl font-bold text-coastal-900" id="custom-pkg-title">Hamper Customiser</h3>
                 <p class="text-xs text-coastal-500" id="custom-pkg-desc">Adjust options for your beach picnic.</p>
             </div>
 
-            <!-- Scrollable Options Area -->
-            <div class="overflow-y-auto custom-scrollbar pr-2 flex-1 space-y-4">
-                <div id="byo-custom-options" class="hidden text-xs">
-                    <p class="text-[11px] text-coastal-700 bg-sand-100/80 p-2.5 rounded-xl border border-sand-300/80 backdrop-blur-sm mb-2">
-                        <strong>Base Hamper (£10.00):</strong> Includes insulated cool box packing, cutlery, napkins & Norfolk butter/condiments. Select your favourite delicacies below:
-                    </p>
+            <!-- Standard Customisation View -->
+            <div id="standard-custom-options" class="space-y-3 text-xs">
+                <div id="dietary-options-container"></div>
+                <div id="drinks-options-container"></div>
+            </div>
+
+            <!-- Build Your Own (BYO) Pick & Mix Section -->
+            <div id="byo-custom-options" class="hidden space-y-3 text-xs">
+                <p class="text-[11px] text-coastal-700 bg-sand-100/80 p-2.5 rounded-xl border border-sand-300/80 backdrop-blur-sm">
+                    <strong>Base Hamper (£10.00):</strong> Includes insulated cool box packing, cutlery, napkins & Norfolk butter/condiments. Select your favourite delicacies below:
+                </p>
+                <div class="max-h-56 overflow-y-auto custom-scrollbar pr-1 space-y-2" id="byo-items-checklist">
+                    <!-- Dynamic BYO Items Checkboxes populated by JavaScript -->
                 </div>
-                
-                <div id="standard-custom-options" class="space-y-3 text-xs">
-                    <!-- Populated dynamically via JS -->
+                <div class="p-3 bg-white/80 rounded-xl border border-coastal-200 flex justify-between items-center font-bold text-coastal-900 shadow-sm">
+                    <span>Bespoke Hamper Subtotal:</span>
+                    <span class="font-serif text-crab-600 text-sm" id="byo-live-total">£10.00</span>
                 </div>
             </div>
 
-            <!-- Footer & Live Total -->
-            <div class="p-3 bg-white/90 rounded-2xl border border-coastal-200 flex justify-between items-center font-bold text-coastal-900 shadow-sm shrink-0 mt-2">
-                <div class="space-y-0.5">
-                    <span class="text-[11px] text-coastal-500 block">Total Hamper Price:</span>
-                    <span class="font-serif text-crab-600 text-base" id="customizer-live-total">£0.00</span>
-                </div>
-                <div class="flex space-x-2">
-                    <button onclick="closeCustomizeModal()" class="touch-target px-4 py-2.5 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold rounded-xl transition-all text-xs border border-coastal-200 flex items-center justify-center">
-                        Cancel
-                    </button>
-                    <button onclick="saveHamperCustomization()" class="touch-target px-5 py-2.5 bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl transition-all text-xs shadow-md flex items-center justify-center space-x-1">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span>Add</span>
-                    </button>
-                </div>
+            <div class="grid grid-cols-3 gap-2.5 pt-2">
+                <button onclick="closeCustomizeModal()" class="touch-target col-span-1 bg-coastal-100 hover:bg-coastal-200 text-coastal-800 font-bold py-3.5 rounded-xl transition-all text-xs border border-coastal-200 flex items-center justify-center">
+                    Cancel
+                </button>
+                <button onclick="saveHamperCustomization()" class="touch-target col-span-2 bg-coastal-800 hover:bg-coastal-900 text-white font-bold py-3.5 rounded-xl transition-all text-xs shadow-md flex items-center justify-center space-x-1">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span>Add to Basket</span>
+                </button>
             </div>
         </div>
     </div>
@@ -396,6 +411,7 @@
                 <p class="text-xs text-coastal-500">Collect from The White Horse Pub • 24 West Street, Cromer</p>
             </div>
 
+            <!-- Checkout Form Content -->
             <div id="modal-form-content" class="space-y-4 text-xs">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
@@ -443,6 +459,7 @@
                     <textarea id="dietary-notes" rows="2" placeholder="e.g. Extra napkins, gluten free bread..." class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coastal-600"></textarea>
                 </div>
 
+                <!-- Financial Summary Box -->
                 <div class="bg-white/70 p-4 rounded-2xl border border-coastal-200 space-y-1.5">
                     <div class="flex justify-between text-coastal-600">
                         <span>Hampers Subtotal:</span>
@@ -464,6 +481,7 @@
                 </button>
             </div>
 
+            <!-- Processing Loading View -->
             <div id="modal-processing-content" class="hidden py-12 text-center space-y-4">
                 <div class="w-12 h-12 border-4 border-coastal-200 border-t-crab-500 rounded-full animate-spin mx-auto"></div>
                 <div>
@@ -472,6 +490,7 @@
                 </div>
             </div>
 
+            <!-- Payment System Down Screen -->
             <div id="modal-payment-down-content" class="hidden py-6 space-y-5 text-center">
                 <div class="w-14 h-14 bg-crab-100 text-crab-600 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
                     <i data-lucide="phone-call" class="w-7 h-7"></i>
@@ -495,7 +514,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Privacy Policy Pop-up -->
+    <!-- MODAL: Privacy Policy & UK GDPR Pop-up Card -->
     <div id="privacy-modal" onclick="if(event.target === this) closePrivacyModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 sm:p-8 relative space-y-4 max-h-[85vh] flex flex-col">
             <button onclick="closePrivacyModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close Privacy Policy">
@@ -562,7 +581,7 @@
         </div>
     </div>
 
-    <!-- MODAL 4: Auth Login/SignUp -->
+    <!-- MODAL 3: Glassmorphic Auth Email Login & Sign Up Modal -->
     <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -585,6 +604,7 @@
                 </button>
             </div>
 
+            <!-- Sign Up Form (New Customer) -->
             <div id="auth-form-signup" class="space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Full Name *</label>
@@ -604,6 +624,7 @@
                 </button>
             </div>
 
+            <!-- Log In Form (Existing Customer) -->
             <div id="auth-form-login" class="hidden space-y-3 text-xs">
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Registered Email Address *</label>
@@ -615,6 +636,7 @@
                 </button>
             </div>
 
+            <!-- Logged In Profile & Log Out View -->
             <div id="auth-logged-in-view" class="hidden space-y-4 text-xs">
                 <div class="bg-coastal-50/80 p-3.5 rounded-2xl border border-coastal-200 space-y-1">
                     <p class="text-coastal-500 text-[11px] font-medium">Signed in as</p>
@@ -635,6 +657,7 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, doc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyDkrSDAVFeTPJC13a1GKdx8SZ1t4ik36zU",
             authDomain: "cromer-picnics.firebaseapp.com",
@@ -710,17 +733,18 @@
     </script>
 
     <script>
+        // Global State Variables
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'cromer-picnics-app';
         let authMode = 'signup';
         let registeredCustomersList = [];
-        let loggedInCustomer = null; 
+        let loggedInCustomer = null; // Starts clean as Guest Session
         let activeCustomizingPkg = null;
         let activeOrder = null;
         let hasUnreadTrackerUpdate = false;
         let basket = {};
         let allOrdersList = [];
 
-        // Privacy Modal Handlers
+        // Privacy Policy Modal handlers
         function openPrivacyModal() {
             const modal = document.getElementById('privacy-modal');
             if (modal) {
@@ -728,68 +752,39 @@
                 safeCreateIcons();
             }
         }
+
         function closePrivacyModal() {
             const modal = document.getElementById('privacy-modal');
             if (modal) modal.classList.add('hidden');
         }
 
-        // -------------------------------------------------------------
-        // NEW UNIFIED MENU & CUSTOMISATION SPREADSHEET DATA
-        // -------------------------------------------------------------
-        const spreadsheetExtras = {
-            savoury: [
-                { id: 'ext-tuna', name: 'Tuna Mayo Sandwich', price: 4.00, icon: '🥪' },
-                { id: 'ext-cheese-chutney', name: 'Cheese & Chutney Sandwich', price: 4.00, icon: '🥪' },
-                { id: 'ext-ham-tom', name: 'Ham & Tomato Sandwich', price: 4.50, icon: '🥪' },
-                { id: 'ext-sand-sel', name: 'Sandwiches Selection', price: 12.95, icon: '🥪' },
-                { id: 'ext-scotch', name: 'Scotch Eggs', price: 2.50, icon: '🥚' },
-                { id: 'ext-sausage', name: 'Sausage Rolls', price: 2.50, icon: '🥐' },
-                { id: 'ext-quiche', name: 'Mini Quiches', price: 3.00, icon: '🥧' },
-                { id: 'ext-crisps', name: 'Kettle Crisps', price: 1.50, icon: '🥔' }
-            ],
-            sweet: [
-                { id: 'ext-fscone', name: 'Fruit Scone', price: 2.00, icon: '🧁' },
-                { id: 'ext-cscone', name: 'Cheese Scone', price: 2.00, icon: '🧀' },
-                { id: 'ext-vic', name: 'Victoria Sponge', price: 4.50, icon: '🍰' },
-                { id: 'ext-lemon', name: 'Lemon Drizzle', price: 4.50, icon: '🍋' },
-                { id: 'ext-choc', name: 'Chocolate Cake', price: 4.50, icon: '🍫' },
-                { id: 'ext-cakesel', name: 'Cake Selection', price: 12.00, icon: '🍰' }
-            ],
-            alcohol: [
-                { id: 'ext-w-pg', name: 'Pinot Grigio 750ml', price: 22.00, icon: '🍾' },
-                { id: 'ext-w-sb', name: 'Sav Blanc 750ml', price: 24.00, icon: '🍾' },
-                { id: 'ext-w-mer', name: 'Merlot 750ml', price: 22.00, icon: '🍷' },
-                { id: 'ext-w-shi', name: 'Shiraz 750ml', price: 24.00, icon: '🍷' },
-                { id: 'ext-p-sgl', name: 'Single Serve Prosecco', price: 6.50, icon: '🥂' },
-                { id: 'ext-p-lrg', name: 'Large Prosecco', price: 26.00, icon: '🍾' }
-            ],
-            water: [
-                { id: 'ext-water-s', name: 'Kingsdown Water Still 330ml', price: 2.75, icon: '💧' },
-                { id: 'ext-water-sp', name: 'Kingdown Water Sparkling 330ml', price: 2.75, icon: '🫧' }
-            ],
-            dropdowns: [
-                { id: 'dd-belvoir-bottle', name: 'Belvoir Pressé Bottle 275ml', price: 3.75, options: ['Elderflower', 'Raspberry Lemonade', 'Cloudy Lemonade', 'Ginger Beer', 'Pink Lady Apple'] },
-                { id: 'dd-belvoir-can', name: 'Belvoir Can 330ml', price: 2.75, options: ['Elderflower Lemonade', 'Raspberry Lemonade', 'Sparkling Mango & Peach'] },
-                { id: 'dd-belvoir-hyd', name: 'Belvoir Hydration Cans 330ml', price: 2.95, options: ['Sparkling Blueberry & Lemon', 'Still Ginger, Lemon & Turmeric'] },
-                { id: 'dd-folkington-juice', name: 'Folkington Juices 250ml', price: 3.50, options: ['Apple', 'Orange', 'Pear', 'Mango', 'Summerberries', 'Cranberry', 'Elderflower', 'Pink Lemonade', 'Tomato', 'Pineapple'] },
-                { id: 'dd-folkington-can', name: 'Folkingtons Pressed Cans 250ml', price: 3.25, options: ['Elderflower', 'Hot Ginger Beer', 'Rhubarb & Apple', 'Lemon & Mint'] },
-                { id: 'dd-posh-pops', name: 'Posh Pops 275ml', price: 3.75, options: ['Strawberry & Rhubarb', 'Ginger Beer & Chilli', 'Pear & Elderflower', 'Plum & Cherry', 'Craft Cola', 'Sloe & Rose Lemonade', 'Cloudy Lemonade', 'Cream Soda', 'Blackcurrant & Raspberry Zero'] },
-                { id: 'dd-ales-ciders', name: 'Ales, Lagers & Ciders', price: 4.50, options: ['Budweiser', 'Corona', 'Ghost Ship', 'Ghost Ship 0%', 'Old Mout Berries & Cherries', 'Old Mout Kiwi & Lime', 'Old Mout Mango & Passion Fruit'] },
-                { id: 'dd-soda', name: 'Non Alco 330ml', price: 2.00, options: ['Coke', 'Coke Zero', 'Diet Coke', '7UP', '7UP Zero', 'Fanta', 'Fanta Zero'] }
-            ]
-        };
-
-        const byoAvailableItems = [
+        // Dynamic BYO Items array loaded from Admin
+        let byoAvailableItems = [
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿' },
             { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖' },
             { id: 'byo-cheese', title: 'Binham Blue & Dapple Cheese Selection', price: 8.50, icon: '🧀' },
+            { id: 'byo-sausage-roll', title: 'Pork & Sage Sausage Rolls (2pcs)', price: 5.00, icon: '🥐' },
+            { id: 'byo-tartlet', title: 'Caramelised Onion & Spinach Tartlet (V)', price: 6.50, icon: '🥧' },
             { id: 'byo-hummus', title: 'Roasted Pepper Hummus & Flatbreads', price: 5.50, icon: '🫓' },
             { id: 'byo-lobster', title: 'Luxury Dressed Lobster Tail Platter', price: 18.00, icon: '🦞' },
             { id: 'byo-strawberries', title: 'Norfolk Strawberries & Clotted Cream', price: 6.00, icon: '🍓' },
-            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖' }
+            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖' },
+            { id: 'byo-prosecco', title: 'Chilled Bottle of Prosecco (75cl)', price: 18.00, icon: '🍾' },
+            { id: 'byo-apple-juice', title: 'Chilled Norfolk Apple Juice', price: 3.50, icon: '🧃' },
+            { id: 'byo-ginger-beer', title: 'Local Artisan Ginger Beer', price: 3.50, icon: '🍺' }
         ];
 
+        // Dynamic Custom Upgrade Fields array synchronized with Admin
+        let customFieldsList = [
+            { id: 'fld-1', title: 'Norfolk Apple Juice', price: 3.50, type: 'drink' },
+            { id: 'fld-2', title: 'Artisan Ginger Beer', price: 3.50, type: 'drink' },
+            { id: 'fld-3', title: 'Gluten-Free Bread & Crackers Swap', price: 0.00, type: 'dietary' },
+            { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' },
+            { id: 'fld-5', title: 'Vegetarian Alternative', price: 0.00, type: 'dietary' }
+        ];
+        
+        // Dynamic Hamper Packages list synchronized with Admin
         let picnicPackages = [
             {
                 id: 'build-your-own',
@@ -862,10 +857,25 @@
         function loadLocalCatalog() {
             try {
                 const storedHampers = localStorage.getItem('wh_admin_hampers');
+                const storedExtras = localStorage.getItem('wh_admin_extras');
+                const storedFields = localStorage.getItem('wh_admin_fields');
+
                 if (storedHampers) {
                     const parsed = JSON.parse(storedHampers);
                     if (Array.isArray(parsed) && parsed.length > 0) {
                         picnicPackages = parsed;
+                    }
+                }
+                if (storedExtras) {
+                    const parsedExtras = JSON.parse(storedExtras);
+                    if (Array.isArray(parsedExtras) && parsedExtras.length > 0) {
+                        byoAvailableItems = parsedExtras;
+                    }
+                }
+                if (storedFields) {
+                    const parsedFields = JSON.parse(storedFields);
+                    if (Array.isArray(parsedFields) && parsedFields.length > 0) {
+                        customFieldsList = parsedFields;
                     }
                 }
             } catch(e) {
@@ -878,7 +888,9 @@
                 if (window.lucide && typeof window.lucide.createIcons === 'function') {
                     window.lucide.createIcons();
                 }
-            } catch (err) {}
+            } catch (err) {
+                console.warn('Lucide icon rendering warning:', err);
+            }
         }
 
         function triggerToast(message, type = 'info') {
@@ -987,10 +999,8 @@
 
             picnicPackages.forEach(pkg => {
                 const isOutOfStock = pkg.available === false;
-                const isBYO = pkg.id === 'build-your-own';
-                const btnLabel = isBYO ? 'BYO Items' : 'Drinks & Extras';
-                
                 const card = document.createElement('div');
+                
                 card.className = `bg-white/90 backdrop-blur-md rounded-3xl border border-coastal-200 overflow-hidden shadow-sm transition-all flex flex-col justify-between ${isOutOfStock ? 'opacity-60 bg-gray-50/80 grayscale-[25%]' : 'hover:shadow-md'}`;
                 
                 card.innerHTML = `
@@ -1019,7 +1029,7 @@
                         ` : `
                             <button onclick="openCustomizeModal('${pkg.id}')" class="touch-target border border-coastal-200 hover:bg-coastal-50 text-coastal-800 font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
                                 <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
-                                <span>${btnLabel}</span>
+                                <span>${pkg.id === 'build-your-own' ? 'BYO Items' : 'Drinks & Extras'}</span>
                             </button>
                             <button onclick="addToBasket('${pkg.id}')" class="touch-target bg-coastal-800 hover:bg-coastal-900 text-white font-bold rounded-xl text-xs py-2 transition-all flex items-center justify-center space-x-1">
                                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
@@ -1110,7 +1120,7 @@
                     if (item.custom.byoItems && item.custom.byoItems.length > 0) {
                         customText = `<p class="text-[10px] text-crab-600 font-semibold truncate">${item.custom.byoItems.length} Items: ${item.custom.byoItems.join(', ')}</p>`;
                     } else if (item.custom.diet || (item.custom.drinks && item.custom.drinks.length)) {
-                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? `+ ${item.custom.drinks.length} Extras` : ''}</p>`;
+                        customText = `<p class="text-[10px] text-coastal-500 truncate">${item.custom.diet} ${(item.custom.drinks && item.custom.drinks.length) ? '+ Drinks' : ''}</p>`;
                     }
                 }
 
@@ -1224,146 +1234,122 @@
             document.getElementById('custom-pkg-title').innerText = `Customise ${pkg.title}`;
             document.getElementById('custom-pkg-desc').innerText = pkg.desc;
 
+            const stdOptions = document.getElementById('standard-custom-options');
             const byoOptions = document.getElementById('byo-custom-options');
+
             if (pkgId === 'build-your-own') {
-                if (byoOptions) byoOptions.classList.remove('hidden');
+                if (stdOptions) stdOptions.classList.add('hidden');
+                if (byoOptions) {
+                    byoOptions.classList.remove('hidden');
+                    renderByoChecklist();
+                }
             } else {
                 if (byoOptions) byoOptions.classList.add('hidden');
+                if (stdOptions) {
+                    stdOptions.classList.remove('hidden');
+                    renderStandardCustomOptions();
+                }
             }
-            
-            renderUnifiedCustomOptions();
-            updateUnifiedLiveTotal();
 
             document.getElementById('customize-modal').classList.remove('hidden');
             safeCreateIcons();
         }
 
-        function renderUnifiedCustomOptions() {
-            const container = document.getElementById('standard-custom-options');
-            if (!container) return;
-            
-            let html = '';
-            const isByo = activeCustomizingPkg && activeCustomizingPkg.id === 'build-your-own';
+        function renderStandardCustomOptions() {
+            const dietContainer = document.getElementById('dietary-options-container');
+            const drinksContainer = document.getElementById('drinks-options-container');
 
-            // Dietary Swap for Standard Hampers
-            if (!isByo) {
-                html += `<label class="block font-bold text-coastal-800 mb-1">Dietary Requirement</label>`;
-                html += `<select id="custom-diet-select" onchange="updateUnifiedLiveTotal()" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600 mb-4 text-coastal-700 font-medium">
-                            <option value="Standard Recipe">Standard Recipe (Chef Special)</option>
-                            <option value="Gluten-Free Swap">Gluten-Free Bread & Crackers Swap</option>
-                            <option value="Dairy-Free Swap">Dairy-Free Alternative Cheese/Spread</option>
-                            <option value="Vegetarian Swap">Vegetarian Alternative</option>
-                         </select>`;
+            const dietaryFields = customFieldsList.filter(f => f.type === 'dietary');
+            const drinkFields = customFieldsList.filter(f => f.type === 'drink' || f.type === 'extra');
+
+            if (dietContainer) {
+                let dietHtml = `<label class="block font-bold text-coastal-800 mb-1">Dietary Requirement Options</label>`;
+                dietHtml += `<select id="custom-diet-select" class="w-full bg-white/90 border border-coastal-200 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-coastal-600">`;
+                dietHtml += `<option value="Standard Recipe">Standard Recipe (Chef Special)</option>`;
+                dietaryFields.forEach(f => {
+                    const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : '';
+                    dietHtml += `<option value="${f.title}">${f.title}${extraTag}</option>`;
+                });
+                dietHtml += `</select>`;
+                dietContainer.innerHTML = dietHtml;
             }
 
-            const renderCheckboxes = (title, items) => {
-                if (!items || items.length === 0) return '';
-                let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm">
-                    <summary class="font-bold text-coastal-900 p-3.5 cursor-pointer bg-coastal-50/50 hover:bg-coastal-100 flex justify-between items-center select-none transition-colors">
-                        <span class="flex items-center space-x-2">${title}</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-crab-500 group-open:rotate-180 transition-transform duration-200"></i>
-                    </summary>
-                    <div class="p-3 space-y-2 border-t border-coastal-100">`;
-                items.forEach(item => {
-                    const itemName = item.name || item.title;
-                    const itemIcon = item.icon ? `${item.icon} ` : '';
-                    block += `<label class="flex justify-between items-center bg-white p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-coastal-50 transition-colors shadow-sm">
-                        <div class="flex items-center space-x-2.5">
-                            <input type="checkbox" data-name="${itemName}" data-price="${item.price}" onchange="updateUnifiedLiveTotal()" class="unified-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4 shrink-0">
-                            <span class="text-coastal-800 font-medium leading-tight">${itemIcon}${itemName}</span>
-                        </div>
-                        <span class="font-bold text-crab-600 shrink-0 ml-2">+£${Number(item.price).toFixed(2)}</span>
-                    </label>`;
-                });
-                block += `</div></details>`;
-                return block;
-            };
-
-            const renderDropdowns = (title, items) => {
-                if (!items || items.length === 0) return '';
-                let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm">
-                    <summary class="font-bold text-coastal-900 p-3.5 cursor-pointer bg-coastal-50/50 hover:bg-coastal-100 flex justify-between items-center select-none transition-colors">
-                        <span class="flex items-center space-x-2">${title}</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-crab-500 group-open:rotate-180 transition-transform duration-200"></i>
-                    </summary>
-                    <div class="p-3 space-y-3 border-t border-coastal-100">`;
-                items.forEach(dd => {
-                    block += `<div class="bg-white p-3 rounded-xl border border-coastal-100 shadow-sm space-y-2">
-                        <label class="block font-bold text-coastal-800 flex justify-between items-center">
-                            <span class="leading-tight">${dd.name}</span>
-                            <span class="text-crab-600 shrink-0 ml-2">+£${Number(dd.price).toFixed(2)}</span>
-                        </label>
-                        <select data-name="${dd.name}" data-price="${dd.price}" onchange="updateUnifiedLiveTotal()" class="unified-select w-full bg-coastal-50 border border-coastal-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 text-coastal-700 font-medium">
-                            <option value="">-- Do not add --</option>`;
-                    dd.options.forEach(opt => {
-                        block += `<option value="${opt}">${opt}</option>`;
+            if (drinksContainer) {
+                if (drinkFields.length > 0) {
+                    let drinksHtml = `<label class="block font-bold text-coastal-800 mb-1">Norfolk Drinks & Custom Upgrades</label><div class="space-y-2">`;
+                    drinkFields.forEach(f => {
+                        const extraTag = f.price > 0 ? ` (+£${Number(f.price).toFixed(2)})` : ' (Free Upgrade)';
+                        drinksHtml += `
+                            <label class="flex items-center space-x-2.5 bg-white/70 p-3 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 transition-colors">
+                                <input type="checkbox" data-price="${f.price}" value="${f.title}" class="custom-upgrade-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                                <span class="text-coastal-800 font-medium">Add ${f.title}${extraTag}</span>
+                            </label>
+                        `;
                     });
-                    block += `</select></div>`;
-                });
-                block += `</div></details>`;
-                return block;
-            };
-
-            // Inject the accordions uniformly
-            if (isByo) {
-                html += renderCheckboxes('🦀 Premium Seafood & Deli', byoAvailableItems);
+                    drinksHtml += `</div>`;
+                    drinksContainer.innerHTML = drinksHtml;
+                } else {
+                    drinksContainer.innerHTML = '';
+                }
             }
-            html += renderCheckboxes('🥪 Savoury Add-ons & Snacks', spreadsheetExtras.savoury);
-            html += renderCheckboxes('🍰 Bakery, Cakes & Scones', spreadsheetExtras.sweet);
-            html += renderCheckboxes('🍾 Wine, Prosecco & Minerals', [...spreadsheetExtras.alcohol, ...spreadsheetExtras.water]);
-            html += renderDropdowns('🥤 Flavoured Drinks, Juices & Ales', spreadsheetExtras.dropdowns);
-
-            container.innerHTML = html;
-            safeCreateIcons();
         }
 
-        function updateUnifiedLiveTotal() {
-            if (!activeCustomizingPkg) return;
-            let total = activeCustomizingPkg.price;
+        function renderByoChecklist() {
+            loadLocalCatalog();
+            const container = document.getElementById('byo-items-checklist');
+            if (!container) return;
+            container.innerHTML = '';
 
-            const checkboxes = document.querySelectorAll('.unified-checkbox');
+            byoAvailableItems.forEach(item => {
+                const label = document.createElement('label');
+                label.className = "flex items-center justify-between bg-white/70 p-2.5 rounded-xl border border-coastal-100 cursor-pointer hover:bg-white/90 text-xs transition-colors";
+                label.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" value="${item.id}" onchange="updateByoLiveTotal()" class="byo-item-checkbox rounded text-crab-500 focus:ring-crab-500 w-4 h-4">
+                        <span class="text-coastal-800 font-medium">${item.icon || '🥪'} ${item.title}</span>
+                    </div>
+                    <span class="font-bold text-crab-600">+£${Number(item.price).toFixed(2)}</span>
+                `;
+                container.appendChild(label);
+            });
+
+            updateByoLiveTotal();
+        }
+
+        function updateByoLiveTotal() {
+            let total = 10.00;
+            const checkboxes = document.querySelectorAll('.byo-item-checkbox');
             checkboxes.forEach(cb => {
                 if (cb.checked) {
-                    total += parseFloat(cb.getAttribute('data-price')) || 0;
+                    const found = byoAvailableItems.find(i => i.id === cb.value);
+                    if (found) total += Number(found.price);
                 }
             });
 
-            const selects = document.querySelectorAll('.unified-select');
-            selects.forEach(sel => {
-                if (sel.value !== "") {
-                    total += parseFloat(sel.getAttribute('data-price')) || 0;
-                }
-            });
-
-            const liveTotalSpan = document.getElementById('customizer-live-total');
+            const liveTotalSpan = document.getElementById('byo-live-total');
             if (liveTotalSpan) liveTotalSpan.innerText = `£${total.toFixed(2)}`;
         }
 
         function saveHamperCustomization() {
             if (!activeCustomizingPkg) return;
 
-            let extraPrice = 0;
-            const selectedItems = [];
-
-            const checkboxes = document.querySelectorAll('.unified-checkbox');
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedItems.push(cb.getAttribute('data-name'));
-                    extraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
-                }
-            });
-
-            const selects = document.querySelectorAll('.unified-select');
-            selects.forEach(sel => {
-                if (sel.value !== "") {
-                    selectedItems.push(`${sel.getAttribute('data-name')} (${sel.value})`);
-                    extraPrice += parseFloat(sel.getAttribute('data-price')) || 0;
-                }
-            });
-
             if (activeCustomizingPkg.id === 'build-your-own') {
+                const selectedItems = [];
+                let extraItemsTotal = 0;
+                const checkboxes = document.querySelectorAll('.byo-item-checkbox');
+
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        const item = byoAvailableItems.find(i => i.id === cb.value);
+                        if (item) {
+                            selectedItems.push(item.title);
+                            extraItemsTotal += Number(item.price);
+                        }
+                    }
+                });
+
                 if (selectedItems.length === 0) {
-                    triggerToast('Please select at least one delicacy or drink for your bespoke hamper', 'error');
+                    triggerToast('Please select at least one delicacy for your bespoke hamper', 'error');
                     return;
                 }
 
@@ -1371,18 +1357,33 @@
                     diet: 'Bespoke Selection',
                     byoItems: selectedItems,
                     drinks: [],
-                    extraPrice: extraPrice
+                    extraPrice: extraItemsTotal
                 };
+
                 addToBasket(activeCustomizingPkg.id, customOpts);
             } else {
                 const dietSelect = document.getElementById('custom-diet-select');
                 const diet = dietSelect ? dietSelect.value : 'Standard Recipe';
 
+                const selectedDietField = customFieldsList.find(f => f.title === diet);
+                let extraPrice = selectedDietField && selectedDietField.price ? Number(selectedDietField.price) : 0;
+
+                const drinksList = [];
+                const drinkCheckboxes = document.querySelectorAll('.custom-upgrade-checkbox');
+                drinkCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        drinksList.push(cb.value);
+                        const itemPrice = parseFloat(cb.getAttribute('data-price')) || 0;
+                        extraPrice += itemPrice;
+                    }
+                });
+
                 const customOpts = {
                     diet: diet,
-                    drinks: selectedItems,
+                    drinks: drinksList,
                     extraPrice: extraPrice
                 };
+
                 addToBasket(activeCustomizingPkg.id, customOpts);
             }
 
@@ -1552,10 +1553,12 @@
                     archived: false
                 };
 
+                // Save locally first
                 const currentLocal = loadLocalOrders();
                 currentLocal.unshift(newOrder);
                 saveLocalOrders(currentLocal);
 
+                // Dispatch to Firestore if online
                 if (window.currentUser && window.firebaseFns && window.getOrderDocRef) {
                     try {
                         const docRef = window.getOrderDocRef(newOrder.id);
@@ -1583,6 +1586,7 @@
 
                 playNotificationSound();
 
+                // Transition to Payment Down modal notice
                 document.getElementById('modal-processing-content').classList.add('hidden');
                 const refSpan = document.getElementById('payment-down-ref');
                 if (refSpan) refSpan.innerText = orderRef;
@@ -1661,6 +1665,12 @@
                     }).join('')}
                 </div>
 
+                <!-- Order Content Breakdown with Customisation Prices -->
+                <div class="bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 space-y-3 text-xs">
+                    <div class="flex justify-between items-center border-b border-coastal-200 pb-2">
+                        <h4 class="font-bold text-coastal-900 text-sm">Hamper Items & Customisations:</h4>
+                        <span class="text-[10px] bg-coastal-200 text-coastal-800 px-2 py-0.5 rounded font-bold uppercase">${(activeOrder.status || 'pending').replace('_', ' ')}</span>
+                    </div>
                 <!-- Order Content Breakdown -->
                 <div class="bg-coastal-50/80 p-4 sm:p-5 rounded-2xl border border-coastal-200 space-y-3 text-xs">
                     <div class="flex justify-between items-center border-b border-coastal-200 pb-2">
@@ -1684,16 +1694,18 @@
                                     i.custom.drinks.forEach(dName => {
                                         details.push(`
                                             <div class="text-coastal-600 text-[11px] pl-3">
-                                                • Included: ${dName}
+                                                • Drink Upgrade: ${dName}
                                             </div>
                                         `);
                                     });
                                 }
                                 if (i.custom.byoItems && i.custom.byoItems.length > 0) {
                                     i.custom.byoItems.forEach(itemTitle => {
+                                        const match = byoAvailableItems.find(b => b.title === itemTitle);
+                                        const icon = match ? match.icon : '🦀';
                                         details.push(`
                                             <div class="text-coastal-700 text-[11px] pl-3">
-                                                • ${itemTitle}
+                                                ${icon} ${itemTitle}
                                             </div>
                                         `);
                                     });
@@ -1750,6 +1762,7 @@
 
             const loggedEmailSpan = document.getElementById('history-logged-email');
 
+            // STRICT ENFORCEMENT: If in Guest mode, DO NOT display any order records. Prompt to sign in instead.
             if (!loggedInCustomer || !loggedInCustomer.email) {
                 if (loggedEmailSpan) loggedEmailSpan.innerText = 'Guest Session';
 
@@ -1776,6 +1789,7 @@
 
             let sourceOrders = allOrdersList.length > 0 ? allOrdersList : loadLocalOrders();
 
+            // STRICT FILTERING: Only display records belonging to the signed-in customer
             const userEmail = loggedInCustomer.email.toLowerCase();
             const filteredOrders = sourceOrders.filter(o => o.customerEmail && o.customerEmail.toLowerCase() === userEmail);
 
@@ -1924,6 +1938,7 @@
 
             const cleanEmail = email.toLowerCase();
 
+            // Check if record already exists in Firebase
             if (window.currentUser && window.firebaseFns && window.getCustomerDocRef) {
                 try {
                     const custRef = window.getCustomerDocRef(cleanEmail);
@@ -2023,6 +2038,7 @@
         function startFirestoreSync() {
             if (!window.currentUser || !window.firebaseFns || !window.getOrdersColRef) return;
 
+            // 1. Sync Live Customer Orders
             try {
                 window.firebaseFns.onSnapshot(window.getOrdersColRef(), (snapshot) => {
                     const orders = [];
@@ -2067,15 +2083,84 @@
                     
                 }, (error) => console.warn("Orders sync warning:", error));
             } catch(e) {}
+
+            // 2. Synchronize Hamper Package Changes & Stock Status from Admin Portal
+            try {
+                if (window.firebaseFns.collection && window.firebaseDb) {
+                    const hampersColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'hampers');
+                    window.firebaseFns.onSnapshot(hampersColRef, (snapshot) => {
+                        if (!snapshot.empty) {
+                            const hampers = [];
+                            snapshot.forEach(doc => {
+                                hampers.push({ ...doc.data(), id: doc.id });
+                            });
+                            if (hampers.length > 0) {
+                                picnicPackages = hampers;
+                                try { localStorage.setItem('wh_admin_hampers', JSON.stringify(hampers)); } catch(e){}
+                                renderPicnicPackages();
+                            }
+                        }
+                    }, (err) => console.warn("Hampers catalog sync warning:", err));
+
+                    const extrasColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'extras');
+                    window.firebaseFns.onSnapshot(extrasColRef, (snapshot) => {
+                        if (!snapshot.empty) {
+                            const extras = [];
+                            snapshot.forEach(doc => {
+                                extras.push({ ...doc.data(), id: doc.id });
+                            });
+                            if (extras.length > 0) {
+                                byoAvailableItems = extras;
+                                try { localStorage.setItem('wh_admin_extras', JSON.stringify(extras)); } catch(e){}
+                                if (activeCustomizingPkg && activeCustomizingPkg.id === 'build-your-own') {
+                                    renderByoChecklist();
+                                }
+                            }
+                        }
+                    }, (err) => console.warn("Extras catalog sync warning:", err));
+
+                    const fieldsColRef = collection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'custom_fields');
+                    window.firebaseFns.onSnapshot(fieldsColRef, (snapshot) => {
+                        if (!snapshot.empty) {
+                            const fields = [];
+                            snapshot.forEach(doc => {
+                                fields.push({ ...doc.data(), id: doc.id });
+                            });
+                            if (fields.length > 0) {
+                                customFieldsList = fields;
+                                try { localStorage.setItem('wh_admin_fields', JSON.stringify(fields)); } catch(e){}
+                                if (activeCustomizingPkg && activeCustomizingPkg.id !== 'build-your-own') {
+                                    renderStandardCustomOptions();
+                                }
+                            }
+                        }
+                    }, (err) => console.warn("Custom fields sync warning:", err));
+                }
+            } catch(e) {}
         }
+
+        // Cross-tab LocalStorage listener for immediate sync across tabs
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'wh_admin_hampers' || event.key === 'wh_admin_extras' || event.key === 'wh_admin_fields') {
+                loadLocalCatalog();
+                renderPicnicPackages();
+                if (activeCustomizingPkg) {
+                    if (activeCustomizingPkg.id === 'build-your-own') renderByoChecklist();
+                    else renderStandardCustomOptions();
+                }
+            }
+        });
 
         window.addEventListener('firebase-ready', () => {
             allOrdersList = loadLocalOrders();
+            loadLocalCatalog();
+            renderPicnicPackages();
             startFirestoreSync();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
             allOrdersList = loadLocalOrders();
+            loadLocalCatalog();
             renderPicnicPackages();
             updateBasketSummary();
             updateHeaderUserBadge();
