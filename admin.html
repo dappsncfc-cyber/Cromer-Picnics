@@ -126,7 +126,7 @@
             </div>
             <div class="space-y-1">
                 <h3 class="font-serif text-xl font-bold text-coastal-900">Pub Staff Admin Portal</h3>
-                <p class="text-xs text-coastal-600">Enter staff PIN to manage hampers, drinks, bakery items, and prices.</p>
+                <p class="text-xs text-coastal-600">Enter staff PIN to manage picnic packages, prices, extra fields, and delicacies.</p>
             </div>
             
             <div class="space-y-2 pt-2">
@@ -1115,7 +1115,10 @@
             if (window.getHampersColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
-                        if (!snapshot.empty) {
+                        if (snapshot.empty) {
+                            // Auto-seed Firebase database if empty on live site
+                            syncDefaultCatalogToFirebase();
+                        } else {
                             const hampers = [];
                             snapshot.forEach(doc => hampers.push({ ...doc.data(), id: doc.id }));
                             if (hampers.length > 0) {
@@ -1124,14 +1127,18 @@
                                 if (isAdminUnlocked) renderAdminDashboard();
                             }
                         }
-                    }, (e) => {});
+                    }, (e) => {
+                        console.warn("Firestore snapshot error:", e);
+                    });
                 } catch(e) {}
             }
 
             if (window.getExtrasColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getExtrasColRef(), (snapshot) => {
-                        if (!snapshot.empty) {
+                        if (snapshot.empty) {
+                            syncDefaultCatalogToFirebase();
+                        } else {
                             const extras = [];
                             snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
                             if (extras.length > 0) {
@@ -1147,7 +1154,9 @@
             if (window.getCustomFieldsColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getCustomFieldsColRef(), (snapshot) => {
-                        if (!snapshot.empty) {
+                        if (snapshot.empty) {
+                            syncDefaultCatalogToFirebase();
+                        } else {
                             const fields = [];
                             snapshot.forEach(doc => fields.push({ ...doc.data(), id: doc.id }));
                             if (fields.length > 0) {
