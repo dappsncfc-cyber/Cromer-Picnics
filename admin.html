@@ -116,10 +116,12 @@
         </div>
     </header>
 
+    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed bottom-6 right-4 z-50 flex flex-col space-y-2 pointer-events-none max-w-sm w-full"></div>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
 
+        <!-- PIN Login Screen without PIN hints -->
         <div id="admin-pin-overlay" class="glass-card p-8 rounded-3xl border-2 border-coastal-800 shadow-xl max-w-md mx-auto space-y-4 text-center my-12">
             <div class="bg-coastal-800 text-sand-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-md">
                 <i data-lucide="shield-check" class="w-7 h-7 text-crab-400"></i>
@@ -140,13 +142,14 @@
 
         <div id="admin-dashboard-content" class="hidden space-y-6">
             
+            <!-- Staff Admin Metrics Bar -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
                     <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Active Hampers</p>
                     <h4 class="font-serif text-2xl font-black text-coastal-800" id="stat-hampers-count">0</h4>
                 </div>
                 <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
-                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Menu Add-ons & Drinks</p>
+                    <p class="text-[10px] font-bold uppercase text-coastal-400 tracking-wider">Menu Add-ons</p>
                     <h4 class="font-serif text-2xl font-black text-crab-600" id="stat-extras-count">0</h4>
                 </div>
                 <div class="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-coastal-200 shadow-sm">
@@ -162,6 +165,7 @@
                 </div>
             </div>
 
+            <!-- Navigation Sub-Tabs -->
             <div class="glass-card p-3 sm:p-4 rounded-3xl border border-coastal-200 shadow-sm flex flex-wrap gap-2 justify-between items-center">
                 <div class="flex flex-wrap gap-2">
                     <button id="tab-btn-hampers" onclick="switchAdminTab('hampers')" class="touch-target px-4 py-2 rounded-xl text-xs font-bold transition-all bg-coastal-800 text-white shadow-sm flex items-center space-x-2">
@@ -190,6 +194,7 @@
                 </div>
             </div>
 
+            <!-- TAB 1: Hamper Packages Editor -->
             <section id="admin-tab-hampers" class="space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
                     <div>
@@ -207,11 +212,12 @@
                 </div>
             </section>
 
+            <!-- TAB 2: Menu Add-ons, Drinks & Extras Manager -->
             <section id="admin-tab-byo" class="hidden space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
                     <div>
                         <h3 class="font-serif text-lg font-bold text-coastal-900">Menu Add-ons, Drinks & Extras Manager</h3>
-                        <p class="text-xs text-coastal-500">Manage sandwiches (2 persons), bakery, cakes, wine, prosecco, waters, and drink dropdowns.</p>
+                        <p class="text-xs text-coastal-500">Configure seafood, meats, bakery, and drink dropsdowns for customisations.</p>
                     </div>
                     <button onclick="openAddExtraModal()" class="touch-target bg-crab-500 hover:bg-crab-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 shadow-md transition-all">
                         <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -224,6 +230,7 @@
                 </div>
             </section>
 
+            <!-- TAB 3: Dietary Swaps Editor -->
             <section id="admin-tab-custom" class="hidden space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white/80 p-4 rounded-2xl border border-coastal-200">
                     <div>
@@ -245,6 +252,7 @@
 
     </main>
 
+    <!-- MODAL 1: Add/Edit Hamper Package Modal -->
     <div id="hamper-modal" onclick="if(event.target === this) closeHamperModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeHamperModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -312,6 +320,7 @@
         </div>
     </div>
 
+    <!-- MODAL 2: Add/Edit Extra Delicacy Modal with Categories -->
     <div id="extra-modal" onclick="if(event.target === this) closeExtraModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-md border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeExtraModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -319,7 +328,7 @@
             </button>
             <div class="border-b border-coastal-100 pb-3">
                 <h3 class="font-serif text-xl font-bold text-coastal-900" id="extra-modal-title">Edit Menu Extra</h3>
-                <p class="text-xs text-coastal-500">Add or edit offerings, sandwiches, drinks, and dropdown options.</p>
+                <p class="text-xs text-coastal-500">Add or edit offerings, sandwiches, cakes, and drop-downs.</p>
             </div>
 
             <form id="extra-form" onsubmit="event.preventDefault(); saveExtraOffering();" class="space-y-3 text-xs">
@@ -327,7 +336,7 @@
                 
                 <div>
                     <label class="block font-bold text-coastal-800 mb-1">Item Title *</label>
-                    <input type="text" id="extra-form-title" required placeholder="e.g. Tuna Mayo Sandwich (for 2)" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                    <input type="text" id="extra-form-title" required placeholder="e.g. Tuna Mayo Sandwich" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -338,12 +347,12 @@
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Category / Grouping</label>
                         <select id="extra-form-category" onchange="toggleDropdownOptionsField()" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
-                            <option value="savoury">Sandwiches & Savoury Snacks</option>
+                            <option value="byo">Premium Seafood & BYO</option>
+                            <option value="savoury">Savoury Snacks & Sandwiches</option>
                             <option value="sweet">Bakery, Cakes & Scones</option>
-                            <option value="dropdown">Flavoured Drinks & Ales (Dropdowns)</option>
-                            <option value="alcohol">Wine, Prosecco & Spirits</option>
+                            <option value="alcohol">Wine, Prosecco & Alcohol</option>
                             <option value="water">Mineral Water</option>
-                            <option value="byo">Premium BYO Seafood</option>
+                            <option value="dropdown">Flavoured Drinks/Ales (Dropdown)</option>
                         </select>
                     </div>
                 </div>
@@ -366,10 +375,10 @@
                     </div>
                 </div>
 
-                <div id="extra-form-options-container" class="hidden">
-                    <label class="block font-bold text-coastal-800 mb-1">Dropdown Flavours / Varieties (Comma Separated)</label>
-                    <input type="text" id="extra-form-options" placeholder="e.g. Elderflower, Raspberry Lemonade, Cloudy Lemonade" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
-                    <p class="text-[10px] text-coastal-500 mt-1">Customers will be able to select one of these flavours when ordering.</p>
+                <div id="extra-form-options-container" class="hidden col-span-2">
+                    <label class="block font-bold text-coastal-800 mb-1">Dropdown Options (Comma Separated)</label>
+                    <input type="text" id="extra-form-options" placeholder="e.g. Coke, Diet Coke, Fanta" class="w-full bg-white/90 border border-coastal-200 rounded-xl px-3 py-2 focus:ring-2 focus:ring-coastal-600 focus:outline-none">
+                    <p class="text-[10px] text-coastal-500 mt-1">List the flavours available for the customer to choose from.</p>
                 </div>
 
                 <div class="pt-3 grid grid-cols-2 gap-2">
@@ -383,6 +392,7 @@
         </div>
     </div>
 
+    <!-- MODAL 3: Add Custom Field/Upgrade Option Modal -->
     <div id="custom-field-modal" onclick="if(event.target === this) closeCustomFieldModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all">
         <div class="glass-card rounded-3xl w-full max-w-md border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeCustomFieldModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors">
@@ -502,7 +512,7 @@
         }
 
         let hampersList = [
-            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, sandwiches, treats, and drinks.', available: true },
+            { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', available: true },
             { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', available: true },
             { id: 'ploughmans-classic', title: 'Norfolk Artisan Ploughman’s', price: 38.00, badge: 'Popular', badgeColor: 'bg-sand-700 text-white', image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=800&q=80', desc: 'Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.', available: true },
             { id: 'saltmarsh-vegan', title: 'Saltmarsh Wild Grazing (V)', price: 36.00, badge: 'Vegetarian', badgeColor: 'bg-sage-600 text-white', image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80', desc: 'Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.', available: true },
@@ -511,49 +521,7 @@
         ];
 
         let menuExtrasList = [
-            // Sandwiches (Prices based on 2 people)
-            { id: 'ext-tuna', title: 'Tuna Mayo Sandwich (for 2)', price: 4.00, icon: '🥪', category: 'savoury' },
-            { id: 'ext-cheese-chutney', title: 'Cheese & Chutney Sandwich (for 2)', price: 4.00, icon: '🧀', category: 'savoury' },
-            { id: 'ext-ham-tom', title: 'Ham & Tomato Sandwich (for 2)', price: 4.50, icon: '🥪', category: 'savoury' },
-            { id: 'ext-sand-sel', title: 'Sandwiches Selection (for 2)', price: 12.95, icon: '🥪', category: 'savoury' },
-
-            // Savoury Snacks & Sides
-            { id: 'ext-scotch', title: 'Scotch Eggs', price: 2.50, icon: '🥚', category: 'savoury' },
-            { id: 'ext-sausage', title: 'Sausage Rolls', price: 2.50, icon: '🥐', category: 'savoury' },
-            { id: 'ext-quiche', title: 'Mini Quiches', price: 3.00, icon: '🥧', category: 'savoury' },
-            { id: 'ext-crisps', title: 'Kettle Crisps', price: 1.50, icon: '🥔', category: 'savoury' },
-
-            // Bakery, Scones & Cakes
-            { id: 'ext-fscone', title: 'Fruit Scone', price: 2.00, icon: '🧁', category: 'sweet' },
-            { id: 'ext-cscone', title: 'Cheese Scone', price: 2.00, icon: '🧀', category: 'sweet' },
-            { id: 'ext-vic', title: 'Victoria Sponge', price: 4.50, icon: '🍰', category: 'sweet' },
-            { id: 'ext-lemon', title: 'Lemon Drizzle', price: 4.50, icon: '🍋', category: 'sweet' },
-            { id: 'ext-choc', title: 'Chocolate Cake', price: 4.50, icon: '🍫', category: 'sweet' },
-            { id: 'ext-cakesel', title: 'Cake Selection', price: 12.00, icon: '🍰', category: 'sweet' },
-
-            // Water
-            { id: 'ext-water-s', title: 'Kingsdown Water Still 330ml', price: 2.75, icon: '💧', category: 'water' },
-            { id: 'ext-water-sp', title: 'Kingsdown Water Sparkling 330ml', price: 2.75, icon: '🫧', category: 'water' },
-
-            // Flavoured Drinks Dropdowns
-            { id: 'dd-belvoir-bottle', title: 'Belvoir Pressé Bottle 275ml', price: 3.75, icon: '🥤', category: 'dropdown', options: 'Elderflower, Raspberry Lemonade, Cloudy Lemonade, Ginger Beer, Pink Lady Apple' },
-            { id: 'dd-belvoir-can', title: 'Belvoir Can 330ml', price: 2.75, icon: '🥤', category: 'dropdown', options: 'Elderflower Lemonade, Raspberry Lemonade, Sparkling Mango & Peach' },
-            { id: 'dd-belvoir-hyd', title: 'Belvoir Hydration Cans 330ml', price: 2.95, icon: '🥤', category: 'dropdown', options: 'Sparkling Blueberry & Lemon, Still Ginger Lemon & Turmeric' },
-            { id: 'dd-folkington-juice', title: 'Folkington Juices 250ml', price: 3.50, icon: '🧃', category: 'dropdown', options: 'Apple, Orange, Pear, Mango, Summerberries, Cranberry, Elderflower, Pink Lemonade, Tomato, Pineapple' },
-            { id: 'dd-folkington-can', title: 'Folkingtons Pressed Cans 250ml', price: 3.25, icon: '🥤', category: 'dropdown', options: 'Elderflower, Hot Ginger Beer, Rhubarb & Apple, Lemon & Mint' },
-            { id: 'dd-posh-pops', title: 'Posh Pops 275ml', price: 3.75, icon: '🥤', category: 'dropdown', options: 'Strawberry & Rhubarb, Ginger Beer & Chilli, Pear & Elderflower, Plum & Cherry, Craft Cola, Sloe & Rose Lemonade, Cloudy Lemonade, Cream Soda, Blackcurrant & Raspberry Zero' },
-            { id: 'dd-soda', title: 'Non Alco 330ml', price: 2.00, icon: '🥤', category: 'dropdown', options: 'Coke, Coke Zero, Diet Coke, 7UP, 7UP Zero, Fanta, Fanta Zero' },
-
-            // Wine, Prosecco & Beers
-            { id: 'ext-w-pg', title: 'Pinot Grigio 750ml', price: 22.00, icon: '🍾', category: 'alcohol' },
-            { id: 'ext-w-sb', title: 'Sav Blanc 750ml', price: 24.00, icon: '🍾', category: 'alcohol' },
-            { id: 'ext-w-mer', title: 'Merlot 750ml', price: 22.00, icon: '🍷', category: 'alcohol' },
-            { id: 'ext-w-shi', title: 'Shiraz 750ml', price: 24.00, icon: '🍷', category: 'alcohol' },
-            { id: 'ext-p-sgl', title: 'Single Serve Prosecco', price: 6.50, icon: '🥂', category: 'alcohol' },
-            { id: 'ext-p-lrg', title: 'Large Prosecco', price: 26.00, icon: '🍾', category: 'alcohol' },
-            { id: 'dd-ales-ciders', title: 'Ales, Lagers & Ciders', price: 4.50, icon: '🍺', category: 'dropdown', options: 'Budweiser, Corona, Ghost Ship, Ghost Ship 0%, Old Mout Berries & Cherries, Old Mout Kiwi & Lime, Old Mout Mango & Passion Fruit' },
-
-            // Premium BYO
+            // Premium BYO Seafood & Meats
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀', category: 'byo' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿', category: 'byo' },
             { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖', category: 'byo' },
@@ -561,7 +529,47 @@
             { id: 'byo-hummus', title: 'Roasted Pepper Hummus & Flatbreads', price: 5.50, icon: '🫓', category: 'byo' },
             { id: 'byo-lobster', title: 'Luxury Dressed Lobster Tail Platter', price: 18.00, icon: '🦞', category: 'byo' },
             { id: 'byo-strawberries', title: 'Norfolk Strawberries & Clotted Cream', price: 6.00, icon: '🍓', category: 'byo' },
-            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖', category: 'byo' }
+            { id: 'byo-sourdough', title: 'Crusty Garlic Sourdough Loaf', price: 4.00, icon: '🥖', category: 'byo' },
+
+            // Savoury Add-ons & Sandwiches (prices for 2 people)
+            { id: 'ext-tuna', title: 'Tuna Mayo Sandwich (for 2)', price: 4.00, icon: '🥪', category: 'savoury' },
+            { id: 'ext-cheese-chutney', title: 'Cheese & Chutney Sandwich (for 2)', price: 4.00, icon: '🥪', category: 'savoury' },
+            { id: 'ext-ham-tom', title: 'Ham & Tomato Sandwich (for 2)', price: 4.50, icon: '🥪', category: 'savoury' },
+            { id: 'ext-sand-sel', title: 'Sandwiches Selection (for 2)', price: 12.95, icon: '🥪', category: 'savoury' },
+            { id: 'ext-scotch', title: 'Scotch Eggs', price: 2.50, icon: '🥚', category: 'savoury' },
+            { id: 'ext-sausage', title: 'Sausage Rolls', price: 2.50, icon: '🥐', category: 'savoury' },
+            { id: 'ext-quiche', title: 'Mini Quiches', price: 3.00, icon: '🥧', category: 'savoury' },
+            { id: 'ext-crisps', title: 'Kettle Crisps', price: 1.50, icon: '🥔', category: 'savoury' },
+
+            // Sweet Bakery & Cakes
+            { id: 'ext-fscone', title: 'Fruit Scone', price: 2.00, icon: '🧁', category: 'sweet' },
+            { id: 'ext-cscone', title: 'Cheese Scone', price: 2.00, icon: '🧀', category: 'sweet' },
+            { id: 'ext-vic', title: 'Victoria Sponge', price: 4.50, icon: '🍰', category: 'sweet' },
+            { id: 'ext-lemon', title: 'Lemon Drizzle', price: 4.50, icon: '🍋', category: 'sweet' },
+            { id: 'ext-choc', title: 'Chocolate Cake', price: 4.50, icon: '🍫', category: 'sweet' },
+            { id: 'ext-cakesel', title: 'Cake Selection', price: 12.00, icon: '🍰', category: 'sweet' },
+
+            // Wine & Spirits
+            { id: 'ext-w-pg', title: 'Pinot Grigio 750ml', price: 22.00, icon: '🍾', category: 'alcohol' },
+            { id: 'ext-w-sb', title: 'Sav Blanc 750ml', price: 24.00, icon: '🍾', category: 'alcohol' },
+            { id: 'ext-w-mer', title: 'Merlot 750ml', price: 22.00, icon: '🍷', category: 'alcohol' },
+            { id: 'ext-w-shi', title: 'Shiraz 750ml', price: 24.00, icon: '🍷', category: 'alcohol' },
+            { id: 'ext-p-sgl', title: 'Single Serve Prosecco', price: 6.50, icon: '🥂', category: 'alcohol' },
+            { id: 'ext-p-lrg', title: 'Large Prosecco', price: 26.00, icon: '🍾', category: 'alcohol' },
+
+            // Waters
+            { id: 'ext-water-s', title: 'Kingsdown Water Still 330ml', price: 2.75, icon: '💧', category: 'water' },
+            { id: 'ext-water-sp', title: 'Kingdown Water Sparkling 330ml', price: 2.75, icon: '🫧', category: 'water' },
+
+            // Drink Dropdowns
+            { id: 'dd-belvoir-bottle', title: 'Belvoir Pressé Bottle 275ml', price: 3.75, icon: '🥤', category: 'dropdown', options: 'Elderflower, Raspberry Lemonade, Cloudy Lemonade, Ginger Beer, Pink Lady Apple' },
+            { id: 'dd-belvoir-can', title: 'Belvoir Can 330ml', price: 2.75, icon: '🥤', category: 'dropdown', options: 'Elderflower Lemonade, Raspberry Lemonade, Sparkling Mango & Peach' },
+            { id: 'dd-belvoir-hyd', title: 'Belvoir Hydration Cans 330ml', price: 2.95, icon: '🥤', category: 'dropdown', options: 'Sparkling Blueberry & Lemon, Still Ginger Lemon & Turmeric' },
+            { id: 'dd-folkington-juice', title: 'Folkington Juices 250ml', price: 3.50, icon: '🧃', category: 'dropdown', options: 'Apple, Orange, Pear, Mango, Summerberries, Cranberry, Elderflower, Pink Lemonade, Tomato, Pineapple' },
+            { id: 'dd-folkington-can', title: 'Folkingtons Pressed Cans 250ml', price: 3.25, icon: '🥤', category: 'dropdown', options: 'Elderflower, Hot Ginger Beer, Rhubarb & Apple, Lemon & Mint' },
+            { id: 'dd-posh-pops', title: 'Posh Pops 275ml', price: 3.75, icon: '🥤', category: 'dropdown', options: 'Strawberry & Rhubarb, Ginger Beer & Chilli, Pear & Elderflower, Plum & Cherry, Craft Cola, Sloe & Rose Lemonade, Cloudy Lemonade, Cream Soda, Blackcurrant & Raspberry Zero' },
+            { id: 'dd-ales-ciders', title: 'Ales, Lagers & Ciders', price: 4.50, icon: '🍺', category: 'dropdown', options: 'Budweiser, Corona, Ghost Ship, Ghost Ship 0%, Old Mout Berries & Cherries, Old Mout Kiwi & Lime, Old Mout Mango & Passion Fruit' },
+            { id: 'dd-soda', title: 'Non Alco 330ml', price: 2.00, icon: '🥤', category: 'dropdown', options: 'Coke, Coke Zero, Diet Coke, 7UP, 7UP Zero, Fanta, Fanta Zero' }
         ];
 
         let customFieldsList = [
@@ -569,6 +577,16 @@
             { id: 'fld-4', title: 'Dairy-Free Alternative Cheese/Spread', price: 0.00, type: 'dietary' },
             { id: 'fld-5', title: 'Vegetarian Alternative', price: 0.00, type: 'dietary' }
         ];
+
+        function searchEmojipedia() {
+            const titleInput = document.getElementById('extra-form-title');
+            const itemTitle = titleInput ? titleInput.value.trim() : '';
+            if (itemTitle) {
+                window.open(`https://emojipedia.org/search?q=${encodeURIComponent(itemTitle)}`, '_blank');
+            } else {
+                window.open('https://emojipedia.org/', '_blank');
+            }
+        }
 
         function triggerToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -590,16 +608,6 @@
                 toast.classList.add('opacity-0', 'translate-y-2');
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
-        }
-
-        function searchEmojipedia() {
-            const titleInput = document.getElementById('extra-form-title');
-            const itemTitle = titleInput ? titleInput.value.trim() : '';
-            if (itemTitle) {
-                window.open(`https://emojipedia.org/search?q=${encodeURIComponent(itemTitle)}`, '_blank');
-            } else {
-                window.open('https://emojipedia.org/', '_blank');
-            }
         }
 
         function unlockAdminPortal() {
@@ -703,38 +711,32 @@
             container.innerHTML = '';
 
             const categories = [
-                { id: 'savoury', label: '🥪 Sandwiches & Savoury Snacks' },
+                { id: 'byo', label: '🦀 Premium BYO & Seafood' },
+                { id: 'savoury', label: '🥪 Savoury Add-ons & Sandwiches' },
                 { id: 'sweet', label: '🍰 Bakery, Cakes & Scones' },
-                { id: 'dropdown', label: '🥤 Flavoured Drinks & Ales (Dropdowns)' },
-                { id: 'alcohol', label: '🍾 Wine, Prosecco & Spirits' },
+                { id: 'alcohol', label: '🍾 Wine, Prosecco & Alcohol' },
                 { id: 'water', label: '💧 Mineral Water' },
-                { id: 'byo', label: '🦀 Premium BYO Seafood' }
+                { id: 'dropdown', label: '🥤 Flavoured Drinks & Ales (Dropdowns)' }
             ];
 
             categories.forEach(cat => {
-                const items = menuExtrasList.filter(i => (i.category || 'savoury') === cat.id);
+                const items = menuExtrasList.filter(i => (i.category || 'byo') === cat.id);
                 if (items.length === 0) return;
 
                 const header = document.createElement('div');
-                header.className = "col-span-full border-b border-coastal-200 mt-4 pb-1 mb-2 font-extrabold text-coastal-800 text-sm flex items-center justify-between";
-                header.innerHTML = `<span>${cat.label}</span> <span class="bg-coastal-100 text-coastal-600 text-[10px] px-2 py-0.5 rounded-full font-bold">${items.length} items</span>`;
+                header.className = "col-span-full border-b border-coastal-200 mt-4 pb-1 mb-2 font-extrabold text-coastal-800 text-sm flex items-center space-x-2";
+                header.innerHTML = `<span>${cat.label}</span> <span class="bg-coastal-100 text-coastal-600 text-[10px] px-2 py-0.5 rounded-full">${items.length} items</span>`;
                 container.appendChild(header);
 
                 items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = "bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-coastal-200 shadow-sm flex items-center justify-between space-x-2 text-xs hover:border-coastal-300 transition-colors";
-                    
-                    const subText = item.options ? `<div class="text-[10px] text-coastal-500 truncate max-w-[170px]" title="${item.options}">${item.options}</div>` : '';
-
                     card.innerHTML = `
                         <div class="flex items-center space-x-2.5 truncate">
                             <span class="text-xl bg-coastal-50 p-2 rounded-xl border border-coastal-100 shrink-0">${item.icon || '🥪'}</span>
                             <div class="truncate">
                                 <h5 class="font-bold text-coastal-900 truncate">${item.title}</h5>
-                                <div class="flex items-center space-x-2">
-                                    <span class="font-serif font-extrabold text-crab-600">£${Number(item.price).toFixed(2)}</span>
-                                    ${subText}
-                                </div>
+                                <span class="font-serif font-extrabold text-crab-600">£${Number(item.price).toFixed(2)}</span>
                             </div>
                         </div>
                         <div class="flex items-center space-x-1 shrink-0">
@@ -931,7 +933,7 @@
             document.getElementById('extra-form-title').value = item.title;
             document.getElementById('extra-form-price').value = item.price;
             document.getElementById('extra-form-icon').value = item.icon || '🥪';
-            document.getElementById('extra-form-category').value = item.category || 'savoury';
+            document.getElementById('extra-form-category').value = item.category || 'byo';
             document.getElementById('extra-form-options').value = item.options || '';
             toggleDropdownOptionsField();
 
@@ -972,7 +974,7 @@
 
             closeExtraModal();
             renderAdminDashboard();
-            triggerToast(`Menu item "${title}" saved`, 'success');
+            triggerToast(`Menu Extra "${title}" saved`, 'success');
         }
 
         async function deleteExtraOffering(id) {
@@ -987,7 +989,7 @@
             }
 
             renderAdminDashboard();
-            triggerToast('Menu item removed', 'info');
+            triggerToast('Menu Extra removed', 'info');
         }
 
         function openAddCustomFieldModal() {
@@ -1116,7 +1118,6 @@
                 try {
                     window.firebaseFns.onSnapshot(window.getHampersColRef(), (snapshot) => {
                         if (snapshot.empty) {
-                            // Auto-seed Firebase database if empty on live site
                             syncDefaultCatalogToFirebase();
                         } else {
                             const hampers = [];
@@ -1127,18 +1128,14 @@
                                 if (isAdminUnlocked) renderAdminDashboard();
                             }
                         }
-                    }, (e) => {
-                        console.warn("Firestore snapshot error:", e);
-                    });
+                    }, (e) => {});
                 } catch(e) {}
             }
 
             if (window.getExtrasColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getExtrasColRef(), (snapshot) => {
-                        if (snapshot.empty) {
-                            syncDefaultCatalogToFirebase();
-                        } else {
+                        if (!snapshot.empty) {
                             const extras = [];
                             snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
                             if (extras.length > 0) {
@@ -1154,9 +1151,7 @@
             if (window.getCustomFieldsColRef) {
                 try {
                     window.firebaseFns.onSnapshot(window.getCustomFieldsColRef(), (snapshot) => {
-                        if (snapshot.empty) {
-                            syncDefaultCatalogToFirebase();
-                        } else {
+                        if (!snapshot.empty) {
                             const fields = [];
                             snapshot.forEach(doc => fields.push({ ...doc.data(), id: doc.id }));
                             if (fields.length > 0) {
