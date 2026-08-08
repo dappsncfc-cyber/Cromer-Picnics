@@ -244,6 +244,7 @@
         </div>
     </div>
 
+    <!-- MODAL 1: Glassmorphic Customise & Build Your Own Hamper Modal -->
     <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4 max-h-[90vh] flex flex-col">
             <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -275,6 +276,7 @@
         </div>
     </div>
 
+    <!-- MODAL 2: Glassmorphic Checkout & Payment Modal -->
     <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-xl border border-white/60 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
             <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -336,6 +338,7 @@
         </div>
     </div>
 
+    <!-- MODAL 3: Privacy Policy Pop-up -->
     <div id="privacy-modal" onclick="if(event.target === this) closePrivacyModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 sm:p-8 relative space-y-4 max-h-[85vh] flex flex-col">
             <button onclick="closePrivacyModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close Privacy Policy"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -361,6 +364,7 @@
         </div>
     </div>
 
+    <!-- MODAL 4: Auth Login/SignUp -->
     <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -492,8 +496,9 @@
         let basket = {};
         let allOrdersList = [];
 
-        let menuExtrasList = [
-            // Seafood / BYO Primary
+        // COMPLETE DEFAULT CATALOG OF EXTRAS Across ALL Categories
+        const defaultExtrasList = [
+            // Seafood / BYO Premium Delicacies
             { id: 'byo-crab', title: 'Fresh Dressed Cromer Crab', price: 14.00, icon: '🦀', category: 'byo' },
             { id: 'byo-samphire', title: 'Sea-Salted Samphire & Lemon Mayo', price: 4.50, icon: '🌿', category: 'byo' },
             { id: 'byo-ham', title: 'Honey-Roasted Norfolk Ham Slices', price: 6.00, icon: '🍖', category: 'byo' },
@@ -511,14 +516,14 @@
             { id: 'ext-sausage', title: 'Sausage Rolls', price: 2.50, icon: '🥐', category: 'savoury' },
             { id: 'ext-quiche', title: 'Mini Quiches', price: 3.00, icon: '🥧', category: 'savoury' },
             { id: 'ext-crisps', title: 'Kettle Crisps', price: 1.50, icon: '🥔', category: 'savoury' },
-            // Bakery, Cakes & Sweet Treats
+            // Bakery & Sweet Treats
             { id: 'ext-fscone', title: 'Fruit Scone', price: 2.00, icon: '🧁', category: 'sweet' },
             { id: 'ext-cscone', title: 'Cheese Scone', price: 2.00, icon: '🧀', category: 'sweet' },
             { id: 'ext-vic', title: 'Victoria Sponge', price: 4.50, icon: '🍰', category: 'sweet' },
             { id: 'ext-lemon', title: 'Lemon Drizzle', price: 4.50, icon: '🍋', category: 'sweet' },
             { id: 'ext-choc', title: 'Chocolate Cake', price: 4.50, icon: '🍫', category: 'sweet' },
             { id: 'ext-cakesel', title: 'Cake Selection', price: 12.00, icon: '🍰', category: 'sweet' },
-            // Wines, Sparkling & Spirits
+            // Alcohol
             { id: 'ext-w-pg', title: 'Pinot Grigio 750ml', price: 22.00, icon: '🍾', category: 'alcohol' },
             { id: 'ext-w-sb', title: 'Sav Blanc 750ml', price: 24.00, icon: '🍾', category: 'alcohol' },
             { id: 'ext-w-mer', title: 'Merlot 750ml', price: 22.00, icon: '🍷', category: 'alcohol' },
@@ -539,6 +544,8 @@
             { id: 'dd-soda', title: 'Non Alco 330ml', price: 2.00, icon: '🥤', category: 'dropdown', options: 'Coke, Coke Zero, Diet Coke, 7UP, 7UP Zero, Fanta, Fanta Zero' }
         ];
 
+        let menuExtrasList = [...defaultExtrasList];
+
         let picnicPackages = [
             { id: 'build-your-own', title: 'Build Your Own Coastal Hamper', price: 10.00, desc: 'Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.', badge: 'Bespoke', badgeColor: 'bg-crab-600 text-white', image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80', available: true },
             { id: 'crab-feast', title: 'The Cromer Crab Feast', price: 48.00, desc: 'Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.', badge: 'Signature', badgeColor: 'bg-crab-500 text-white', image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=800&q=80', available: true },
@@ -554,6 +561,30 @@
             { id: 'fld-5', title: 'Vegetarian Alternative', price: 0.00, type: 'dietary' }
         ];
 
+        function mergeExtras(remoteExtras) {
+            if (!Array.isArray(remoteExtras) || remoteExtras.length === 0) return [...defaultExtrasList];
+            
+            const mergedMap = new Map();
+            defaultExtrasList.forEach(def => mergedMap.set(def.id, { ...def }));
+            
+            remoteExtras.forEach(item => {
+                const id = item.id || ('ext_' + (item.title || item.name || '').toLowerCase().replace(/[^a-z0-9]/g, '_'));
+                const existing = mergedMap.get(id);
+                
+                const unified = {
+                    id,
+                    title: item.title || item.name || (existing ? existing.title : 'Extra Item'),
+                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0,
+                    icon: item.icon || (existing ? existing.icon : '🍴'),
+                    category: item.category || (existing ? existing.category : 'savoury'),
+                    options: item.options || (existing ? existing.options : '')
+                };
+                mergedMap.set(id, unified);
+            });
+            
+            return Array.from(mergedMap.values());
+        }
+
         function loadLocalCatalog() {
             try {
                 const storedHampers = localStorage.getItem('wh_admin_hampers');
@@ -567,9 +598,7 @@
                 if (storedExtras) {
                     const parsed = JSON.parse(storedExtras);
                     if (Array.isArray(parsed) && parsed.length > 0) {
-                        const storedIds = new Set(parsed.map(item => item.id));
-                        const missingDefaults = menuExtrasList.filter(item => !storedIds.has(item.id));
-                        menuExtrasList = [...parsed, ...missingDefaults];
+                        menuExtrasList = mergeExtras(parsed);
                     }
                 }
                 if (storedFields) {
@@ -933,7 +962,7 @@
 
             const renderQuantityItems = (title, items) => {
                 if (!items || items.length === 0) return '';
-                let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm">
+                let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm" open>
                     <summary class="font-bold text-coastal-900 p-3.5 cursor-pointer bg-coastal-50/50 hover:bg-coastal-100 flex justify-between items-center select-none transition-colors text-sm">
                         <span class="flex items-center space-x-2">${title}</span><i data-lucide="chevron-down" class="w-4 h-4 text-crab-500 group-open:rotate-180 transition-transform duration-200"></i>
                     </summary><div class="p-3 space-y-2 border-t border-coastal-100">`;
@@ -1020,7 +1049,7 @@
                 return block;
             };
 
-            // Render ALL categories for BOTH BYO and Standard Hampers!
+            // Render ALL categories across ALL Hampers!
             html += renderQuantityItems('🦀 Premium Seafood & Delicacies', byoItems);
             html += renderQuantityItems('🥪 Savoury Add-ons & Snacks', savouryItems);
             html += renderQuantityItems('🍰 Bakery, Cakes & Scones', sweetItems);
@@ -1412,9 +1441,7 @@
                             const extras = [];
                             snapshot.forEach(doc => extras.push({ ...doc.data(), id: doc.id }));
                             if (extras.length > 0) {
-                                const storedIds = new Set(extras.map(item => item.id));
-                                const missingDefaults = menuExtrasList.filter(item => !storedIds.has(item.id));
-                                menuExtrasList = [...extras, ...missingDefaults];
+                                menuExtrasList = mergeExtras(extras);
                                 localStorage.setItem('wh_admin_extras', JSON.stringify(extras));
                                 if(!document.getElementById('customize-modal').classList.contains('hidden')) renderUnifiedCustomOptions();
                             }
@@ -1441,6 +1468,7 @@
             }
         }
 
+        // Expose functions globally to window object
         window.switchView = switchView;
         window.openAuthModal = openAuthModal;
         window.closeAuthModal = closeAuthModal;
