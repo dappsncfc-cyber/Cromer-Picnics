@@ -16,6 +16,110 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- Schema.org Structured Data (JSON-LD) for Local Business & Picnic Menu -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["FoodEstablishment", "LocalBusiness"],
+      "name": "Cromer Picnics at The White Horse",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+      "@id": "https://cromerpicnics.co.uk/#pub",
+      "url": "https://cromerpicnics.co.uk",
+      "telephone": "+441263512275",
+      "priceRange": "££",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "24 West Street",
+        "addressLocality": "Cromer",
+        "addressRegion": "Norfolk",
+        "postalCode": "NR27 9DS",
+        "addressCountry": "GB"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 52.9312,
+        "longitude": 1.2982
+      },
+      "servesCuisine": [
+        "Gourmet Coastal Hampers",
+        "Fresh Cromer Crab",
+        "Norfolk Artisan Picnics"
+      ],
+      "hasMenu": {
+        "@type": "Menu",
+        "name": "Cromer Coastal Picnic Hampers Menu",
+        "hasMenuSection": [
+          {
+            "@type": "MenuSection",
+            "name": "Picnic Hampers & Hampers",
+            "hasMenuItem": [
+              {
+                "@type": "MenuItem",
+                "name": "Build Your Own Coastal Hamper",
+                "description": "Start with our standard cool box prep fee (£10.00) and pick any combination of local Cromer crab, artisan cheeses, deli bites, treats, and Norfolk drinks.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "10.00",
+                  "priceCurrency": "GBP"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "The Cromer Crab Feast",
+                "description": "Two dressed Cromer crabs, sea-salted samphire, fresh lemon & dill mayonnaise, garlic sourdough loaf, Norfolk kettle crisps, and elderflower pressé.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "48.00",
+                  "priceCurrency": "GBP"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "Norfolk Artisan Ploughman’s",
+                "description": "Honey-roasted Norfolk ham, Binham Blue cheese, Norfolk Dapple cheddar, pork & sage sausage rolls, pickled onions, chutney, and fresh crusty rolls.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "38.00",
+                  "priceCurrency": "GBP"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "Saltmarsh Wild Grazing (V)",
+                "description": "Caramelised onion & spinach tartlet, roasted pepper hummus, baked flatbreads, luxury olives, local vine tomatoes, falafels, and fresh garden strawberries.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "36.00",
+                  "priceCurrency": "GBP"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "Pier Sunset Romance (For Two)",
+                "description": "Dressed lobster tail platter, artisan crackers, artisan chocolate truffles, Norfolk strawberries with clotted cream, and a bottle of chilled Prosecco.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "68.00",
+                  "priceCurrency": "GBP"
+                }
+              },
+              {
+                "@type": "MenuItem",
+                "name": "Little Shipmates Family Feast",
+                "description": "Mini ham sandwiches, sausage rolls, fruit skewers, apple juice boxes, local fudge, plus a wooden crab-catching line set with bait bag.",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "28.00",
+                  "priceCurrency": "GBP"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+    </script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -244,7 +348,7 @@
         </div>
     </div>
 
-    <!-- MODAL 1: Glassmorphic Customise & Build Your Own Hamper Modal -->
+    <!-- MODAL 1: Customise & Build Your Own Hamper Modal -->
     <div id="customize-modal" onclick="if(event.target === this) closeCustomizeModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl overflow-hidden relative p-6 space-y-4 max-h-[90vh] flex flex-col">
             <button onclick="closeCustomizeModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close modal"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -276,7 +380,7 @@
         </div>
     </div>
 
-    <!-- MODAL 2: Glassmorphic Checkout & Payment Modal -->
+    <!-- MODAL 2: Checkout & Payment Modal -->
     <div id="checkout-modal" onclick="if(event.target === this) closeCheckoutModal();" class="hidden fixed inset-0 z-50 overflow-y-auto bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-xl border border-white/60 shadow-2xl overflow-hidden relative p-6 sm:p-8 space-y-5">
             <button onclick="closeCheckoutModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -973,7 +1077,7 @@
 
                     let savedQty = 0;
                     if (editingBasketKey && basket[editingBasketKey] && basket[editingBasketKey].custom) {
-                        const list = [...(basket[editingBasketKey].custom.byoItems || []), ...(basket[editingBasketKey].custom.drinks || [])];
+                        const list = Array.from(new Set([...(basket[editingBasketKey].custom.byoItems || []), ...(basket[editingBasketKey].custom.drinks || [])]));
                         const matchStr = list.find(s => s.endsWith(` ${itemName}`));
                         if (matchStr) {
                             const match = matchStr.match(/^(\d+)x /);
@@ -1012,7 +1116,7 @@
                     let savedQty = 0;
                     let savedVal = "";
                     if (editingBasketKey && basket[editingBasketKey] && basket[editingBasketKey].custom) {
-                        const list = [...(basket[editingBasketKey].custom.byoItems || []), ...(basket[editingBasketKey].custom.drinks || [])];
+                        const list = Array.from(new Set([...(basket[editingBasketKey].custom.byoItems || []), ...(basket[editingBasketKey].custom.drinks || [])]));
                         const matchStr = list.find(s => s.includes(` ${ddName} `) || s.startsWith(`${ddName} `));
                         if (matchStr) {
                             const match = matchStr.match(/^(\d+)x\s+(.*)\s*\((.*)\)$/);
@@ -1123,7 +1227,7 @@
             
             if (activeCustomizingPkg.id === 'build-your-own') {
                 if (sel.length === 0) return triggerToast('Please select at least one delicacy or drink', 'error');
-                addToBasket(activeCustomizingPkg.id, { diet: 'Bespoke Selection', byoItems: sel, drinks: sel, extraPrice: ep }, qtyToPreserve);
+                addToBasket(activeCustomizingPkg.id, { diet: 'Bespoke Selection', byoItems: sel, drinks: [], extraPrice: ep }, qtyToPreserve);
             } else {
                 let dietVal = 'Standard Recipe';
                 const d = document.getElementById('custom-diet-select');
@@ -1132,7 +1236,7 @@
                     const opt = d.options[d.selectedIndex]; 
                     ep += parseFloat(opt.getAttribute('data-price'))||0; 
                 }
-                addToBasket(activeCustomizingPkg.id, { diet: dietVal, byoItems: sel, drinks: sel, extraPrice: ep }, qtyToPreserve);
+                addToBasket(activeCustomizingPkg.id, { diet: dietVal, byoItems: [], drinks: sel, extraPrice: ep }, qtyToPreserve);
             }
             closeCustomizeModal();
         }
@@ -1468,7 +1572,6 @@
             }
         }
 
-        // Expose functions globally to window object
         window.switchView = switchView;
         window.openAuthModal = openAuthModal;
         window.closeAuthModal = closeAuthModal;
