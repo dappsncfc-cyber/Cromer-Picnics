@@ -395,12 +395,12 @@
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div><label class="block font-bold text-coastal-800 mb-1">Email Address *</label><input type="email" id="customer-email" placeholder="sarah@example.co.uk" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600"></div>
-                    <div><label class="block font-bold text-coastal-800 mb-1">Collection Date *</label><input type="date" id="pickup-date" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600"></div>
+                    <div><label class="block font-bold text-coastal-800 mb-1">Collection Date *</label><input type="date" id="pickup-date" onchange="updateAvailableTimeSlots(); validatePickupCutoff();" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600"></div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-coastal-800 mb-1">Collection Time *</label>
-                        <select id="pickup-time" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
+                        <select id="pickup-time" onchange="validatePickupCutoff()" class="w-full bg-white/80 border border-coastal-200 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600">
                             <option value="12:00 PM">12:00 PM (Lunch)</option><option value="1:00 PM">1:00 PM (Lunch)</option><option value="2:30 PM">2:30 PM (Afternoon)</option><option value="4:00 PM">4:00 PM (High Tea)</option><option value="6:00 PM">6:00 PM (Sunset Picnic)</option>
                         </select>
                     </div>
@@ -442,7 +442,6 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Privacy Policy Pop-up -->
     <div id="privacy-modal" onclick="if(event.target === this) closePrivacyModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-lg border border-white/60 shadow-2xl p-6 sm:p-8 relative space-y-4 max-h-[85vh] flex flex-col">
             <button onclick="closePrivacyModal()" class="touch-target absolute top-4 right-4 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors" title="Close Privacy Policy"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -515,7 +514,6 @@
         </div>
     </div>
 
-    <!-- MODAL 4: Auth Login/SignUp -->
     <div id="auth-modal" onclick="if(event.target === this) closeAuthModal();" class="hidden fixed inset-0 z-50 bg-coastal-900/60 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-200">
         <div class="glass-card rounded-3xl w-full max-w-sm border border-white/60 shadow-2xl p-6 relative space-y-4">
             <button onclick="closeAuthModal()" class="touch-target absolute top-3 right-3 text-coastal-400 hover:text-coastal-800 p-2 rounded-full hover:bg-coastal-100/50 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -1200,7 +1198,7 @@
                 return block;
             };
 
-            // Render ALL categories across ALL Hampers!
+            // Render ALL categories across ALL Hampers
             html += renderQuantityItems('🦀 Premium Seafood & Delicacies', byoItems);
             html += renderQuantityItems('🥪 Savoury Add-ons & Snacks', savouryItems);
             html += renderQuantityItems('🍰 Bakery, Cakes & Scones', sweetItems);
@@ -1288,6 +1286,79 @@
             closeCustomizeModal();
         }
 
+        function updateAvailableTimeSlots() {
+            const timeSelect = document.getElementById('pickup-time');
+            const dateInput = document.getElementById('pickup-date');
+            if (!timeSelect || !dateInput) return;
+
+            const now = new Date();
+            const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            const isToday = dateInput.value === todayStr;
+
+            const timeSlotMap = {
+                '12:00 PM': { hour: 12, min: 0, label: '12:00 PM (Lunch)' },
+                '1:00 PM': { hour: 13, min: 0, label: '1:00 PM (Lunch)' },
+                '2:30 PM': { hour: 14, min: 30, label: '2:30 PM (Afternoon)' },
+                '4:00 PM': { hour: 16, min: 0, label: '4:00 PM (High Tea)' },
+                '6:00 PM': { hour: 18, min: 0, label: '6:00 PM (Sunset Picnic)' }
+            };
+
+            let firstValidValue = null;
+
+            Array.from(timeSelect.options).forEach(opt => {
+                const slot = timeSlotMap[opt.value];
+                if (slot) {
+                    let isPast = false;
+                    if (isToday) {
+                        if (now.getHours() > slot.hour || (now.getHours() === slot.hour && now.getMinutes() >= slot.min)) {
+                            isPast = true;
+                        }
+                    }
+                    if (isPast) {
+                        opt.disabled = true;
+                        opt.text = `${opt.value} - Passed`;
+                    } else {
+                        opt.disabled = false;
+                        opt.text = slot.label;
+                        if (!firstValidValue) firstValidValue = opt.value;
+                    }
+                }
+            });
+
+            if (timeSelect.selectedOptions[0] && timeSelect.selectedOptions[0].disabled) {
+                if (firstValidValue) {
+                    timeSelect.value = firstValidValue;
+                }
+            }
+        }
+
+        function validatePickupCutoff() {
+            const di = document.getElementById('pickup-date'); 
+            const timeSelect = document.getElementById('pickup-time');
+            const nt = document.getElementById('cutoff-notice-text'); 
+            const nb = document.getElementById('cutoff-notice');
+            if (!di || !nt) return true;
+            const now = new Date(); 
+            const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+            const isToday = di.value === todayStr;
+
+            if (isToday && now.getHours() >= 15) {
+                if (nb) nb.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                nt.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a future date."; 
+                return false;
+            }
+
+            if (isToday && timeSelect && timeSelect.selectedOptions[0] && timeSelect.selectedOptions[0].disabled) {
+                if (nb) nb.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
+                nt.innerHTML = "⚠️ The selected pick-up time has already passed for today. Please select a future time slot."; 
+                return false;
+            }
+
+            if (nb) nb.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
+            nt.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>."; 
+            return true;
+        }
+
         function openCheckoutModal() {
             const keys = Object.keys(basket);
             if (keys.length === 0) return;
@@ -1311,6 +1382,8 @@
             
             const dateInput = document.getElementById('pickup-date');
             if (today.getHours() >= 15) { dateInput.value = tmStr; dateInput.min = tmStr; } else { dateInput.value = tStr; dateInput.min = tStr; }
+            
+            updateAvailableTimeSlots();
             validatePickupCutoff();
 
             document.getElementById('modal-form-content').classList.remove('hidden');
@@ -1320,20 +1393,6 @@
             safeCreateIcons();
         }
 
-        function validatePickupCutoff() {
-            const di = document.getElementById('pickup-date'); const nt = document.getElementById('cutoff-notice-text'); const nb = document.getElementById('cutoff-notice');
-            if (!di || !nt) return true;
-            const now = new Date(); const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-            
-            if (di.value === todayStr && now.getHours() >= 15) {
-                nb.className = "w-full text-[11px] p-2.5 rounded-xl bg-crab-50 border border-crab-200 text-crab-700 font-bold leading-tight";
-                nt.innerHTML = "⚠️ Same-day pickup closed at 3:00 PM. Please select tomorrow or a future date."; return false;
-            } else {
-                nb.className = "w-full text-[11px] p-2.5 rounded-xl bg-coastal-50/80 border border-coastal-200 text-coastal-600 font-medium leading-tight";
-                nt.innerHTML = "Same-day pickup orders close daily at <strong>3:00 PM</strong>."; return true;
-            }
-        }
-
         function closeCheckoutModal() { document.getElementById('checkout-modal').classList.add('hidden'); }
 
         function processSimulatedPayment() {
@@ -1341,7 +1400,7 @@
             const pickupDate = document.getElementById('pickup-date').value; const pickupTime = document.getElementById('pickup-time').value; const notes = document.getElementById('dietary-notes').value.trim();
             if (!name || !email) return triggerToast('Please provide your name and email address', 'error');
             if (!pickupDate) return triggerToast('Please select a collection date', 'error');
-            if (!validatePickupCutoff()) return triggerToast('Same-day orders close at 3:00 PM. Please select tomorrow or a later date.', 'error');
+            if (!validatePickupCutoff()) return triggerToast('Same-day orders close at 3:00 PM or the selected time slot has passed. Please select a future date/time.', 'error');
 
             document.getElementById('modal-form-content').classList.add('hidden'); document.getElementById('modal-processing-content').classList.remove('hidden');
 
@@ -1634,6 +1693,7 @@
         window.closeMobileBasketModal = closeMobileBasketModal;
         window.openCheckoutModal = openCheckoutModal;
         window.closeCheckoutModal = closeCheckoutModal;
+        window.updateAvailableTimeSlots = updateAvailableTimeSlots;
         window.validatePickupCutoff = validatePickupCutoff;
         window.processSimulatedPayment = processSimulatedPayment;
         window.finishCheckoutPaymentDown = finishCheckoutPaymentDown;
