@@ -1069,7 +1069,7 @@
                 let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm" open>
                     <summary class="font-bold text-coastal-900 p-3.5 cursor-pointer bg-coastal-50/50 hover:bg-coastal-100 flex justify-between items-center select-none transition-colors text-sm">
                         <span class="flex items-center space-x-2">${title}</span><i data-lucide="chevron-down" class="w-4 h-4 text-crab-500 group-open:rotate-180 transition-transform duration-200"></i>
-                    </summary><div class="p-3 space-y-2 border-t border-coastal-100">`;
+                    </summary><div class="p-2.5 sm:p-3 space-y-2 border-t border-coastal-100">`;
                 items.forEach(item => {
                     const itemName = item.title || item.name;
                     const itemIcon = item.icon ? `${item.icon} ` : '';
@@ -1085,13 +1085,13 @@
                         }
                     }
 
-                    block += `<div class="flex justify-between items-center bg-white p-3 rounded-xl border border-coastal-100 shadow-sm hover:bg-coastal-50 transition-colors">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="text-coastal-800 font-medium leading-tight text-xs">${itemIcon}${itemName}</span>
+                    block += `<div class="flex justify-between items-center bg-white p-2.5 sm:p-3 rounded-xl border border-coastal-100 shadow-sm hover:bg-coastal-50 transition-colors gap-2">
+                        <div class="flex items-center space-x-2 min-w-0 flex-1 pr-1">
+                            <span class="text-coastal-800 font-medium leading-snug text-xs break-words">${itemIcon}${itemName}</span>
                         </div>
-                        <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
                             <span class="font-bold text-crab-600 shrink-0 text-xs">+£${Number(item.price).toFixed(2)}</span>
-                            <div class="flex items-center space-x-1.5 bg-coastal-50 rounded-lg p-1 border border-coastal-200 shrink-0">
+                            <div class="flex items-center space-x-1 sm:space-x-1.5 bg-coastal-50 rounded-lg p-1 border border-coastal-200 shrink-0">
                                 <button type="button" onclick="adjustCustomItemQty('${safeId}', -1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-coastal-600 hover:text-coastal-900 font-bold">-</button>
                                 <span id="${safeId}" data-name="${itemName.replace(/"/g, '&quot;')}" data-price="${item.price}" class="unified-qty-val w-4 text-center text-xs font-bold text-coastal-900">${savedQty}</span>
                                 <button type="button" onclick="adjustCustomItemQty('${safeId}', 1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-coastal-600 hover:text-coastal-900 font-bold">+</button>
@@ -1108,7 +1108,7 @@
                 let block = `<details class="bg-white/80 border border-coastal-200 rounded-xl overflow-hidden mb-2 group shadow-sm">
                     <summary class="font-bold text-coastal-900 p-3.5 cursor-pointer bg-coastal-50/50 hover:bg-coastal-100 flex justify-between items-center select-none transition-colors text-sm">
                         <span class="flex items-center space-x-2">${title}</span><i data-lucide="chevron-down" class="w-4 h-4 text-crab-500 group-open:rotate-180 transition-transform duration-200"></i>
-                    </summary><div class="p-3 space-y-3 border-t border-coastal-100">`;
+                    </summary><div class="p-2.5 sm:p-3 space-y-3 border-t border-coastal-100">`;
                 items.forEach(dd => {
                     const ddName = dd.title || dd.name;
                     const safeId = 'dd_' + ddName.replace(/[^a-zA-Z0-9]/g, '_');
@@ -1131,17 +1131,17 @@
                     if (typeof dd.options === 'string') opts = dd.options.split(',').map(s => s.trim()).filter(s => s);
                     else if (Array.isArray(dd.options)) opts = dd.options;
 
-                    block += `<div class="bg-white p-3 rounded-xl border border-coastal-100 shadow-sm space-y-2">
-                        <label class="block font-bold text-coastal-800 flex justify-between items-center text-xs">
-                            <span class="leading-tight">${dd.icon || '🥤'} ${ddName}</span>
+                    block += `<div class="bg-white p-2.5 sm:p-3 rounded-xl border border-coastal-100 shadow-sm space-y-2">
+                        <label class="block font-bold text-coastal-800 flex justify-between items-center text-xs gap-2">
+                            <span class="leading-tight min-w-0 break-words">${dd.icon || '🥤'} ${ddName}</span>
                             <span class="text-crab-600 shrink-0 ml-2">+£${Number(dd.price).toFixed(2)}</span>
                         </label>
                         <div class="flex items-center space-x-2">
-                            <select id="sel_${safeId}" data-name="${ddName}" data-price="${dd.price}" onchange="handleDropdownChange('${safeId}')" class="unified-select flex-1 bg-coastal-50 border border-coastal-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-coastal-600 text-coastal-700 font-medium text-xs">
+                            <select id="sel_${safeId}" data-name="${ddName}" data-price="${dd.price}" onchange="handleDropdownChange('${safeId}')" class="unified-select flex-1 min-w-0 bg-coastal-50 border border-coastal-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-coastal-600 text-coastal-700 font-medium text-xs truncate">
                                 <option value="">-- Choose Flavour --</option>`;
                     opts.forEach(opt => { block += `<option value="${opt}" ${opt === savedVal ? 'selected' : ''}>${opt}</option>`; });
                     block += `</select>
-                            <div class="flex items-center space-x-1.5 bg-coastal-50 rounded-lg p-1 border border-coastal-200 shrink-0">
+                            <div class="flex items-center space-x-1 sm:space-x-1.5 bg-coastal-50 rounded-lg p-1 border border-coastal-200 shrink-0">
                                 <button type="button" onclick="adjustDropdownQty('${safeId}', -1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-coastal-600 hover:text-coastal-900 font-bold">-</button>
                                 <span id="qty_${safeId}" class="w-4 text-center text-xs font-bold text-coastal-900">${savedQty}</span>
                                 <button type="button" onclick="adjustDropdownQty('${safeId}', 1)" class="w-6 h-6 flex items-center justify-center bg-white rounded shadow-sm text-coastal-600 hover:text-coastal-900 font-bold">+</button>
