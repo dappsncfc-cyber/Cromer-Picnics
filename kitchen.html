@@ -130,7 +130,6 @@
             
             <div class="space-y-3 pt-2">
                 <div>
-                    <!-- PIN logic updated to 1884 as requested -->
                     <input type="password" id="staff-pin-input" placeholder="Enter Staff PIN" maxlength="6" autofocus autocomplete="off" class="w-full bg-white border border-coastal-300 rounded-2xl px-4 py-3 text-center text-xl font-mono tracking-widest focus:ring-2 focus:ring-coastal-600 focus:outline-none shadow-inner text-coastal-900">
                     <p id="pin-error-text" class="text-xs text-crab-600 font-bold mt-1.5 hidden"></p>
                 </div>
@@ -346,15 +345,29 @@
             } catch(e) {}
         }
 
-        // Pin correctly updated to 1884
-        function unlockKitchenPortal() {
+        // Security Note: In production static environments without a dedicated backend server,
+        // salted cryptographic hashing removes plaintext PINs from repository source code.
+        // For production access control, authorization should be enforced by a secure backend API or Firebase Security Rules.
+        async function hashPin(pin) {
+            const salt = "WH-Cromer-Salt-2026:";
+            const encoder = new TextEncoder();
+            const data = encoder.encode(salt + pin);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function unlockKitchenPortal() {
             const pinInput = document.getElementById('staff-pin-input');
             const errText = document.getElementById('pin-error-text');
             const pin = pinInput ? pinInput.value.trim() : '';
 
             if (errText) errText.classList.add('hidden');
 
-            if (pin === '1884') {
+            const hashedPin = await hashPin(pin);
+            const EXPECTED_PIN_HASH = '34dd5fc96016eaf090ba0da07dfb577e4047fe1104b5694f5cf0dec02bb152ea';
+
+            if (hashedPin === EXPECTED_PIN_HASH) {
                 demoUnlockKitchen();
             } else {
                 if (errText) {
